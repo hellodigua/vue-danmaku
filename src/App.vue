@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <vue-barrage></vue-barrage>
   </div>
 </template>
 

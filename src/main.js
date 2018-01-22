@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueBarrage from './lib/index'
 
 Vue.config.productionTip = false
+Vue.use(VueBarrage)
 
 /* eslint-disable no-new */
 new Vue({
