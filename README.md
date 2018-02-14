@@ -1,4 +1,4 @@
-# vue-barrage
+# vue-danmaku
 
 > A Vue.js project
 

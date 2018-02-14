@@ -14,9 +14,15 @@ export default {
     const {
       danmus
     } = this
-    const danmusEl = this._l(danmus, (danmu, index) => {
+    const danmusEl = this._l(danmus, (item, index) => {
       return (
-        <p>{danmu}</p>
+        <p
+          class='dm'
+          ref={`dm-${index}`}
+          // refInFor
+        >
+          {item}
+        </p>
       )
     })
     return (
@@ -44,8 +50,19 @@ export default {
     opacity: 1;
   }
   p {
+    position: absolute;
     color: #fff;
     text-shadow: 1px 1px 1px #000;
+    margin: 0;
+    white-space: pre;
+  }
+  .dm {
+    position: absolute;
+    color: #fff;
+    left: 100%;
+    top: 8px;
+    white-space: pre;
+    text-shadow: 1px 1px 2px #001;
   }
 }
 </style>

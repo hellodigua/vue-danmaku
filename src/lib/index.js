@@ -1,7 +1,7 @@
-import VueBarrage from './main.vue'
+import VueDanmaku from './main.vue'
 
-VueBarrage.install = function (Vue) {
-  Vue.component('VueBarrage', VueBarrage)
+VueDanmaku.install = function (Vue) {
+  Vue.component('VueDanmaku', VueDanmaku)
 }
 
-export default VueBarrage
+export default VueDanmaku

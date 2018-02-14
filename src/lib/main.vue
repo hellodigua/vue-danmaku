@@ -1,12 +1,12 @@
 <template>
-  <div class="barrage" @mouseenter="onMouseenter" @mouseleave="onMouseleave">
+  <div ref="container" class="danmaku" @mouseenter="onMouseenter" @mouseleave="onMouseleave">
     <slot></slot>
     <div class="danmus"></div>
   </div>
 </template>
 <script>
 import Vue from 'vue'
-import VueDanmu from './danmu.vue'
+import Danmu from './danmu.vue'
 export default {
   props: {
     danmus: {
@@ -16,36 +16,68 @@ export default {
     row: {
       type: Number,
       default: 3
+    },
+    hover: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
+      container: null,
       isActive: false,
       timer: null,
-      danmu: null
+      danmu: null,
+      index: 0,
+      speed: 5
     }
   },
   computed: {},
   watch: {
     isActive (val) {
-      val ? this.start() : this.stop()
+      val ? this.draw() : this.stop()
     }
   },
   created () { },
-  mounted () { },
+  mounted () {
+    this.initDanmu()
+  },
   methods: {
     initDanmu () {
-      this.danmu = new Vue(VueDanmu).$mount('.danmus')
+      this.danmu = new Vue(Danmu).$mount('.danmus')
       this.danmu.danmus = this.danmus
+      this.container = this.$refs.container
     },
     onMouseenter () {
-      this.isActive = true
+      if (this.hover) {
+        this.isActive = true
+      }
     },
     onMouseleave () {
-      this.isActive = false
+      if (this.hover) {
+        this.isActive = false
+      }
     },
-    start () {
-      this.initDanmu()
+    draw () {
+      this.$nextTick(() => {
+        console.log(this.container.offsetWidth)
+        console.log(this.container.offsetHeight)
+        this.timer = setInterval(() => {
+          if (this.index > this.danmus.length - 1) {
+            clearInterval(this.timer)
+          } else {
+            let el = this.danmu.$refs['dm-' + this.index]
+            let width = el.offsetWidth
+            console.log(el.offsetHeight)
+            el.style.left = -width + 'px'
+            el.style.transition = 'left ' + this.speed + 's linear'
+            this.index++
+          }
+        }, 1000 * 1.5)
+        for (let item in this.danmu.$refs) {
+          console.log(this.danmu.$refs[item].offsetWidth)
+        }
+      })
     },
     stop () {
     }
@@ -53,7 +85,8 @@ export default {
 }
 </script>
 <style lang="postcss" scoped>
-.barrage {
+.danmaku {
   position: relative;
+  overflow: hidden;
 }
 </style>

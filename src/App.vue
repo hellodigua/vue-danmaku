@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <vue-barrage class="barrage" :danmus="danmus">
+    <vue-danmaku class="danmaku" :danmus="danmus">
       <img src="@/assets/mai.png">
-    </vue-barrage>
+    </vue-danmaku>
   </div>
 </template>
 
@@ -12,10 +12,15 @@ export default {
   data () {
     return {
       danmus: [
-        '2333333333333',
+        '超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试',
+        '超长弹幕测试超长弹幕测试超长弹幕测试',
+        '超长弹幕测试超长弹幕测试',
+        '超长弹幕测试',
         '今天是个好日子',
-        'barrage最高！',
-        '地瓜地瓜，干杯~'
+        'danmaku最高！',
+        '地瓜地瓜，干杯~',
+        '宽度',
+        '窄'
       ]
     }
   }
@@ -26,7 +31,7 @@ export default {
 #app {
   height: 100%;
   width: 100%;
-  .barrage {
+  .danmaku {
     width: 360px;
     height: 240px;
     img {
