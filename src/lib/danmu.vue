@@ -59,6 +59,7 @@ export default {
   .dm {
     position: absolute;
     color: #fff;
+    font-size: 18px;
     left: 100%;
     top: 8px;
     white-space: pre;
