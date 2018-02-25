@@ -17,6 +17,7 @@ export default {
       type: Number,
       default: 3
     },
+    config: Object,
     hover: {
       type: Boolean,
       default: true
@@ -50,7 +51,7 @@ export default {
       this.danmaku = new Vue(Danmu).$mount('.danmus')
       this.danmaku.danmus = []
       this.container = this.$refs.container
-      this.channels = parseInt(this.container.offsetHeight / this.height) // 初始化轨道数量
+      this.channels = this.config.channels ? this.config.channels : parseInt(this.container.offsetHeight / this.height) // 初始化轨道数量
       // console.log(this.container.offsetWidth)
       // console.log(this.container.offsetHeight)
     },
