@@ -27,7 +27,7 @@ export default {
       container: null,
       isActive: false,
       timer: null,
-      danmu: null,
+      danmaku: null,
       index: 0,
       speed: 5
     }
@@ -44,9 +44,8 @@ export default {
   },
   methods: {
     initDanmu () {
-      this.danmu = new Vue(Danmu).$mount('.danmus')
-      // this.danmu.danmus = this.danmus
-      this.danmu.danmus = []
+      this.danmaku = new Vue(Danmu).$mount('.danmus')
+      this.danmaku.danmus = []
       this.container = this.$refs.container
       // console.log(this.container.offsetWidth)
       // console.log(this.container.offsetHeight)
@@ -67,20 +66,23 @@ export default {
           if (this.index > this.danmus.length - 1) {
             clearInterval(this.timer)
           } else {
-            this.add()
+            let isP = this.collision()
+            if (isP) {
+              this.add()
+            }
           }
         }, 1000 * 1.5)
-        for (let item in this.danmu.$refs) {
-          console.log(this.danmu.$refs[item].offsetWidth)
+        for (let item in this.danmaku.$refs) {
+          console.log(this.danmaku.$refs[item].offsetWidth)
         }
       })
     },
     add () {
-      this.danmu.danmus.push(this.danmus[this.index])
+      this.danmaku.danmus.push(this.danmus[this.index])
       this.$nextTick(() => {
-        console.log(this.danmu.$refs)
+        console.log(this.danmaku.$refs)
         console.log(this.index)
-        let el = this.danmu.$refs['dm-' + this.index]
+        let el = this.danmaku.$refs['dm-' + this.index]
         console.log(el)
         let width = el.offsetWidth
         // console.log(el.offsetHeight)
@@ -88,6 +90,9 @@ export default {
         el.style.transition = 'left ' + this.speed + 's linear'
         this.index++
       })
+    },
+    collision () {
+      return 1
     },
     stop () {
     }
