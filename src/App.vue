@@ -12,9 +12,9 @@ export default {
   data () {
     return {
       danmus: [
-        '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试',
-        '2超长弹幕测试超长弹幕测试超长弹幕测试',
-        '3超长弹幕测试超长弹幕测试',
+        '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试end',
+        '2超长弹幕测试超长弹幕测试超长弹幕测试2',
+        '3短弹幕测试',
         '4超长弹幕测试',
         '5今天是个好日子',
         '6danmaku最高！',
@@ -29,11 +29,13 @@ export default {
 
 <style lang="postcss">
 #app {
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
+  background: grey;
+  padding: 100px;
   .danmaku {
     width: 360px;
-    height: 240px;
+    height: 200px;
     img {
       width: 100%;
     }
