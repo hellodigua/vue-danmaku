@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-danmaku class="danmaku" :danmus="danmus1">
+    <vue-danmaku class="danmaku" :danmus="danmus" :config="config">
       <img src="@/assets/mai.png">
     </vue-danmaku>
   </div>
@@ -25,6 +25,10 @@ export default {
   name: 'App',
   data () {
     return {
+      config: {
+        channels: 3,
+        loop: false
+      },
       danmus: [
         '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试end',
         '2超长弹幕测试超长弹幕测试超长弹幕测试2',
@@ -123,10 +127,11 @@ export default {
   background: grey;
   padding: 100px;
   .danmaku {
-    width: 360px;
-    height: 200px;
+    width: 720px;
+    height: 480px;
     img {
       width: 100%;
+      height: 100%;
     }
   }
 }

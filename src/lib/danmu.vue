@@ -19,7 +19,6 @@ export default {
         <p
           class='dm'
           ref={`dm-${index}`}
-          // refInFor
         >
           {item}
         </p>
