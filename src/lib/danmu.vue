@@ -14,13 +14,13 @@ export default {
     const {
       danmus
     } = this
-    const danmusEl = this._l(danmus, (item, index) => {
+    const danmusEl = this._l(danmus, (item) => {
       return (
         <p
           class='dm'
-          ref={`dm-${index}`}
+          ref={`dm-${item.index}`}
         >
-          {item}
+          {item.danmu}
         </p>
       )
     })

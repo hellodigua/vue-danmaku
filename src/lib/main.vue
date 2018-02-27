@@ -13,15 +13,12 @@ export default {
       type: Array,
       required: true
     },
-    row: {
-      type: Number,
-      default: 3
-    },
     config: {
       type: Object,
       default: () => {
         return {
-          channels: 0
+          channels: 0,
+          loop: false
         }
       }
     },
@@ -40,7 +37,7 @@ export default {
       speed: 5,
       continueG: true,
       danChannel: {},
-      channels: 1, // 轨道数量
+      channels: 0, // 轨道数量
       height: 30 // 弹幕高度
     }
   },
@@ -75,27 +72,34 @@ export default {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
           if (this.index > this.danmus.length - 1) {
-            clearInterval(this.timer)
+            if (this.config.loop) {
+              this.index = 0
+              this.insert()
+            } else {
+              clearInterval(this.timer)
+            }
           } else {
-            this.add()
+            this.insert()
+            this.clean()
           }
-        }, 100)
+        }, 300)
       })
     },
-    add () {
+    insert () {
       if (this.continueG) {
-        this.danmaku.danmus.push(this.danmus[this.index])
+        this.danmaku.danmus.push({
+          index: this.index,
+          danmu: this.danmus[this.index]
+        })
       }
       this.$nextTick(() => {
         const el = this.danmaku.$refs['dm-' + this.index]
         const tunnelIndex = this.getChannel(el)
-        console.log(el)
         if (tunnelIndex >= 0) {
           this.continueG = true
           const width = el.offsetWidth
-          // console.log(el.offsetHeight)
           el.style.top = tunnelIndex * this.height + 'px'
-          el.style.left = -width + 'px'
+          el.style.left = -width - 1 + 'px'
           el.style.transition = 'left ' + this.speed + 's linear'
           this.index++
         } else {
@@ -129,6 +133,7 @@ export default {
       }
       return -1
     },
+    // 弹幕到右侧的距离
     getDanRight (el) {
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
       const eleRight = el.getBoundingClientRect().right || this.container.getBoundingClientRect().right + eleWidth
