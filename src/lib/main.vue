@@ -107,15 +107,20 @@ export default {
         }
       })
     },
+    clean () {
+      const index = this.danmaku.danmus[0].index
+      const el = this.danmaku.$refs['dm-' + index]
+      if (el && el.getBoundingClientRect().right < this.container.getBoundingClientRect().left) {
+      }
+    },
     getChannel (el) {
-      console.log(el.style)
+      const tmp = this.container.offsetWidth / ((this.container.offsetWidth + el.offsetWidth) / this.speed)
       for (let i = 0; i < this.channels; i++) {
         const items = this.danChannel[i + '']
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            // TODO：碰撞检测
-            if (danRight <= 0) {
+            if (danRight <= this.container.offsetWidth - tmp * ((this.container.offsetWidth + parseInt(items[j].offsetWidth)) / this.speed) || danRight <= 0) {
               break
             }
             if (j === items.length - 1) {
