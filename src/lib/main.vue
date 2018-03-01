@@ -35,18 +35,14 @@ export default {
       danmaku: null,
       index: 0,
       speed: 5,
-      continueG: true,
+      continue: true,
       danChannel: {},
       channels: 0, // 轨道数量
       height: 30 // 弹幕高度
     }
   },
   computed: {},
-  watch: {
-    isActive (val) {
-      val ? this.draw() : this.stop()
-    }
-  },
+  watch: {},
   created () { },
   mounted () {
     this.initDanmu()
@@ -59,13 +55,14 @@ export default {
       this.channels = this.config.channels || parseInt(this.container.offsetHeight / this.height) // 初始化轨道数量
     },
     onMouseenter () {
-      if (this.hover) {
-        this.isActive = true
+      if (this.hover && !this.timer) {
+        console.log('走你')
+        this.draw()
       }
     },
     onMouseleave () {
       if (this.hover) {
-        this.isActive = false
+        this.stop()
       }
     },
     draw () {
@@ -73,44 +70,47 @@ export default {
         this.timer = setInterval(() => {
           if (this.index > this.danmus.length - 1) {
             if (this.config.loop) {
-              this.index = 0
               this.insert()
             } else {
+              this.index = 0
               clearInterval(this.timer)
             }
           } else {
             this.insert()
-            this.clean()
           }
-        }, 300)
+        }, 50)
       })
     },
     insert () {
-      if (this.continueG) {
+      const index = this.config.loop ? this.index % this.danmus.length : this.index
+      if (this.continue) {
+        console.log(index)
         this.danmaku.danmus.push({
           index: this.index,
-          danmu: this.danmus[this.index]
+          danmu: this.danmus[index]
         })
       }
       this.$nextTick(() => {
         const el = this.danmaku.$refs['dm-' + this.index]
         const tunnelIndex = this.getChannel(el)
         if (tunnelIndex >= 0) {
-          this.continueG = true
+          this.continue = true
           const width = el.offsetWidth
           el.style.top = tunnelIndex * this.height + 'px'
           el.style.left = -width - 1 + 'px'
           el.style.transition = 'left ' + this.speed + 's linear'
           this.index++
+          this.clean()
         } else {
-          this.continueG = false
+          this.continue = false
         }
       })
     },
     clean () {
       const index = this.danmaku.danmus[0].index
       const el = this.danmaku.$refs['dm-' + index]
-      if (el && el.getBoundingClientRect().right < this.container.getBoundingClientRect().left) {
+      if (el && (el.getBoundingClientRect().right < this.container.getBoundingClientRect().left)) {
+        // this.danmaku.danmus.splice(0, 1)
       }
     },
     getChannel (el) {
