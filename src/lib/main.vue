@@ -55,7 +55,7 @@ export default {
     init () {
       this.$danmaku = this.$refs.danmaku
       this.$danmus = this.$refs.danmus
-      this.channels = this.config.channels || parseInt(this.$danmaku.offsetHeight / this.height) // 初始化轨道数量
+      this.channels = this.config.channels || parseInt(this.$danmus.offsetHeight / this.height) // 初始化轨道数量
     },
     onMouseenter () {
       if (this.hover && !this.timer) {
@@ -86,51 +86,43 @@ export default {
     insert () {
       const index = this.config.loop ? this.index % this.danmus.length : this.index
       const el = document.createElement(`p`)
-      el.classList.add(`dm`)
       if (this.continue) {
+        el.classList.add(`dm`)
         el.innerHTML = this.danmus[index]
         el.setAttribute('index', this.index)
-        // this.danmaku.danmus.push({
-        //   index: this.index,
-        //   danmu: this.danmus[index]
-        // })
         this.$danmus.appendChild(el)
       }
       this.$nextTick(() => {
-        const tunnelIndex = this.getChannel(el)
+        let tunnelIndex = this.getChannel(el)
         if (tunnelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
           el.style.top = tunnelIndex * this.height + 'px'
           el.style.left = -width - 1 + 'px'
           el.style.transition = 'left ' + this.speed + 's linear'
+          el.addEventListener('transitionend', () => {
+            this.$danmus.removeChild(el)
+          })
           this.index++
-          // this.clean()
         } else {
+          this.$danmus.removeChild(el)
           this.continue = false
         }
       })
     },
-    clean () {
-      const index = this.danmaku.danmus[0].index
-      const el = this.danmaku.$refs['dm-' + index]
-      if (el && (el.getBoundingClientRect().right < this.$danmaku.getBoundingClientRect().left)) {
-        // this.danmaku.danmus.splice(0, 1)
-      }
-    },
     getChannel (el) {
-      const tmp = this.$danmaku.offsetWidth / ((this.$danmaku.offsetWidth + el.offsetWidth) / this.speed)
+      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / this.speed)
       for (let i = 0; i < this.channels; i++) {
         const items = this.danChannel[i + '']
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            if (danRight <= this.$danmaku.offsetWidth - tmp * ((this.$danmaku.offsetWidth + parseInt(items[j].offsetWidth)) / this.speed) || danRight <= 0) {
+            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / this.speed) || danRight <= 0) {
               break
             }
             if (j === items.length - 1) {
               this.danChannel[i + ''].push(el)
-              el.addEventListener('animationend', () => {
+              el.addEventListener('transitionend', () => {
                 this.danChannel[i + ''].splice(0, 1)
               })
               return i % this.channels
@@ -146,8 +138,8 @@ export default {
     // 弹幕到右侧的距离
     getDanRight (el) {
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
-      const eleRight = el.getBoundingClientRect().right || this.$danmaku.getBoundingClientRect().right + eleWidth
-      return this.$danmaku.getBoundingClientRect().right - eleRight
+      const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
+      return this.$danmus.getBoundingClientRect().right - eleRight
     },
     stop () {
     }
@@ -187,15 +179,7 @@ export default {
     top: 8px;
     white-space: pre;
     text-shadow: 1px 1px 2px #001;
+    will-change: transform;
   }
 }
-.dm {
-    position: absolute;
-    color: #fff;
-    font-size: 18px;
-    left: 100%;
-    top: 8px;
-    white-space: pre;
-    text-shadow: 1px 1px 2px #001;
-  }
 </style>
