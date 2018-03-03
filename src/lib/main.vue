@@ -150,6 +150,9 @@ export default {
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
     stop () {
+      this.danChannel = {}
+      this.index = 0
+      clearInterval(this.timer)
     }
   }
 }
