@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       config: {
-        channels: 4,
+        channels: 5,
         loop: true
       },
       danmus: [

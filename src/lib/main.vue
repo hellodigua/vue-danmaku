@@ -33,13 +33,13 @@ export default {
       $danmaku: null,
       $danmus: null,
       danmaku: {
-        danmus: []
+        danmus: [],
+        channels: 0 // 轨道数量
       },
       index: 0,
       speed: 5,
       continue: true,
       danChannel: {},
-      channels: 0, // 轨道数量
       height: 30 // 弹幕高度
     }
   },
@@ -55,7 +55,8 @@ export default {
     init () {
       this.$danmaku = this.$refs.danmaku
       this.$danmus = this.$refs.danmus
-      this.channels = this.config.channels || parseInt(this.$danmus.offsetHeight / this.height) // 初始化轨道数量
+      this.danmaku.danmus = this.danmus
+      this.danmaku.channels = this.config.channels || parseInt(this.$danmus.offsetHeight / this.height) // 初始化轨道数量
     },
     onMouseenter () {
       if (this.hover && !this.timer) {
@@ -84,7 +85,7 @@ export default {
       })
     },
     insert () {
-      const index = this.config.loop ? this.index % this.danmus.length : this.index
+      let index = this.config.loop ? this.index % this.danmus.length : this.index
       const el = document.createElement(`p`)
       if (this.continue) {
         el.classList.add(`dm`)
@@ -93,17 +94,19 @@ export default {
         this.$danmus.appendChild(el)
       }
       this.$nextTick(() => {
-        let tunnelIndex = this.getChannel(el)
-        if (tunnelIndex >= 0) {
+        let channelIndex = this.getChannel(el)
+        if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
-          el.style.top = tunnelIndex * this.height + 'px'
+          el.style.top = channelIndex * this.height + 'px'
           el.style.left = -width - 1 + 'px'
           el.style.transition = 'left ' + this.speed + 's linear'
           el.addEventListener('transitionend', () => {
             this.$danmus.removeChild(el)
           })
-          this.index++
+          if (el.classList.length > 0) {
+            this.index++
+          }
         } else {
           if (el.classList.length > 0) {
             this.$danmus.removeChild(el)
@@ -114,7 +117,7 @@ export default {
     },
     getChannel (el) {
       const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / this.speed)
-      for (let i = 0; i < this.channels; i++) {
+      for (let i = 0; i < this.danmaku.channels; i++) {
         const items = this.danChannel[i + '']
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
@@ -127,12 +130,15 @@ export default {
               el.addEventListener('transitionend', () => {
                 this.danChannel[i + ''].splice(0, 1)
               })
-              return i % this.channels
+              return i % this.danmaku.channels
             }
           }
         } else {
           this.danChannel[i + ''] = [el]
-          return i % this.channels
+          el.addEventListener('transitionend', () => {
+            this.danChannel[i + ''].splice(0, 1)
+          })
+          return i % this.danmaku.channels
         }
       }
       return -1
