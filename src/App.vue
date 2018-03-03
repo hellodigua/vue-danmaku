@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="container">
-      <vue-danmaku class="dan" :danmus="danmus1" :config="config">
+      <vue-danmaku class="dan" :danmus="danmus" :config="config">
         <img src="@/assets/mai.png">
       </vue-danmaku>
     </div>
@@ -27,8 +27,8 @@ export default {
   data () {
     return {
       config: {
-        channels: 0,
-        loop: false
+        channels: 4,
+        loop: true
       },
       danmus: [
         '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试end',

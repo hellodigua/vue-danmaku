@@ -105,7 +105,9 @@ export default {
           })
           this.index++
         } else {
-          this.$danmus.removeChild(el)
+          if (el.classList.length > 0) {
+            this.$danmus.removeChild(el)
+          }
           this.continue = false
         }
       })
@@ -150,36 +152,36 @@ export default {
 .danmaku {
   position: relative;
   overflow: hidden;
-}
-.danmus {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  -webkit-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-  &.show {
-    opacity: 1;
-  }
-  p {
+  .danmus {
     position: absolute;
-    color: #fff;
-    text-shadow: 1px 1px 1px #000;
-    margin: 0;
-    white-space: pre;
-  }
-  .dm {
-    position: absolute;
-    color: #fff;
-    font-size: 18px;
-    left: 100%;
-    top: 8px;
-    white-space: pre;
-    text-shadow: 1px 1px 2px #001;
-    will-change: transform;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    &.show {
+      opacity: 1;
+    }
+    p {
+      position: absolute;
+      color: #fff;
+      text-shadow: 1px 1px 1px #000;
+      margin: 0;
+      white-space: pre;
+    }
+    .dm {
+      position: absolute;
+      color: #fff;
+      font-size: 18px;
+      left: 100%;
+      top: 8px;
+      white-space: pre;
+      text-shadow: 1px 1px 2px #001;
+      will-change: transform;
+    }
   }
 }
 </style>
