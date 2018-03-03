@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-danmaku class="danmaku" :danmus="danmus1" :config="config">
+    <vue-danmaku class="dan" :danmus="danmus1" :config="config">
       <img src="@/assets/mai.png">
     </vue-danmaku>
   </div>
@@ -30,20 +30,20 @@ export default {
       },
       danmus: [
         '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试end',
-        '2超长弹幕测试超长弹幕测试超长弹幕测试2',
-        '3短弹幕测试',
-        '4超长弹幕测试',
+        '2短弹幕测试',
+        '3超长弹幕测试',
+        '4超长弹幕测试超长弹幕测试超长弹幕测试2',
         '5今天是个好日子',
         '6danmaku最高！',
-        '7地瓜地瓜，干杯~',
+        '7哔哩哔哩，干杯~',
         '8宽度',
         '9窄'
       ],
       danmus1: [
         '1超长弹幕测试超长弹幕测试超长弹幕测试超长弹幕测试end',
-        '2超长弹幕测试超长弹幕测试超长弹幕测试2',
-        '3短弹幕测试',
-        '4超长弹幕测试',
+        '2短弹幕测试',
+        '3超长弹幕测试',
+        '4超长弹幕测试超长弹幕测试超长弹幕测试2',
         '5今天是个好日子',
         '6danmaku最高！',
         '7地瓜地瓜，干杯~',
@@ -125,7 +125,7 @@ export default {
   width: 100vw;
   background: grey;
   padding: 100px;
-  .danmaku {
+  .dan {
     width: 720px;
     height: 480px;
     img {
