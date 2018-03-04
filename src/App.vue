@@ -1,9 +1,12 @@
 <template>
   <div id="app">
     <div class="container">
-      <vue-danmaku class="dan" :danmus="danmus" :config="config">
+      <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit">
         <img src="@/assets/mai.png">
       </vue-danmaku>
+      <button @click="make(1)">开始</button>
+      <button @click="make(2)">暂停</button>
+      <button @click="make(3)">停止</button>
     </div>
   </div>
 </template>
@@ -116,6 +119,25 @@ export default {
         '8宽度',
         '9窄'
       ]
+    }
+  },
+  methods: {
+    onInit () {
+      // this.$refs.danmaku.draw()
+    },
+    make (index) {
+      switch (index) {
+        case 1:
+          this.$refs.danmaku.draw()
+          break
+        case 2:
+          // this.$refs.danmaku.stop()
+          break
+        case 3:
+          this.$refs.danmaku.stop()
+          break
+        default:break
+      }
     }
   }
 }

@@ -14,10 +14,7 @@ export default {
     config: {
       type: Object,
       default: () => {
-        return {
-          channels: 0,
-          loop: false
-        }
+        return {}
       }
     },
     hover: {
@@ -34,13 +31,17 @@ export default {
       $danmus: null,
       danmaku: {
         danmus: [],
-        channels: 0 // 轨道数量
+        width: 0, // danmaku宽度
+        channels: 0, // 轨道数量
+        loop: false // 是否循环
+      },
+      danmu: {
+        height: 30
       },
       index: 0,
       speed: 5,
       continue: true,
-      danChannel: {},
-      height: 30 // 弹幕高度
+      danChannel: {}
     }
   },
   computed: {},
@@ -49,35 +50,36 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.init()
+      this.$emit('inited')
     })
   },
   methods: {
     init () {
+      this.initCore()
+      this.initConfig()
+    },
+    initCore () {
       this.$danmaku = this.$refs.danmaku
       this.$danmus = this.$refs.danmus
+    },
+    initConfig () {
+      this.danmaku.width = this.$danmus.offsetWidth
+      this.danmaku.height = this.$danmus.offsetHeight
       this.danmaku.danmus = this.danmus
-      this.danmaku.channels = this.config.channels || parseInt(this.$danmus.offsetHeight / this.height) // 初始化轨道数量
+      this.danmaku.channels = this.config.channels || parseInt(this.danmaku.offsetHeight / this.danmu.height)
+      this.danmaku.loop = this.config.loop || this.danmaku.loop
     },
     onMouseenter () {
-      if (this.hover && !this.timer) {
-        this.draw()
-      }
+      this.$emit('mousein')
     },
     onMouseleave () {
-      if (this.hover) {
-        this.stop()
-      }
+      this.$emit('mouseout')
     },
     draw () {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
           if (this.index > this.danmus.length - 1) {
-            if (this.config.loop) {
-              this.insert()
-            } else {
-              this.index = 0
-              clearInterval(this.timer)
-            }
+            this.config.loop ? this.insert() : this.clear()
           } else {
             this.insert()
           }
@@ -85,7 +87,7 @@ export default {
       })
     },
     insert () {
-      let index = this.config.loop ? this.index % this.danmus.length : this.index
+      const index = this.config.loop ? this.index % this.danmus.length : this.index
       const el = document.createElement(`p`)
       if (this.continue) {
         el.classList.add(`dm`)
@@ -98,7 +100,7 @@ export default {
         if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
-          el.style.top = channelIndex * this.height + 'px'
+          el.style.top = channelIndex * this.danmu.height + 'px'
           el.style.left = -width - 1 + 'px'
           el.style.transition = 'left ' + this.speed + 's linear'
           el.addEventListener('transitionend', () => {
@@ -151,6 +153,10 @@ export default {
     },
     stop () {
       this.danChannel = {}
+      this.$refs.danmus.innerHTML = ''
+      this.clear()
+    },
+    clear () {
       this.index = 0
       clearInterval(this.timer)
     }
