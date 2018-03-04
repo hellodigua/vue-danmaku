@@ -16,10 +16,6 @@ export default {
       default: () => {
         return {}
       }
-    },
-    hover: {
-      type: Boolean,
-      default: true
     }
   },
   data () {
@@ -36,10 +32,10 @@ export default {
         loop: false // 是否循环
       },
       danmu: {
-        height: 30
+        height: 30,
+        speed: 5
       },
       index: 0,
-      speed: 5,
       continue: true,
       danChannel: {}
     }
@@ -66,8 +62,9 @@ export default {
       this.danmaku.width = this.$danmus.offsetWidth
       this.danmaku.height = this.$danmus.offsetHeight
       this.danmaku.danmus = this.danmus
-      this.danmaku.channels = this.config.channels || parseInt(this.danmaku.offsetHeight / this.danmu.height)
+      this.danmaku.channels = this.config.channels || parseInt(this.danmaku.height / this.danmu.height)
       this.danmaku.loop = this.config.loop || this.danmaku.loop
+      this.danmu.speed = this.config.speed || this.danmu.speed
     },
     onMouseenter () {
       this.$emit('mousein')
@@ -102,7 +99,7 @@ export default {
           const width = el.offsetWidth
           el.style.top = channelIndex * this.danmu.height + 'px'
           el.style.left = -width - 1 + 'px'
-          el.style.transition = 'left ' + this.speed + 's linear'
+          el.style.transition = 'left ' + this.danmu.speed + 's linear'
           el.addEventListener('transitionend', () => {
             this.$danmus.removeChild(el)
           })
@@ -118,13 +115,13 @@ export default {
       })
     },
     getChannel (el) {
-      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / this.speed)
+      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / this.danmu.speed)
       for (let i = 0; i < this.danmaku.channels; i++) {
         const items = this.danChannel[i + '']
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / this.speed) || danRight <= 0) {
+            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / this.danmu.speed) || danRight <= 0) {
               break
             }
             if (j === items.length - 1) {

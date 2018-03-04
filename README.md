@@ -1,21 +1,61 @@
 # vue-danmaku
 
-> A Vue.js project
+> 一个Vue弹幕组件
 
-## Build Setup
+## Install
 
-``` bash
-# install dependencies
-npm install
+npm install vue-danmaku --save
 
-# serve with hot reload at localhost:8080
-npm run dev
+## Usage
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+```html
+<vue-danmaku ref="danmaku" :danmus="danmus" :config="config" @inited="onInit">
+  <slot></slot>
+</vue-danmaku>
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+```javascript
+import vueDanmaku from 'vue-danmaku'
+
+data() {
+  return {
+    danmus: ['danmu1', 'danmu2', 'danmu3', 'danmu4', '...']
+    config: {
+      channels: 5,
+      loop: true
+    }
+  }
+}
+
+```
+
+## Attributes
+
+| 参数         | 说明                      | 类型           | 可选值                    | 默认值                      |
+| :----------- | :----------------------- | :------------- | :----------------------- | :-------------------------- |
+| channels     | 轨道数量                  |    [Number]    |                          |  容器可容纳最高轨道数         |
+| loop         | 是否开启循环              |    [Boolean]   |                          |  false                      |
+| speed        | 弹幕速度，值越大弹幕越慢   |    [Number]    |                          |  5                         |
+
+## Events
+
+| 事件名称             | 说明              | 回调参数              |
+| :--------------- | :-------------- | :---------------- |
+| inited   | 弹幕初始化完毕，准备就绪| null |
+| mousein  | 鼠标移入弹幕容器| null |
+| mouseout | 鼠标移出弹幕容器| null |
+
+## Methods
+
+| 方法名            | 说明           | 参数             |
+| :--------------- | :-------------- | :-------------- |
+| draw             | 开始弹幕滚动     |                 |
+| stop             | 停止弹幕滚动     |                 |
+| pause            | 暂停弹幕滚动     |                 |
+
+## TODO
+
+[] 弹幕暂停
+[] 插入弹幕（按百分比插入，从头插入，从尾插入）
+[] 弹幕颜色
+[] 弹幕透明度
