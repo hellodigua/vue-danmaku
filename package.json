@@ -1,9 +1,9 @@
 {
   "name": "vue-danmuku",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "一个弹幕组件",
   "author": "'digua' <'hellodigua@gmail.com'>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
@@ -14,7 +14,6 @@
     "vue": "^2.5.2"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
