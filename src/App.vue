@@ -1,32 +1,17 @@
 <template>
   <div id="app">
-    <div class="container">
-      <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit">
-        <img src="@/assets/mai.png">
+    <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit">
       </vue-danmaku>
-      <button @click="make(1)">开始</button>
-      <button @click="make(2)">暂停</button>
-      <button @click="make(3)">停止</button>
-    </div>
   </div>
 </template>
 
 <script>
-import Stats from 'stats.js'
-
-var stats = new Stats()
-stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom)
-
-function animate () {
-  stats.begin()
-  stats.end()
-  requestAnimationFrame(animate)
-}
-requestAnimationFrame(animate)
-
+import VueDanmaku from './lib/index'
 export default {
   name: 'App',
+  components: {
+    VueDanmaku
+  },
   data () {
     return {
       config: {
@@ -123,7 +108,7 @@ export default {
   },
   methods: {
     onInit () {
-      // this.$refs.danmaku.draw()
+      this.$refs.danmaku.draw()
     },
     make (index) {
       switch (index) {
@@ -143,7 +128,7 @@ export default {
 }
 </script>
 
-<style lang="postcss">
+<style lang="scss">
 #app {
   position: relative;
   height: 100vh;

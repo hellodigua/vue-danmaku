@@ -160,7 +160,7 @@ export default {
   }
 }
 </script>
-<style lang="postcss">
+<style lang="scss">
 .danmaku {
   position: relative;
   overflow: hidden;
