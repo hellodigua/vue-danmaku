@@ -1,6 +1,6 @@
 {
-  "name": "vue-danmuku",
-  "version": "1.0.0",
+  "name": "vue-danmaku",
+  "version": "0.0.1",
   "description": "一个弹幕组件",
   "author": "'digua' <'hellodigua@gmail.com'>",
   "private": false,
