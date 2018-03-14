@@ -5,4 +5,3 @@ VueDanmaku.install = function (Vue) {
 }
 
 export default VueDanmaku
-

@@ -88,19 +88,21 @@ export default {
       const el = document.createElement(`p`)
       if (this.continue) {
         el.classList.add(`dm`)
+        el.classList.add(`move`)
         el.innerHTML = this.danmus[index]
         el.setAttribute('index', this.index)
         this.$danmus.appendChild(el)
       }
       this.$nextTick(() => {
         let channelIndex = this.getChannel(el)
+        console.log(channelIndex)
         if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
           el.style.top = channelIndex * this.danmu.height + 'px'
-          el.style.left = -width - 1 + 'px'
-          el.style.transition = 'left ' + this.danmu.speed + 's linear'
-          el.addEventListener('transitionend', () => {
+          el.style.width = width + 1 + 'px'
+          el.style.transform = `translateX(-${this.danmaku.width}px)`
+          el.addEventListener('animationend', () => {
             this.$danmus.removeChild(el)
           })
           if (el.classList.length > 0) {
@@ -110,7 +112,6 @@ export default {
           if (el.classList.length > 0) {
             this.$danmus.removeChild(el)
           }
-          this.continue = false
         }
       })
     },
@@ -126,7 +127,7 @@ export default {
             }
             if (j === items.length - 1) {
               this.danChannel[i + ''].push(el)
-              el.addEventListener('transitionend', () => {
+              el.addEventListener('animationend', () => {
                 this.danChannel[i + ''].splice(0, 1)
               })
               return i % this.danmaku.channels
@@ -134,7 +135,7 @@ export default {
           }
         } else {
           this.danChannel[i + ''] = [el]
-          el.addEventListener('transitionend', () => {
+          el.addEventListener('animationend', () => {
             this.danChannel[i + ''].splice(0, 1)
           })
           return i % this.danmaku.channels
@@ -188,12 +189,23 @@ export default {
       position: absolute;
       color: #fff;
       font-size: 18px;
-      left: 100%;
+      right: 0;
+      // left: 100%;
       top: 8px;
       white-space: pre;
       text-shadow: 1px 1px 2px #001;
-      will-change: transform;
+      transform: translateX(100%);
+      &.move {
+        will-change: transform;
+        animation: danmaku 5s linear;
+        // animation-play-state: paused;
+      }
     }
+    @keyframes danmaku {
+  from {
+    transform: translateX(100%);
+  }
+}
   }
 }
 </style>
