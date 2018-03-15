@@ -1,7 +1,7 @@
 <template>
   <div ref="danmaku" class="danmaku" @mouseenter="onMouseenter" @mouseleave="onMouseleave">
     <slot></slot>
-    <div class="danmus show" ref="danmus"></div>
+    <div :class="['danmus', 'show', {'paused': paused}]" ref="danmus"></div>
   </div>
 </template>
 <script>
@@ -35,6 +35,7 @@ export default {
         height: 30,
         speed: 5
       },
+      paused: false,
       index: 0,
       continue: true,
       danChannel: {}
@@ -149,6 +150,9 @@ export default {
       const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
+    pause () {
+      this.paused = !this.paused
+    },
     stop () {
       this.danChannel = {}
       this.$refs.danmus.innerHTML = ''
@@ -178,6 +182,11 @@ export default {
     &.show {
       opacity: 1;
     }
+    &.paused {
+      .dm.move {
+        animation-play-state: paused;
+      }
+    }
     p {
       position: absolute;
       color: #fff;
@@ -198,7 +207,7 @@ export default {
       &.move {
         will-change: transform;
         animation: danmaku 5s linear;
-        // animation-play-state: paused;
+        animation-play-state: running;
       }
     }
     @keyframes danmaku {

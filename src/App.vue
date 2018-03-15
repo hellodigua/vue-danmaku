@@ -4,7 +4,7 @@
       <img src="@/assets/mai.png">
     </vue-danmaku>
     <button @click="make(1)">开始</button>
-    <button @click="make(2)">暂停</button>
+    <button @click="make(2)">暂停/继续</button>
     <button @click="make(3)">停止</button>
   </div>
 </template>
@@ -132,7 +132,7 @@ export default {
           this.$refs.danmaku.draw()
           break
         case 2:
-          // this.$refs.danmaku.stop()
+          this.$refs.danmaku.pause()
           break
         case 3:
           this.$refs.danmaku.stop()
