@@ -1,7 +1,7 @@
 <template>
-  <div ref="danmaku" class="danmaku" @mouseenter="onMouseenter" @mouseleave="onMouseleave">
+  <div ref="danmaku" class="danmaku">
     <slot></slot>
-    <div :class="['danmus', 'show', {'paused': paused}]" ref="danmus"></div>
+    <div :class="['danmus', {'show': !hiden}, {'paused': paused}]" ref="danmus"></div>
   </div>
 </template>
 <script>
@@ -35,6 +35,7 @@ export default {
         height: 30,
         speed: 5
       },
+      hiden: false,
       paused: false,
       index: 0,
       continue: true,
@@ -67,12 +68,6 @@ export default {
       this.danmaku.loop = this.config.loop || this.danmaku.loop
       this.danmu.speed = this.config.speed || this.danmu.speed
     },
-    onMouseenter () {
-      this.$emit('mousein')
-    },
-    onMouseleave () {
-      this.$emit('mouseout')
-    },
     draw () {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
@@ -96,7 +91,6 @@ export default {
       }
       this.$nextTick(() => {
         let channelIndex = this.getChannel(el)
-        console.log(channelIndex)
         if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
@@ -156,11 +150,18 @@ export default {
     stop () {
       this.danChannel = {}
       this.$refs.danmus.innerHTML = ''
+      this.paused = false
       this.clear()
     },
     clear () {
       this.index = 0
       clearInterval(this.timer)
+    },
+    show () {
+      this.hiden = false
+    },
+    hide () {
+      this.hiden = true
     }
   }
 }

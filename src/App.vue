@@ -6,6 +6,8 @@
     <button @click="make(1)">开始</button>
     <button @click="make(2)">暂停/继续</button>
     <button @click="make(3)">停止</button>
+    <button @click="make(4)">显示</button>
+    <button @click="make(5)">隐藏</button>
   </div>
 </template>
 
@@ -136,6 +138,12 @@ export default {
           break
         case 3:
           this.$refs.danmaku.stop()
+          break
+        case 4:
+          this.$refs.danmaku.show()
+          break
+        case 5:
+          this.$refs.danmaku.hide()
           break
         default: break
       }
