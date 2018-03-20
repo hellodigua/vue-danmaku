@@ -1,7 +1,7 @@
 <template>
   <div ref="danmaku" class="danmaku">
     <slot></slot>
-    <div :class="['danmus', {'show': !hiden}, {'paused': paused}]" ref="danmus"></div>
+    <div :class="['danmus', {'show': !hidden}, {'paused': paused}]" ref="danmus"></div>
   </div>
 </template>
 <script>
@@ -35,7 +35,7 @@ export default {
         height: 30,
         speed: 5
       },
-      hiden: false,
+      hidden: false,
       paused: false,
       index: 0,
       continue: true,
@@ -67,6 +67,15 @@ export default {
       this.danmaku.channels = this.config.channels || parseInt(this.danmaku.height / this.danmu.height)
       this.danmaku.loop = this.config.loop || this.danmaku.loop
       this.danmu.speed = this.config.speed || this.danmu.speed
+    },
+    play () {
+      if (this.paused) {
+        this.paused = false
+        return
+      }
+      if (!this.timer) {
+        this.draw()
+      }
     },
     draw () {
       this.$nextTick(() => {
@@ -145,23 +154,25 @@ export default {
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
     pause () {
-      this.paused = !this.paused
+      this.paused = true
     },
     stop () {
       this.danChannel = {}
       this.$refs.danmus.innerHTML = ''
       this.paused = false
+      this.hidden = false
       this.clear()
     },
     clear () {
-      this.index = 0
       clearInterval(this.timer)
+      this.timer = null
+      this.index = 0
     },
     show () {
-      this.hiden = false
+      this.hidden = false
     },
     hide () {
-      this.hiden = true
+      this.hidden = true
     }
   }
 }
