@@ -13,7 +13,6 @@
 
 <script>
 import Stats from 'stats.js'
-import VueDanmaku from './lib/index'
 
 var stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -28,7 +27,6 @@ requestAnimationFrame(animate)
 export default {
   name: 'App',
   components: {
-    VueDanmaku
   },
   data () {
     return {
