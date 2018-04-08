@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit">
+    <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit" @mouseIn="onMouseIn" @mouseOut="onMouseOut">
       <img src="@/assets/mai.png">
     </vue-danmaku>
     <button @click="make(1)">开始</button>
@@ -125,6 +125,12 @@ export default {
   methods: {
     onInit () {
       this.$refs.danmaku.play()
+    },
+    onMouseIn () {
+      console.log('in')
+    },
+    onMouseOut () {
+      console.log('out')
     },
     make (index) {
       switch (index) {

@@ -1,5 +1,5 @@
 <template>
-  <div ref="danmaku" class="danmaku">
+  <div ref="danmaku" class="vue-danmaku" @mouseenter="mouseIn" @mouseleave="mouseOut">
     <slot></slot>
     <div :class="['danmus', {'show': !hidden}, {'paused': paused}]" ref="danmus"></div>
   </div>
@@ -173,12 +173,18 @@ export default {
     },
     hide () {
       this.hidden = true
+    },
+    mouseIn () {
+      this.$emit('mouseIn')
+    },
+    mouseOut () {
+      this.$emit('mouseOut')
     }
   }
 }
 </script>
 <style lang="scss">
-.danmaku {
+.vue-danmaku {
   position: relative;
   overflow: hidden;
   .danmus {
