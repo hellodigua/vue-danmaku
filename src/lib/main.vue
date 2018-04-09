@@ -56,13 +56,19 @@ export default {
       this.initCore()
       this.initConfig()
     },
+    mouseIn () {
+      this.$emit('mouseIn')
+    },
+    mouseOut () {
+      this.$emit('mouseOut')
+    },
     initCore () {
       this.$danmaku = this.$refs.danmaku
       this.$danmus = this.$refs.danmus
     },
     initConfig () {
-      this.danmaku.width = this.$danmus.offsetWidth
-      this.danmaku.height = this.$danmus.offsetHeight
+      this.danmaku.width = this.$danmaku.offsetWidth
+      this.danmaku.height = this.$danmaku.offsetHeight
       this.danmaku.danmus = this.danmus
       this.danmaku.channels = this.config.channels || parseInt(this.danmaku.height / this.danmu.height)
       this.danmaku.loop = this.config.loop || this.danmaku.loop
@@ -174,11 +180,12 @@ export default {
     hide () {
       this.hidden = true
     },
-    mouseIn () {
-      this.$emit('mouseIn')
-    },
-    mouseOut () {
-      this.$emit('mouseOut')
+    resize () {
+      this.initConfig()
+      const items = this.$danmaku.getElementsByClassName('dm')
+      for (let i = 0; i < items.length; i++) {
+        items[i].style.transform = `translateX(-${this.danmaku.width}px)`
+      }
     }
   }
 }
