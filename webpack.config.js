@@ -4,7 +4,8 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 var entry = {
   development: ['./src/main.js'],
-  production: ['./src/lib/index.js']
+  production: ['./src/lib/index.js'],
+  demo: ['./src/main.js']
 }
 
 var output = {
@@ -19,6 +20,11 @@ var output = {
     filename: 'vue-danmaku.js',
     library: ['vue-danmaku'],
     libraryTarget: 'umd'
+  },
+  demo: {
+    path: path.resolve(__dirname, './demo'),
+    publicPath: '/demo/',
+    filename: 'build.js'
   }
 }
 
