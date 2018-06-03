@@ -23,7 +23,7 @@ var output = {
   },
   demo: {
     path: path.resolve(__dirname, './demo'),
-    publicPath: '/demo/',
+    publicPath: './demo/',
     filename: 'build.js'
   }
 }
