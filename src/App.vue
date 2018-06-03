@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit" @mouseIn="onMouseIn" @mouseOut="onMouseOut">
-      <img src="/static/mai.png">
+      <img src="../static/mai.png">
     </vue-danmaku>
     <button @click="make(1)">开始</button>
     <button @click="make(2)">暂停</button>
