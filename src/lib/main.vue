@@ -33,6 +33,7 @@ export default {
       },
       danmu: {
         height: 30,
+        fontSize: 18,
         speed: 5
       },
       hidden: false,
@@ -73,6 +74,7 @@ export default {
       this.danmaku.channels = this.config.channels || parseInt(this.danmaku.height / this.danmu.height)
       this.danmaku.loop = this.config.loop || this.danmaku.loop
       this.danmu.speed = this.config.speed || this.danmu.speed
+      this.danmu.fontSize = this.config.fontSize || this.danmu.fontSize
     },
     play () {
       if (this.paused) {
@@ -100,6 +102,7 @@ export default {
       if (this.continue) {
         el.classList.add(`dm`)
         el.classList.add(`move`)
+        el.style.fontSize = `${this.danmu.fontSize}px`
         el.innerHTML = this.danmus[index]
         el.setAttribute('index', this.index)
         this.$danmus.appendChild(el)
@@ -109,7 +112,8 @@ export default {
         if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
-          el.style.top = channelIndex * this.danmu.height + 'px'
+          const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize
+          el.style.top = channelIndex * height + 'px'
           el.style.width = width + 1 + 'px'
           el.style.transform = `translateX(-${this.danmaku.width}px)`
           el.addEventListener('animationend', () => {
