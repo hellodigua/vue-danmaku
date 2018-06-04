@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <vue-danmaku ref="danmaku" class="dan" :danmus="danmus" :config="config" @inited="onInit" @mouseIn="onMouseIn" @mouseOut="onMouseOut">
-      <img src="../static/mai.png">
+    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" :config="config" @inited="onInit" @mouseIn="onMouseIn" @mouseOut="onMouseOut">
+      <section class="intro">
+        <h1>vue-danmaku</h1>
+        <p>非时间流式的弹幕交互组件</p>
+      </section>
     </vue-danmaku>
     <button @click="make(1)">开始</button>
     <button @click="make(2)">暂停</button>
@@ -77,16 +80,22 @@ export default {
   position: relative;
   height: 100vh;
   width: 100vw;
-  background: grey;
+  background: linear-gradient(45deg, #5ac381, #20568b);
   .container {
     margin: 0 20%;
   }
-  .dan {
-    width: 720px;
-    height: 480px;
-    img {
-      width: 100%;
-      height: 100%;
+  .demo {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .intro {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20%;
+      h1 {
+        font-size: 3em;
+      }
     }
   }
 }
