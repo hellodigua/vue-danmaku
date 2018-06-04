@@ -57,6 +57,9 @@ export default {
       this.initCore()
       this.initConfig()
     },
+    reset () {
+      this.initConfig()
+    },
     mouseIn () {
       this.$emit('mouseIn')
     },
