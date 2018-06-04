@@ -15,15 +15,15 @@ var output = {
     filename: 'build.js'
   },
   production: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    path: path.resolve(__dirname, './publish'),
+    publicPath: '/publish/',
     filename: 'vue-danmaku.js',
     library: ['vue-danmaku'],
     libraryTarget: 'umd'
   },
   demo: {
-    path: path.resolve(__dirname, './demo'),
-    publicPath: './demo/',
+    path: path.resolve(__dirname, './dist'),
+    publicPath: './dist/',
     filename: 'build.js'
   }
 }
@@ -32,7 +32,7 @@ var copyList = ['/README.md', '/package.json']
 copyList = copyList.map(function (item, index) {
   return {
     from: path.join(__dirname, item),
-    to: path.join(__dirname, '/dist', item)
+    to: path.join(__dirname, '/publish', item)
   }
 })
 
