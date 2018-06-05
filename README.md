@@ -1,8 +1,8 @@
 # vue-danmaku
 
-> 一个Vue弹幕组件
+> 一个非时间流式的弹幕交互组件
 
-[https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
+Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
 ## Install
 
@@ -24,7 +24,9 @@ data() {
     danmus: ['danmu1', 'danmu2', 'danmu3', 'danmu4', '...']
     config: {
       channels: 5,
-      loop: true
+      loop: true,
+      speed: 5,
+      fontSize: 20
     }
   }
 }
@@ -36,8 +38,9 @@ data() {
 | 参数         | 说明                      | 类型           | 可选值                    | 默认值                      |
 | :----------- | :----------------------- | :------------- | :----------------------- | :-------------------------- |
 | channels     | 轨道数量                  |    [Number]    |                          |  容器可容纳最高轨道数         |
-| loop         | 是否开启循环              |    [Boolean]   |                          |  false                      |
+| loop         | 是否开启弹幕循环           |    [Boolean]   |                          |  false                      |
 | speed        | 弹幕速度，值越大弹幕越慢   |    [Number]    |                          |  5                         |
+| fontSize     | 弹幕字号                |    [Number]    |                          |  20                         |
 
 ## Events
 
@@ -54,13 +57,18 @@ data() {
 | stop             | 停止弹幕滚动     |                 |
 | show             | 弹幕显示         |                 |
 | hide             | 弹幕隐藏         |                 |
+| reset            | 应用设置         |                 |
+| add              | 新增弹幕         |                 |
 
 ## TODO
 
 - [x] 弹幕暂停
 - [x] 弹幕速度
+- [x] 弹道控制
 - [x] 弹幕循环
+- [x] 弹幕速度
+- [x] 弹幕字号
+- [x] 新增弹幕
 - [ ] 弹幕透明度
-- [ ] 弹幕事件
-- [ ] 插入弹幕（按百分比插入，从头插入，从尾插入）
-- [ ] 要不要增加视频模式呢
+- [ ] 弹幕操作事件
+- [ ] 要不要增加时间模式呢
