@@ -115,7 +115,7 @@ export default {
         if (channelIndex >= 0) {
           this.continue = true
           const width = el.offsetWidth
-          const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize
+          const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize + 4
           el.style.top = channelIndex * height + 'px'
           el.style.width = width + 1 + 'px'
           el.style.transform = `translateX(-${this.danmaku.width}px)`
