@@ -1,7 +1,11 @@
 <template>
-  <div ref="danmaku" class="vue-danmaku" @mouseenter="mouseIn" @mouseleave="mouseOut">
+  <div ref="danmaku"
+    class="vue-danmaku"
+    @mouseenter="mouseIn"
+    @mouseleave="mouseOut">
     <slot></slot>
-    <div :class="['danmus', {'show': !hidden}, {'paused': paused}]" ref="danmus"></div>
+    <div :class="['danmus', {'show': !hidden}, {'paused': paused}]"
+      ref="danmus"></div>
   </div>
 </template>
 <script>
@@ -215,7 +219,6 @@ export default {
     height: 100%;
     opacity: 0;
     -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
     transition: all 0.3s;
     &.show {
       opacity: 1;
@@ -249,10 +252,15 @@ export default {
       }
     }
     @keyframes danmaku {
-  from {
-    transform: translateX(100%);
-  }
-}
+      from {
+        transform: translateX(100%);
+      }
+    }
+    @-webkit-keyframes danmaku {
+      from {
+        -webkit-transform: translateX(100%);
+      }
+    }
   }
 }
 </style>
