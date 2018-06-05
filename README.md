@@ -2,6 +2,8 @@
 
 > 一个Vue弹幕组件
 
+[https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
+
 ## Install
 
 npm install vue-danmaku --save

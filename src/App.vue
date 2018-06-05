@@ -29,26 +29,32 @@
       </p>
       <p>速度：
         <button class="btn"
-          @click="make(4)">减速</button>
+          @click="speedChange(1)">减速</button>
         <button class="btn"
-          @click="make(4)">增速</button>
+          @click="speedChange(2)">增速</button>
       </p>
       <p>字号：
         <button class="btn"
-          @click="make(4)">缩小</button>
+          @click="fontChange(1)">缩小</button>
         <button class="btn"
-          @click="make(4)">放大</button>
+          @click="fontChange(2)">放大</button>
       </p>
       <p>弹道：
-        <input type="text">
+        <input class="ipt" type="text" v-model="config.channels">
         <button class="btn"
-          @click="make(4)">设置</button>
+          @click="play('reset')">设置</button>
       </p>
       <p>
         发送：
-        <input type="text">
+        <input class="ipt" type="text" v-model="danmu">
         <button class="btn"
-          @click="make(4)">发送</button>
+          @click="addDanmu">发送</button>
+      </p>
+      <p>性能：
+        <button class="btn"
+          @click="performance('show')">显示</button>
+        <button class="btn"
+          @click="performance('hide')">隐藏</button>
       </p>
     </section>
   </div>
@@ -60,6 +66,7 @@ import { danmus, danmus1 } from './assets/danmu.js'
 var stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
+stats.dom.style.display = 'none'
 
 function animate () {
   stats.begin()
@@ -75,8 +82,11 @@ export default {
     return {
       config: {
         channels: 5,
-        loop: true
+        loop: true,
+        speed: 5,
+        fontSize: 20
       },
+      danmu: '',
       danmus: danmus,
       danmus1: danmus1
     }
@@ -108,19 +118,39 @@ export default {
         case 'hide':
           this.$refs.danmaku.hide()
           break
+        case 'reset':
+          this.$refs.danmaku.reset()
+          break
         default: break
       }
     },
-    make (index) {
-      switch (index) {
-        case 4:
-          this.$refs.danmaku.show()
-          break
-        case 5:
-          this.$refs.danmaku.hide()
-          break
-        default: break
+    performance (type) {
+      if (type === 'show') {
+        stats.dom.style.display = 'block'
+      } else {
+        stats.dom.style.display = 'none'
       }
+    },
+    speedChange (type) {
+      if (type === 1) {
+        this.config.speed = ++this.config.speed
+      } else {
+        this.config.speed = --this.config.speed
+      }
+      this.$refs.danmaku.reset()
+    },
+    fontChange (type) {
+      if (type === 1) {
+        this.config.fontSize = --this.config.fontSize
+      } else {
+        this.config.fontSize = ++this.config.fontSize
+      }
+      this.$refs.danmaku.reset()
+    },
+    addDanmu () {
+      if (!this.danmu) return
+      this.$refs.danmaku.add(this.danmu)
+      this.danmu = ''
     }
   }
 }
@@ -170,6 +200,12 @@ export default {
       &:active {
         background-color: #fff;
       }
+    }
+    .ipt {
+      padding: 6px 16px;
+      border-radius: 5px;
+      outline: none;
+      border: none;
     }
   }
 }
