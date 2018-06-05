@@ -167,6 +167,11 @@ export default {
       const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
+    // 添加弹幕
+    add (danmu) {
+      const index = this.index % this.danmaku.danmus.length
+      this.danmaku.danmus.splice(index, 0, danmu)
+    },
     pause () {
       this.paused = true
     },
