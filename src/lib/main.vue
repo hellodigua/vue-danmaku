@@ -105,6 +105,7 @@ export default {
       if (this.continue) {
         el.classList.add(`dm`)
         el.classList.add(`move`)
+        el.style.animationDuration = `${this.danmu.speed}s`
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.innerHTML = this.danmus[index]
         el.setAttribute('index', this.index)
@@ -133,13 +134,13 @@ export default {
       })
     },
     getChannel (el) {
-      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / this.danmu.speed)
+      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / 6)
       for (let i = 0; i < this.danmaku.channels; i++) {
         const items = this.danChannel[i + '']
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / this.danmu.speed) || danRight <= 0) {
+            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / 6) || danRight <= 0) {
               break
             }
             if (j === items.length - 1) {
@@ -231,14 +232,14 @@ export default {
       color: #fff;
       font-size: 18px;
       right: 0;
-      // left: 100%;
       top: 8px;
       white-space: pre;
       text-shadow: 1px 1px 2px #001;
       transform: translateX(100%);
       &.move {
         will-change: transform;
-        animation: danmaku 5s linear;
+        animation-name: danmaku;
+        animation-timing-function: linear;
         animation-play-state: running;
       }
     }
