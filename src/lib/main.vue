@@ -1,11 +1,11 @@
 <template>
   <div ref="danmaku"
-    class="vue-danmaku"
-    @mouseenter="mouseIn"
-    @mouseleave="mouseOut">
+       class="vue-danmaku"
+       @mouseenter="mouseIn"
+       @mouseleave="mouseOut">
     <slot></slot>
     <div :class="['danmus', {'show': !hidden}, {'paused': paused}]"
-      ref="danmus"></div>
+         ref="danmus"></div>
   </div>
 </template>
 <script>
@@ -22,7 +22,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       container: null,
       isActive: false,
@@ -49,32 +49,32 @@ export default {
   },
   computed: {},
   watch: {},
-  created () { },
-  mounted () {
+  created() { },
+  mounted() {
     this.$nextTick(() => {
       this.init()
       this.$emit('inited')
     })
   },
   methods: {
-    init () {
+    init() {
       this.initCore()
       this.initConfig()
     },
-    reset () {
+    reset() {
       this.initConfig()
     },
-    mouseIn () {
+    mouseIn() {
       this.$emit('mouseIn')
     },
-    mouseOut () {
+    mouseOut() {
       this.$emit('mouseOut')
     },
-    initCore () {
+    initCore() {
       this.$danmaku = this.$refs.danmaku
       this.$danmus = this.$refs.danmus
     },
-    initConfig () {
+    initConfig() {
       this.danmaku.width = this.$danmaku.offsetWidth
       this.danmaku.height = this.$danmaku.offsetHeight
       this.danmaku.danmus = this.danmus
@@ -83,7 +83,7 @@ export default {
       this.danmu.speed = this.config.speed || this.danmu.speed
       this.danmu.fontSize = this.config.fontSize || this.danmu.fontSize
     },
-    play () {
+    play() {
       if (this.paused) {
         this.paused = false
         return
@@ -92,7 +92,7 @@ export default {
         this.draw()
       }
     },
-    draw () {
+    draw() {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
           if (this.index > this.danmus.length - 1) {
@@ -103,7 +103,7 @@ export default {
         }, 50)
       })
     },
-    insert () {
+    insert() {
       const index = this.config.loop ? this.index % this.danmus.length : this.index
       const el = document.createElement(`p`)
       if (this.continue) {
@@ -137,7 +137,7 @@ export default {
         }
       })
     },
-    getChannel (el) {
+    getChannel(el) {
       const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / 6)
       for (let i = 0; i < this.danmaku.channels; i++) {
         const items = this.danChannel[i + '']
@@ -166,38 +166,38 @@ export default {
       return -1
     },
     // 弹幕到右侧的距离
-    getDanRight (el) {
+    getDanRight(el) {
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
       const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
     // 添加弹幕
-    add (danmu) {
+    add(danmu) {
       const index = this.index % this.danmaku.danmus.length
       this.danmaku.danmus.splice(index, 0, danmu)
     },
-    pause () {
+    pause() {
       this.paused = true
     },
-    stop () {
+    stop() {
       this.danChannel = {}
       this.$refs.danmus.innerHTML = ''
       this.paused = false
       this.hidden = false
       this.clear()
     },
-    clear () {
+    clear() {
       clearInterval(this.timer)
       this.timer = null
       this.index = 0
     },
-    show () {
+    show() {
       this.hidden = false
     },
-    hide () {
+    hide() {
       this.hidden = true
     },
-    resize () {
+    resize() {
       this.initConfig()
       const items = this.$danmaku.getElementsByClassName('dm')
       for (let i = 0; i < items.length; i++) {
