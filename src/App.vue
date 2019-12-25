@@ -105,7 +105,7 @@ export default {
       config: {
         channels: 5,
         loop: true,
-        speed: 5,
+        speed: 10,
         fontSize: 20
       },
       danmu: '',

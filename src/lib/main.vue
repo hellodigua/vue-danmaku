@@ -107,7 +107,6 @@ export default {
       const index = this.config.loop ? this.index % this.danmus.length : this.index
       const el = document.createElement(`p`)
       if (this.continue) {
-        el.classList.add(`dm`)
         el.classList.add(`move`)
         el.style.animationDuration = `${this.danmu.speed}s`
         el.style.fontSize = `${this.danmu.fontSize}px`
@@ -121,6 +120,7 @@ export default {
           this.continue = true
           const width = el.offsetWidth
           const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize + 4
+          el.classList.add(`dm`)
           el.style.top = channelIndex * height + 'px'
           el.style.width = width + 1 + 'px'
           el.style.transform = `translateX(-${this.danmaku.width}px)`
