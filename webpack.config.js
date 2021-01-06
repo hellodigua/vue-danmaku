@@ -15,10 +15,10 @@ var output = {
     filename: 'build.js'
   },
   production: {
-    path: path.resolve(__dirname, './publish'),
-    publicPath: '/publish/',
+    path: path.resolve(__dirname, './dist'),
+    publicPath: '/dist/',
     filename: 'vue-danmaku.js',
-    library: ['vue-danmaku'],
+    libraryExport: 'default',
     libraryTarget: 'umd'
   },
   demo: {
@@ -32,7 +32,7 @@ var copyList = ['/README.md', '/package.json']
 copyList = copyList.map(function (item, index) {
   return {
     from: path.join(__dirname, item),
-    to: path.join(__dirname, '/publish', item)
+    to: path.join(__dirname, '/dist', item)
   }
 })
 
@@ -114,7 +114,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    }),
-    new CopyWebpackPlugin(copyList)
+    })
+    // new CopyWebpackPlugin(copyList)
   ])
 }

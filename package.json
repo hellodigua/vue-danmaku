@@ -1,15 +1,15 @@
 {
   "name": "vue-danmaku",
   "description": "一个弹幕组件",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "'digua' <'hellodigua@gmail.com'>",
   "private": false,
   "license": "MIT",
-  "main": "vue-danmaku.js",
+  "main": "dist/vue-danmaku.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=demo webpack --progress --hide-modules",
-    "pub": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "demo": "cross-env NODE_ENV=demo webpack --progress --hide-modules",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
     "vue": "^2.5.2"
