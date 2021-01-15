@@ -10,8 +10,8 @@ var entry = {
 
 var output = {
   development: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    path: path.resolve(__dirname, './demo'),
+    publicPath: '/demo/',
     filename: 'build.js'
   },
   production: {
@@ -22,8 +22,8 @@ var output = {
     libraryTarget: 'umd'
   },
   demo: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: './dist/',
+    path: path.resolve(__dirname, './demo'),
+    publicPath: './demo/',
     filename: 'build.js'
   }
 }
