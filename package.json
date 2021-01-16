@@ -1,7 +1,7 @@
 {
   "name": "vue-danmaku",
   "description": "一个弹幕组件",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "'digua' <'hellodigua@gmail.com'>",
   "private": false,
   "license": "MIT",

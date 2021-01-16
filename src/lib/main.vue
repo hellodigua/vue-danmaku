@@ -67,12 +67,6 @@ export default {
       this.initConfig()
       this.$emit('inited')
     },
-    reset() {
-      this.$danmaku = null
-      this.$danmus = null
-      this.danmu.height = 0
-      this.init()
-    },
     mouseIn() {
       this.$emit('mouseIn')
     },
@@ -89,9 +83,9 @@ export default {
       const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18, top = 4, right = 2 } = this.config
       this.danmaku.danmus = [...this.danmus]
       this.danmaku.channels = Number(channels)
-      this.danmaku.loop = loop
-      this.danmaku.slot = slot
-      this.danmaku.debounce = debounce
+      this.danmaku.loop = Boolean(loop)
+      this.danmaku.slot = Boolean(slot)
+      this.danmaku.debounce = Number(debounce)
       this.danmu.speed = Number(speed)
       this.danmu.fontSize = Number(fontSize)
       this.danmu.top = Number(top)
@@ -228,6 +222,12 @@ export default {
     clear() {
       this.clearTimer()
       this.index = 0
+    },
+    reset() {
+      this.$danmaku = null
+      this.$danmus = null
+      this.danmu.height = 0
+      this.init()
     },
     stop() {
       this.danChannel = {}
