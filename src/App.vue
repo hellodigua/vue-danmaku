@@ -7,10 +7,16 @@
                  @inited="onInit"
                  @mouseIn="onMouseIn"
                  @mouseOut="onMouseOut">
+      <!-- slot用法 -->
+      <div class="danmu-item" slot-scope="{danmu, index}">
+        <img class="img" :src="danmu.avatar">
+        <span>{{ index }}{{ danmu.name }}：</span>
+        <span>{{ danmu.text }}</span>
+      </div>
     </vue-danmaku>
     <section class="intro">
       <h1>vue-danmaku</h1>
-      <p>非时间流式的弹幕交互组件</p>
+      <p>Vue弹幕交互组件</p>
     </section>
     <section class="operation">
       <p>播放：
@@ -20,6 +26,12 @@
                 @click="play('pause')">暂停</button>
         <button class="btn"
                 @click="play('stop')">停止</button>
+      </p>
+      <p>slot：
+        <button class="btn"
+                @click="switchSlot(true)">自定义模式</button>
+        <button class="btn"
+                @click="switchSlot(false)">普通弹幕模式</button>
       </p>
       <p>显示：
         <button class="btn"
@@ -56,9 +68,9 @@
       </p>
       <p>性能：
         <button class="btn"
-                @click="performance('show')">显示</button>
+                @click="setPerformance('block')">显示</button>
         <button class="btn"
-                @click="performance('hide')">隐藏</button>
+                @click="setPerformance('none')">隐藏</button>
       </p>
     </section>
     <a href="https://github.com/hellodigua/vue-danmaku"
@@ -84,7 +96,7 @@
 
 <script>
 import Stats from 'stats.js'
-import { danmus, danmus1 } from './assets/danmu.js'
+import { danmus, customDanmus } from './assets/danmu.js'
 var stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
@@ -106,11 +118,11 @@ export default {
         channels: 5,
         loop: true,
         speed: 10,
-        fontSize: 20
+        fontSize: 20,
+        slot: false
       },
       danmu: '',
-      danmus: danmus,
-      danmus1: danmus1
+      danmus
     }
   },
   methods: {
@@ -146,12 +158,14 @@ export default {
         default: break
       }
     },
-    performance(type) {
-      if (type === 'show') {
-        stats.dom.style.display = 'block'
-      } else {
-        stats.dom.style.display = 'none'
-      }
+    switchSlot(slot) {
+      this.config.slot = slot
+      this.$refs.danmaku.reset()
+      this.danmus = slot ? customDanmus : danmus
+      this.$refs.danmaku.play()
+    },
+    setPerformance(type) {
+      stats.dom.style.display = type
     },
     speedChange(type) {
       if (type === 1) {
@@ -194,6 +208,17 @@ export default {
     height: 100%;
     z-index: -1;
     background: linear-gradient(45deg, #5ac381, #20568b);
+  }
+  .danmu-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    .img {
+      height: 25px;
+      width: 25px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
   }
   .intro {
     display: inline-block;
