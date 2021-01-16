@@ -16,7 +16,7 @@
     </vue-danmaku>
     <section class="intro">
       <h1>vue-danmaku</h1>
-      <p>高性能Vue弹幕交互组件</p>
+      <p>Vue弹幕交互组件</p>
     </section>
     <section class="operation">
       <p>播放：
@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       config: {
-        channels: 5,
+        channels: 0,
         loop: true,
         speed: 10,
         fontSize: 20,
@@ -127,7 +127,6 @@ export default {
   },
   methods: {
     onInit() {
-      this.config.speed = document.body.offsetWidth / 100
       this.$refs.danmaku.play()
     },
     onMouseIn() {

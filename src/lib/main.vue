@@ -36,12 +36,13 @@ export default {
         width: 0, // danmaku宽度
         channels: 0, // 轨道数量
         loop: false, // 是否循环
-        slot: false // 是否开启slot
+        slot: false, // 是否开启slot
+        debounce: 50 // 弹幕刷新频率(ms)
       },
       danmu: {
         height: 0,
         fontSize: 18,
-        speed: 5
+        speed: 10
       },
       index: 0,
       hidden: false,
@@ -82,12 +83,13 @@ export default {
     },
     initConfig() {
       this.danmaku.danmus = this.danmus
-      const { channels = 3, loop = false, slot = false, speed = 5, fontSize = 18 } = this.config
-      this.danmaku.channels = channels || parseInt(this.danmaku.height / this.danmu.height)
+      const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18 } = this.config
+      this.danmaku.channels = Number(channels)
       this.danmaku.loop = loop
       this.danmaku.slot = slot
-      this.danmu.speed = speed
-      this.danmu.fontSize = fontSize
+      this.danmaku.debounce = debounce
+      this.danmu.speed = Number(speed)
+      this.danmu.fontSize = Number(fontSize)
     },
     play() {
       if (this.paused) {
@@ -106,17 +108,15 @@ export default {
           } else {
             this.insert()
           }
-        }, 50)
+        }, this.danmaku.debounce)
       })
     },
     insert() {
       const index = this.danmaku.loop ? this.index % this.danmus.length : this.index
       let el = document.createElement(`div`)
-      // console.log(this.danmaku.slot)
       if (this.danmaku.slot) {
         el = this.getSlotComponent(index).$el
-      }
-      if (!this.danmaku.slot) {
+      } else {
         el.innerHTML = this.danmus[index]
       }
       el.classList.add('dm', 'move')
@@ -125,10 +125,14 @@ export default {
       el.setAttribute('index', this.index)
       this.$danmus.appendChild(el)
       this.$nextTick(() => {
-        if (!this.danmu.height || !this.danmu.width) {
+        if (!this.danmu.height || !this.danmu.width || !this.danmaku.channels) {
           this.danmu.height = el.offsetHeight
+          // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
+          if (!this.danmaku.channels) {
+            this.danmaku.channels = Math.floor(this.danmaku.height / this.danmu.height)
+          }
         }
-        let channelIndex = this.getChannel(el)
+        let channelIndex = this.getChannelIndex(el)
         if (channelIndex >= 0) {
           const width = el.offsetWidth
           const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize + 4
@@ -174,10 +178,10 @@ export default {
 
       return ele
     },
-    getChannel(el) {
+    getChannelIndex(el) {
       const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / 6)
       for (let i = 0; i < this.danmaku.channels; i++) {
-        const items = this.danChannel[i + '']
+        const items = this.danChannel[i]
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
@@ -185,17 +189,17 @@ export default {
               break
             }
             if (j === items.length - 1) {
-              this.danChannel[i + ''].push(el)
+              this.danChannel[i].push(el)
               el.addEventListener('animationend', () => {
-                this.danChannel[i + ''].splice(0, 1)
+                this.danChannel[i].splice(0, 1)
               })
               return i % this.danmaku.channels
             }
           }
         } else {
-          this.danChannel[i + ''] = [el]
+          this.danChannel[i] = [el]
           el.addEventListener('animationend', () => {
-            this.danChannel[i + ''].splice(0, 1)
+            this.danChannel[i].splice(0, 1)
           })
           return i % this.danmaku.channels
         }
