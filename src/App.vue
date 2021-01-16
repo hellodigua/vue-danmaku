@@ -16,7 +16,7 @@
     </vue-danmaku>
     <section class="intro">
       <h1>vue-danmaku</h1>
-      <p>Vue弹幕交互组件</p>
+      <p>高性能Vue弹幕交互组件</p>
     </section>
     <section class="operation">
       <p>播放：
@@ -27,11 +27,11 @@
         <button class="btn"
                 @click="play('stop')">停止</button>
       </p>
-      <p>slot：
+      <p>模式：
         <button class="btn"
-                @click="switchSlot(true)">自定义模式</button>
+                @click="switchSlot(true)">弹幕slot插槽</button>
         <button class="btn"
-                @click="switchSlot(false)">普通弹幕模式</button>
+                @click="switchSlot(false)">普通文本</button>
       </p>
       <p>显示：
         <button class="btn"
@@ -127,6 +127,7 @@ export default {
   },
   methods: {
     onInit() {
+      this.config.speed = document.body.offsetWidth / 100
       this.$refs.danmaku.play()
     },
     onMouseIn() {
@@ -224,6 +225,7 @@ export default {
     display: inline-block;
     color: #fff;
     text-align: center;
+    text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
     h1 {
       font-size: 48px;
       line-height: 32px;
