@@ -56,19 +56,21 @@ export default {
   watch: {},
   created() { },
   mounted() {
-    this.$nextTick(() => {
-      this.init()
-      this.$emit('inited')
-    })
+    this.init()
+  },
+  beforeDestroy() {
+    this.clearTimer()
   },
   methods: {
     init() {
       this.initCore()
       this.initConfig()
+      this.$emit('inited')
     },
     reset() {
       this.$danmaku = null
       this.$danmus = null
+      this.danmu.height = 0
       this.init()
     },
     mouseIn() {
@@ -84,8 +86,8 @@ export default {
       this.danmaku.height = this.$danmaku.offsetHeight
     },
     initConfig() {
-      this.danmaku.danmus = this.danmus
       const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18, top = 4, right = 2 } = this.config
+      this.danmaku.danmus = [...this.danmus]
       this.danmaku.channels = Number(channels)
       this.danmaku.loop = loop
       this.danmaku.slot = slot
@@ -96,32 +98,33 @@ export default {
       this.danmu.right = Number(right)
     },
     play() {
-      if (this.paused) {
-        this.paused = false
-        return
-      }
       if (!this.timer) {
         this.draw()
+      }
+      if (this.paused) {
+        this.paused = false
       }
     },
     draw() {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
-          if (this.index > this.danmus.length - 1) {
-            this.danmaku.loop ? this.insert() : this.clear()
-          } else {
-            this.insert()
+          if (!this.paused) {
+            if (this.index > this.danmaku.danmus.length - 1) {
+              this.danmaku.loop ? this.insert() : this.clear()
+            } else {
+              this.insert()
+            }
           }
         }, this.danmaku.debounce)
       })
     },
     insert() {
-      const index = this.danmaku.loop ? this.index % this.danmus.length : this.index
+      const index = this.danmaku.loop ? this.index % this.danmaku.danmus.length : this.index
       let el = document.createElement(`div`)
       if (this.danmaku.slot) {
         el = this.getSlotComponent(index).$el
       } else {
-        el.innerHTML = this.danmus[index]
+        el.innerHTML = this.danmaku.danmus[index]
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.style.lineHeight = `${this.danmu.fontSize}px`
       }
@@ -177,7 +180,7 @@ export default {
 
       const ele = new DmComponent({
         propsData: {
-          danmu: this.danmus[index],
+          danmu: this.danmaku.danmus[index],
           index
         }
       }).$mount(document.createElement('div'))
@@ -218,28 +221,34 @@ export default {
       const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
       return this.$danmus.getBoundingClientRect().right - eleRight
     },
+    clearTimer() {
+      clearInterval(this.timer)
+      this.timer = null
+    },
+    clear() {
+      this.clearTimer()
+      this.index = 0
+    },
+    stop() {
+      this.danChannel = {}
+      this.$refs.danmus.innerHTML = ''
+      this.paused = true
+      this.hidden = false
+      this.clear()
+    },
+    pause() {
+      this.paused = true
+    },
     // 添加弹幕
     add(danmu) {
       const index = this.index % this.danmaku.danmus.length
       this.danmaku.danmus.splice(index, 0, danmu)
     },
-    pause() {
-      this.paused = true
+    setChannels(len) {
+      this.danmaku.channels = len
     },
-    stop() {
-      this.danChannel = {}
-      this.$refs.danmus.innerHTML = ''
-      this.paused = false
-      this.hidden = false
-      this.clear()
-    },
-    getPlayStatus() {
+    getPlayState() {
       return !this.paused
-    },
-    clear() {
-      clearInterval(this.timer)
-      this.timer = null
-      this.index = 0
     },
     show() {
       this.hidden = false
@@ -282,7 +291,7 @@ export default {
     .dm {
       position: absolute;
       right: 0;
-      font-size: 14px;
+      font-size: 20px;
       color: #fff;
       white-space: pre;
       transform: translateX(100%);
