@@ -1,6 +1,6 @@
 # vue-danmaku
 
-> 一个非时间流式的弹幕交互组件
+> 基于Vue.js的弹幕交互组件
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
