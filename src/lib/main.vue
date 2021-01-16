@@ -40,9 +40,11 @@ export default {
         debounce: 50 // 弹幕刷新频率(ms)
       },
       danmu: {
-        height: 0,
-        fontSize: 18,
-        speed: 10
+        fontSize: 18, // 弹幕元素字号（slot下不可用）
+        height: 0, // 弹幕元素高度
+        speed: 10, // 弹幕速度
+        top: 4, // 弹幕垂直间距
+        right: 2 // 弹幕水平间距
       },
       index: 0,
       hidden: false,
@@ -83,13 +85,15 @@ export default {
     },
     initConfig() {
       this.danmaku.danmus = this.danmus
-      const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18 } = this.config
+      const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18, top = 4, right = 2 } = this.config
       this.danmaku.channels = Number(channels)
       this.danmaku.loop = loop
       this.danmaku.slot = slot
       this.danmaku.debounce = debounce
       this.danmu.speed = Number(speed)
       this.danmu.fontSize = Number(fontSize)
+      this.danmu.top = Number(top)
+      this.danmu.right = Number(right)
     },
     play() {
       if (this.paused) {
@@ -118,14 +122,14 @@ export default {
         el = this.getSlotComponent(index).$el
       } else {
         el.innerHTML = this.danmus[index]
+        el.style.fontSize = `${this.danmu.fontSize}px`
+        el.style.lineHeight = `${this.danmu.fontSize}px`
       }
-      el.classList.add('dm', 'move')
-      el.style.animationDuration = `${this.danmu.speed}s`
-      el.style.fontSize = `${this.danmu.fontSize}px`
+      el.classList.add('dm')
       el.setAttribute('index', this.index)
       this.$danmus.appendChild(el)
       this.$nextTick(() => {
-        if (!this.danmu.height || !this.danmu.width || !this.danmaku.channels) {
+        if (!this.danmu.height || !this.danmaku.channels) {
           this.danmu.height = el.offsetHeight
           // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
           if (!this.danmaku.channels) {
@@ -135,9 +139,11 @@ export default {
         let channelIndex = this.getChannelIndex(el)
         if (channelIndex >= 0) {
           const width = el.offsetWidth
-          const height = this.danmu.height > this.danmu.fontSize ? this.danmu.height : this.danmu.fontSize + 4
-          el.style.top = channelIndex * height + 'px'
-          el.style.width = width + 1 + 'px'
+          const height = this.danmu.height
+          el.classList.add('move')
+          el.style.animationDuration = `${this.danmu.speed}s`
+          el.style.top = channelIndex * (height + this.danmu.top) + 'px'
+          el.style.width = width + this.danmu.right + 'px'
           el.style.transform = `translateX(-${this.danmaku.width}px)`
           el.addEventListener('animationend', () => {
             this.$danmus.removeChild(el)
@@ -273,35 +279,26 @@ export default {
         animation-play-state: paused;
       }
     }
-    p {
-      position: absolute;
-      color: #fff;
-      text-shadow: 1px 1px 1px #000;
-      margin: 0;
-      white-space: pre;
-    }
     .dm {
       position: absolute;
-      color: #fff;
-      font-size: 18px;
       right: 0;
-      top: 8px;
+      font-size: 14px;
+      color: #fff;
       white-space: pre;
-      text-shadow: 1px 1px 2px #001;
       transform: translateX(100%);
       &.move {
         will-change: transform;
-        animation-name: danmaku;
+        animation-name: moveLeft;
         animation-timing-function: linear;
         animation-play-state: running;
       }
     }
-    @keyframes danmaku {
+    @keyframes moveLeft {
       from {
         transform: translateX(100%);
       }
     }
-    @-webkit-keyframes danmaku {
+    @-webkit-keyframes moveLeft {
       from {
         -webkit-transform: translateX(100%);
       }
