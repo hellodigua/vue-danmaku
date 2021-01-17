@@ -4,9 +4,14 @@
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
+![normal.jpg](https://i.loli.net/2021/01/17/u1CWvG4A2UVPH6c.jpg)
+
+![slot.jpg](https://i.loli.net/2021/01/17/W6etb1GN9YkJ4Rj.jpg)
 ## Install
 
+```js
 npm install vue-danmaku --save
+```
 
 ## Usage
 
@@ -67,13 +72,23 @@ data() {
 
 ## Attributes
 
+| 参数         | 说明                      | 类型           | 可选值      | 默认值           |
+| :----------- | :----------------------- | :------------- | :-------- | :-------------- |
+| config     | 弹幕配置                    |    [Object]    |          |  见下表         |
+| danmus     | 弹幕元素列表，支持纯文本或者自定义对象    | [Array]    |          |           |
+
+## Config Attributes
+
 | 参数         | 说明                      | 类型           | 可选值                    | 默认值                      |
 | :----------- | :----------------------- | :------------- | :----------------------- | :-------------------------- |
-| slot     | 是否开启弹幕插槽                  |    [Boolean]    |                          |  false         |
-| channels     | 轨道数量                  |    [Number]    |                          |  容器可容纳最高轨道数         |
+| channels     | 轨道数量                  |    [Number]    |                          |  0 容器可容纳最高轨道数         |
+| slot         | 是否开启弹幕插槽            |    [Boolean]    |                          |  false         |
 | loop         | 是否开启弹幕循环           |    [Boolean]   |                          |  false                      |
-| speed        | 弹幕速度，值越大弹幕越慢   |    [Number]    |                          |  5                         |
-| fontSize     | 弹幕字号                |    [Number]    |                          |  20                         |
+| speed        | 弹幕速度（值越大速度越小） |    [Number]    |                          |  10                         |
+| fontSize     | 弹幕字号（文本模式可用）     |    [Number]    |                          |  20                         |
+| debounce     | 弹幕刷新频率(ms)     |    [Number]    |                          |  50                         |
+| top          | 弹幕垂直间距(px)     |    [Number]    |                          |  4                         |
+| right        | 弹幕水平间距(px)     |    [Number]    |                          |  2                         |
 
 ## Events
 
@@ -88,9 +103,10 @@ data() {
 | play             | 开始弹幕滚动     |                 |
 | pause            | 暂停弹幕滚动     |                 |
 | stop             | 停止弹幕滚动     |                 |
+| setChannels      | 动态设置轨道数    |                 |
 | show             | 弹幕显示         |                 |
 | hide             | 弹幕隐藏         |                 |
-| reset            | 应用设置         |                 |
+| reset            | 重置为当前设置    |                 |
 | add              | 新增弹幕         |                 |
 
 ## 进度
@@ -107,7 +123,9 @@ data() {
 - [x] 设置弹幕距离 v0.3.0
 - [x] Make Core Code Great Again v0.3.0
 - [ ] 弹幕操作事件 -> 动工中
-- [ ] 倒放模式 -> 动工中
-- [ ] 时间控制器 - > 动工中
+- [ ] 随机轨道发送 - > 动工中
+- [ ] 顶部弹幕 - > pending
+- [ ] 倒放模式 -> pending
+- [ ] 时间控制器 - > pending
 - [ ] TS类型支持
 - [ ] 支持Vue3

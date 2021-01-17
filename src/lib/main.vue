@@ -279,7 +279,6 @@ export default {
     opacity: 0;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
-    z-index: 1000;
     &.show {
       opacity: 1;
     }
