@@ -8,23 +8,23 @@ export const danmus = [
   '双厨狂喜',
   '禁止套娃',
   '我来了！',
-  '233333'
+  '233333',
 ]
 
 export const customDanmus = [
   {
-    avatar: require('./avatar_1.jpg'),
+    avatar: 'https://i.loli.net/2021/01/17/iI5hq9ozPxXNFfy.jpg',
     name: '美绪',
-    text: '马什么梅？'
+    text: '马什么梅？',
   },
   {
-    avatar: require('./avatar_2.jpg'),
+    avatar: 'https://i.loli.net/2021/01/17/YcPdNkQyAUaTWG8.jpg',
     name: '博士',
-    text: '马东什么？'
+    text: '马东什么？',
   },
   {
-    avatar: require('./avatar_3.jpg'),
+    avatar: 'https://i.loli.net/2021/01/17/cPtsFmaJ2OiYZRb.jpg',
     name: '柚子',
-    text: '什么冬梅？'
-  }
+    text: '什么冬梅？',
+  },
 ]

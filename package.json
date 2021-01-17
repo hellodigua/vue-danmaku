@@ -1,18 +1,22 @@
 {
   "name": "vue-danmaku",
-  "description": "一个弹幕组件",
+  "description": "基于Vue.js的弹幕交互组件",
   "version": "0.3.0",
-  "author": "'digua' <'hellodigua@gmail.com'>",
+  "author": "hellodigua",
   "private": false,
   "license": "MIT",
   "main": "dist/vue-danmaku.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "demo": "cross-env NODE_ENV=demo webpack --progress --hide-modules",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.5.2"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -39,7 +43,7 @@
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "vue-loader": "^13.0.5",
-    "vue-template-compiler": "^2.4.4",
+    "vue-template-compiler": "^2.6.11",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
   }

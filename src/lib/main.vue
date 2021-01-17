@@ -1,10 +1,6 @@
 <template>
-  <div ref="danmaku"
-       class="vue-danmaku"
-       @mouseenter="mouseIn"
-       @mouseleave="mouseOut">
-    <div :class="['danmus', {'show': !hidden}, {'paused': paused}]"
-         ref="danmus"></div>
+  <div ref="danmaku" class="vue-danmaku" @mouseenter="mouseIn" @mouseleave="mouseOut">
+    <div :class="['danmus', { show: !hidden }, { paused: paused }]" ref="danmus"></div>
     <slot name="content" />
   </div>
 </template>
@@ -15,14 +11,14 @@ export default {
   props: {
     danmus: {
       type: Array,
-      required: true
+      required: true,
     },
     config: {
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -37,24 +33,24 @@ export default {
         channels: 0, // 轨道数量
         loop: false, // 是否循环
         slot: false, // 是否开启slot
-        debounce: 50 // 弹幕刷新频率(ms)
+        debounce: 50, // 弹幕刷新频率(ms)
       },
       danmu: {
         fontSize: 18, // 弹幕元素字号（slot下不可用）
         height: 0, // 弹幕元素高度
         speed: 10, // 弹幕速度
         top: 4, // 弹幕垂直间距
-        right: 2 // 弹幕水平间距
+        right: 2, // 弹幕水平间距
       },
       index: 0,
       hidden: false,
       paused: false,
-      danChannel: {}
+      danChannel: {},
     }
   },
   computed: {},
   watch: {},
-  created() { },
+  created() {},
   mounted() {
     this.init()
   },
@@ -80,7 +76,16 @@ export default {
       this.danmaku.height = this.$danmaku.offsetHeight
     },
     initConfig() {
-      const { channels = 0, loop = false, slot = false, debounce = 50, speed = 10, fontSize = 18, top = 4, right = 2 } = this.config
+      const {
+        channels = 0,
+        loop = false,
+        slot = false,
+        debounce = 50,
+        speed = 10,
+        fontSize = 18,
+        top = 4,
+        right = 2,
+      } = this.config
       this.danmaku.danmus = [...this.danmus]
       this.danmaku.channels = Number(channels)
       this.danmaku.loop = Boolean(loop)
@@ -160,23 +165,23 @@ export default {
       const DmComponent = Vue.extend({
         props: {
           danmu: [String, Object],
-          index: Number
+          index: Number,
         },
         render(createElement) {
           return createElement('div', [
             that.$scopedSlots.default({
               danmu: this.danmu,
-              index: this.index
-            })
+              index: this.index,
+            }),
           ])
-        }
+        },
       })
 
       const ele = new DmComponent({
         propsData: {
           danmu: this.danmaku.danmus[index],
-          index
-        }
+          index,
+        },
       }).$mount(document.createElement('div'))
 
       return ele
@@ -188,7 +193,11 @@ export default {
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            if (danRight <= this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / 6) || danRight <= 0) {
+            if (
+              danRight <=
+                this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / 6) ||
+              danRight <= 0
+            ) {
               break
             }
             if (j === items.length - 1) {
@@ -262,8 +271,8 @@ export default {
       for (let i = 0; i < items.length; i++) {
         items[i].style.transform = `translateX(-${this.danmaku.width}px)`
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

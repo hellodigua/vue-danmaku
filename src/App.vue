@@ -25,6 +25,11 @@
           <button class="btn" @click="switchSlot(true)">弹幕 slot</button>
           <button class="btn" @click="switchSlot(false)">普通文本</button>
         </p>
+        <!-- <p>
+          循环：
+          <button class="btn" @click="play('show')">开启</button>
+          <button class="btn" @click="play('hide')">关闭</button>
+        </p> -->
         <p>
           显示：
           <button class="btn" @click="play('show')">显示</button>
@@ -60,7 +65,12 @@
         </p>
       </div>
     </div>
-    <a href="https://github.com/hellodigua/vue-danmaku" class="github-corner" target="_blank" aria-label="View source on Github">
+    <a
+      href="https://github.com/hellodigua/vue-danmaku"
+      class="github-corner"
+      target="_blank"
+      aria-label="View source on Github"
+    >
       <svg
         width="80"
         height="80"
@@ -109,10 +119,10 @@ export default {
         speed: 10,
         fontSize: 20,
         top: 10,
-        slot: false
+        slot: false,
       },
       danmu: '',
-      danmus
+      danmus,
     }
   },
   methods: {
@@ -168,18 +178,24 @@ export default {
     },
     addDanmu() {
       if (!this.danmu) return
-      const danmu = this.config.slot ? {
-        avatar: require('./assets/avatar_1.jpg'),
-        name: '你',
-        text: this.danmu } : this.danmu
+      const danmu = this.config.slot
+        ? {
+            avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
+            name: '你',
+            text: this.danmu,
+          }
+        : this.danmu
       this.$refs.danmaku.add(danmu)
       this.danmu = ''
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
+body {
+  margin: 0;
+}
 #app {
   position: relative;
   height: 100vh;
@@ -231,6 +247,7 @@ export default {
         background: #fff;
         border: none;
         padding: 6px 16px;
+        margin-right: 8px;
         border-radius: 5px;
         outline: none;
         cursor: pointer;
@@ -247,6 +264,7 @@ export default {
         border-radius: 5px;
         outline: none;
         border: none;
+        margin-right: 8px;
       }
     }
   }
