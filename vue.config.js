@@ -1,3 +1,5 @@
+const WebpackCdnPlugin = require('webpack-cdn-plugin')
+
 module.exports = {
   parallel: false,
   publicPath:
@@ -19,4 +21,14 @@ module.exports = {
     }
   },
   css: { extract: !!process.env.NO_EXTRACT_CSS },
+  configureWebpack: {
+    plugins: [
+      new WebpackCdnPlugin({
+        modules: [{ name: 'vue', var: 'Vue', path: 'dist/vue.runtime.min.js' }],
+        publicPath: '/node_modules',
+        prodUrl: '//cdn.jsdelivr.net/npm/:name@:version/:path',
+        crossOrigin: 'anonymous',
+      }),
+    ],
+  },
 }
