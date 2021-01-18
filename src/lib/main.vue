@@ -1,7 +1,7 @@
 <template>
   <div ref="danmaku" class="vue-danmaku" @mouseenter="mouseIn" @mouseleave="mouseOut">
     <div :class="['danmus', { show: !hidden }, { paused: paused }]" ref="danmus"></div>
-    <slot name="content" />
+    <slot />
   </div>
 </template>
 <script>
@@ -169,7 +169,7 @@ export default {
         },
         render(createElement) {
           return createElement('div', [
-            that.$scopedSlots.default({
+            that.$scopedSlots.dm({
               danmu: this.danmu,
               index: this.index,
             }),
@@ -202,17 +202,13 @@ export default {
             }
             if (j === items.length - 1) {
               this.danChannel[i].push(el)
-              el.addEventListener('animationend', () => {
-                this.danChannel[i].splice(0, 1)
-              })
+              el.addEventListener('animationend', () => this.danChannel[i].splice(0, 1))
               return i % this.danmaku.channels
             }
           }
         } else {
           this.danChannel[i] = [el]
-          el.addEventListener('animationend', () => {
-            this.danChannel[i].splice(0, 1)
-          })
+          el.addEventListener('animationend', () => this.danChannel[i].splice(0, 1))
           return i % this.danmaku.channels
         }
       }

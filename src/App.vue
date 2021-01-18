@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" :config="config" @inited="onInit">
+      <!-- 容器slot -->
+      <div></div>
       <!-- 弹幕slot -->
-      <div class="danmu-item" slot-scope="{ danmu, index }">
-        <img class="img" :src="danmu.avatar" />
-        <span>{{ index }}{{ danmu.name }}：</span>
-        <span>{{ danmu.text }}</span>
-      </div>
+      <template v-slot:dm="{ index, danmu }">
+        <div class="danmu-item">
+          <img class="img" :src="danmu.avatar" />
+          <span>{{ index }}{{ danmu.name }}：</span>
+          <span>{{ danmu.text }}</span>
+        </div>
+      </template>
     </vue-danmaku>
     <div class="main">
       <div class="intro">
@@ -48,11 +52,11 @@
           <span>当前字号：{{ config.fontSize }}px</span>
         </p>
         <p>
-          弹道：
-          <button class="btn" @click="channelChange(-1)">减一</button>
-          <button class="btn" @click="channelChange(1)">加一</button>
+          轨道：
+          <button class="btn" @click="channelChange(-1)">-1</button>
+          <button class="btn" @click="channelChange(1)">+1</button>
           <button class="btn" @click="channelChange(0)">填满</button>
-          <span>当前弹道：{{ config.channels }}</span>
+          <span>当前轨道数：{{ config.channels }}</span>
         </p>
         <p>
           发送：
@@ -118,7 +122,7 @@ export default {
         channels: 5, // 为0则弹幕轨道数不限
         loop: true,
         speed: 8,
-        fontSize: 20,
+        fontSize: 20, // slot模式下失效
         top: 10,
         slot: false,
       },
@@ -127,7 +131,7 @@ export default {
     }
   },
   created() {
-    // 手机端使用海量弹幕效果，反正他们的手机性能都好
+    // 手机端使用海量弹幕效果
     if (screen.width < 750) {
       this.config.speed = 5
       this.config.channels = 0
@@ -251,6 +255,7 @@ body {
     .action {
       margin-top: 20px;
       color: #fff;
+      min-width: 360px;
       .btn {
         color: #000;
         background: #fff;

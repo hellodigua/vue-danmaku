@@ -47,15 +47,17 @@ export default {
 
 ## 自定义弹幕
 
+自 0.3.1 版本起，vue-danmaku 支持通过 slot 插槽来自定义弹幕结构与样式，你可以传入任意结构的对象并通过 vue-danmaku 渲染出来。
+
 ```vue
 <template>
   <vue-danmaku ref="danmaku" :danmus="danmus" :config="config" @inited="onInit">
     <!-- 弹幕插槽 -->
-    <div slot-scope="{ danmu, index }">
+    <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
-    </div>
+    </template>
     <!-- 容器插槽 -->
-    <div slot="content"></div>
+    <div></div>
   </vue-danmaku>
 </template>
 
@@ -65,7 +67,7 @@ import vueDanmaku from 'vue-danmaku'
 export default {
   data() {
     return {
-      danmus: [{ name: 'a', text: 'aaa' }, { name: 'b', text: 'bbb' }, ...]
+      danmus: [{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...]
       config: {
         slot: true,
         channels: 5,
@@ -121,15 +123,19 @@ export default {
 
 - [x] 弹幕暂停 v0.0.5
 - [x] 弹幕速度 v0.0.5
-- [x] 弹道控制 v0.0.5
+- [x] 轨道控制 v0.0.5
 - [x] 弹幕循环 v0.0.5
 - [x] 弹幕速度 v0.0.6
 - [x] 弹幕字号 v0.0.6
 - [x] 新增弹幕 v0.0.6
-- [x] 支持 iOS v0.1.0
+- [x] 移动端支持 v0.1.0
 - [x] 弹幕插槽 v0.2.0
-- [x] 设置弹幕距离 v0.3.0
 - [x] Make Core Code Great Again v0.3.0
+- [x] 设置弹幕距离 v0.3.0
+- [x] 打包体积优化 v0.3.1
+- [ ] 新增自动播放参数 -> test ing...
+- [ ] 窗口改变时，重新计算滚动距离 -> test ing...
+- [ ] 弹幕层级 -> test ing...
 - [ ] 弹幕操作事件 -> 动工中
 - [ ] 随机轨道发送 - > 动工中
 - [ ] 顶部弹幕 - > pending
