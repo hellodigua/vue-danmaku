@@ -51,6 +51,7 @@
           弹道：
           <button class="btn" @click="channelChange(-1)">减一</button>
           <button class="btn" @click="channelChange(1)">加一</button>
+          <button class="btn" @click="channelChange(0)">填满</button>
           <span>当前弹道：{{ config.channels }}</span>
         </p>
         <p>
@@ -116,13 +117,20 @@ export default {
       config: {
         channels: 5, // 为0则弹幕轨道数不限
         loop: true,
-        speed: 10,
+        speed: 8,
         fontSize: 20,
         top: 10,
         slot: false,
       },
       danmu: '',
       danmus,
+    }
+  },
+  created() {
+    // 手机端使用海量弹幕效果，反正他们的手机性能都好
+    if (screen.width < 750) {
+      this.config.speed = 5
+      this.config.channels = 0
     }
   },
   methods: {
@@ -173,7 +181,11 @@ export default {
       this.$refs.danmaku.reset()
     },
     channelChange(val) {
-      this.config.channels += val
+      if (val === 0) {
+        this.config.channels = 0
+      } else {
+        this.config.channels += val
+      }
       this.$refs.danmaku.setChannels(this.config.channels)
     },
     addDanmu() {
@@ -200,6 +212,9 @@ body {
   position: relative;
   height: 100vh;
   width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .demo {
     position: fixed;
     top: 0;
@@ -219,12 +234,6 @@ body {
     }
   }
   .main {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;

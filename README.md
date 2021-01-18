@@ -8,9 +8,11 @@
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
-![normal.jpg](https://i.loli.net/2021/01/17/u1CWvG4A2UVPH6c.jpg)
+![1.gif](https://i.loli.net/2021/01/18/AhqP2nZBtLg9uwl.gif)
 
-![slot.jpg](https://i.loli.net/2021/01/17/W6etb1GN9YkJ4Rj.jpg)
+支持自定义样式和海量弹幕：
+
+![2.gif](https://i.loli.net/2021/01/18/Rn3rHJeoAEsbiwZ.gif)
 
 ## Install
 
