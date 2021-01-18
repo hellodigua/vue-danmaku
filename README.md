@@ -1,5 +1,9 @@
 # vue-danmaku
 
+[![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-14kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![license](https://img.shields.io/npm/l/express.svg)]()
+
 > 基于 Vue.js 的弹幕交互组件
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
