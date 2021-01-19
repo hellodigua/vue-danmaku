@@ -1,7 +1,7 @@
 {
   "name": "vue-danmaku",
   "description": "基于Vue.js的弹幕交互组件",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "hellodigua",
   "private": false,
   "license": "MIT",

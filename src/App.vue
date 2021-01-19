@@ -137,6 +137,12 @@ export default {
       this.config.channels = 0
     }
   },
+  mounted() {
+    window.onresize = () => this.resizeHandler()
+  },
+  beforeDestroy() {
+    window.onresize = null
+  },
   methods: {
     play(type) {
       switch (type) {
@@ -188,6 +194,12 @@ export default {
         this.config.channels += val
       }
       this.$refs.danmaku.setChannels(this.config.channels)
+    },
+    resizeHandler: function() {
+      if (this.timer) clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.$refs.danmaku.resize()
+      }, 500)
     },
     addDanmu() {
       if (!this.danmu) return

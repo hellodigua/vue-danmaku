@@ -261,7 +261,7 @@ export default {
       this.hidden = true
     },
     resize() {
-      this.initConfig()
+      this.initCore()
       const items = this.$danmaku.getElementsByClassName('dm')
       for (let i = 0; i < items.length; i++) {
         items[i].style.transform = `translateX(-${this.danmaku.width}px)`
