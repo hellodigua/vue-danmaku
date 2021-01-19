@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" :config="config" @inited="onInit">
+    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" :config="config">
       <!-- 容器slot -->
       <div></div>
       <!-- 弹幕slot -->
@@ -138,9 +138,6 @@ export default {
     }
   },
   methods: {
-    onInit() {
-      this.$refs.danmaku.play()
-    },
     play(type) {
       switch (type) {
         case 'play':

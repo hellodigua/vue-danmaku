@@ -24,7 +24,7 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku ref="danmu" :danmus="danmus" @inited="onInit"> </vue-danmaku>
+  <vue-danmaku :danmus="danmus"></vue-danmaku>
 </template>
 
 <script>
@@ -33,13 +33,8 @@ import vueDanmaku from 'vue-danmaku'
 export default {
   data() {
     return {
-      danmus: ['danmu1', 'danmu2', 'danmu3', 'danmu4', '...'],
+      danmus: ['danmu1', 'danmu2', 'danmu3', '...'],
     }
-  },
-  methods: {
-    onInit() {
-      this.$refs.danmu.play()
-    },
   },
 }
 </script>
@@ -51,7 +46,7 @@ export default {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" :config="config" @inited="onInit">
+  <vue-danmaku ref="danmaku" :danmus="danmus" :config="config">
     <!-- 弹幕插槽 -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
@@ -89,16 +84,17 @@ export default {
 
 ## Config Attributes
 
-| 参数     | 说明                       | 类型      | 可选值 | 默认值                 |
-| :------- | :------------------------- | :-------- | :----- | :--------------------- |
-| channels | 轨道数量                   | [Number]  |        | 0 容器可容纳最高轨道数 |
-| slot     | 是否开启弹幕插槽           | [Boolean] |        | false                  |
-| loop     | 是否开启弹幕循环           | [Boolean] |        | false                  |
-| speed    | 弹幕速度（值越大速度越小） | [Number]  |        | 10                     |
-| fontSize | 弹幕字号（文本模式可用）   | [Number]  |        | 20                     |
-| debounce | 弹幕刷新频率(ms)           | [Number]  |        | 50                     |
-| top      | 弹幕垂直间距(px)           | [Number]  |        | 4                      |
-| right    | 弹幕水平间距(px)           | [Number]  |        | 2                      |
+| 参数     | 说明                          | 类型      | 可选值 | 默认值                 |
+| :------- | :---------------------------- | :-------- | :----- | :--------------------- |
+| channels | 轨道数量                      | [Number]  |        | 0 容器可容纳最高轨道数 |
+| autoplay | 是否自动播放                  | [Boolean] |        | true                   |
+| slot     | 是否开启弹幕插槽              | [Boolean] |        | false                  |
+| loop     | 是否开启弹幕循环              | [Boolean] |        | false                  |
+| speed    | 弹幕速度（值越大速度越小）    | [Number]  |        | 10                     |
+| fontSize | 弹幕字号（slot 模式下不可用） | [Number]  |        | 20                     |
+| debounce | 弹幕刷新频率(ms)              | [Number]  |        | 50                     |
+| top      | 弹幕垂直间距(px)              | [Number]  |        | 4                      |
+| right    | 弹幕水平间距(px)              | [Number]  |        | 2                      |
 
 ## Events
 

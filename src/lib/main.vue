@@ -1,5 +1,5 @@
 <template>
-  <div ref="danmaku" class="vue-danmaku" @mouseenter="mouseIn" @mouseleave="mouseOut">
+  <div ref="danmaku" class="vue-danmaku">
     <div :class="['danmus', { show: !hidden }, { paused: paused }]" ref="danmus"></div>
     <slot />
   </div>
@@ -29,6 +29,7 @@ export default {
       $danmus: null,
       danmaku: {
         danmus: [],
+        autoplay: true, // 自动播放
         width: 0, // danmaku宽度
         channels: 0, // 轨道数量
         loop: false, // 是否循环
@@ -61,13 +62,9 @@ export default {
     init() {
       this.initCore()
       this.initConfig()
-      this.$emit('inited')
-    },
-    mouseIn() {
-      this.$emit('mouseIn')
-    },
-    mouseOut() {
-      this.$emit('mouseOut')
+      if (this.danmaku.autoplay && this.danmaku.danmus.length) {
+        this.play()
+      }
     },
     initCore() {
       this.$danmaku = this.$refs.danmaku
@@ -77,6 +74,7 @@ export default {
     },
     initConfig() {
       const {
+        autoplay = true,
         channels = 0,
         loop = false,
         slot = false,
@@ -87,6 +85,7 @@ export default {
         right = 2,
       } = this.config
       this.danmaku.danmus = [...this.danmus]
+      this.danmaku.autoplay = Boolean(autoplay)
       this.danmaku.channels = Number(channels)
       this.danmaku.loop = Boolean(loop)
       this.danmaku.slot = Boolean(slot)
