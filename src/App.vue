@@ -55,8 +55,8 @@
           轨道：
           <button class="btn" @click="channelChange(-1)">-1</button>
           <button class="btn" @click="channelChange(1)">+1</button>
-          <button class="btn" @click="channelChange(0)">填满</button>
-          <span>当前轨道数：{{ config.channels }}</span>
+          <button class="btn" @click="channelChange(-config.channels)">填满</button>
+          <span>当前轨道：{{ config.channels }}</span>
         </p>
         <p>
           发送：
@@ -106,6 +106,7 @@ import { danmus, customDanmus } from './assets/danmu.js'
 var stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
+stats.dom.style.display = 'none'
 
 function animate() {
   stats.begin()
@@ -118,16 +119,18 @@ export default {
   components: {},
   data() {
     return {
+      danmus,
       config: {
-        channels: 5, // 为0则弹幕轨道数不限
-        loop: true,
-        speed: 8,
-        fontSize: 20, // slot模式下失效
-        top: 10,
-        slot: false,
+        channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
+        slot: false, // 是否开启slot
+        loop: true, // 是否开启弹幕循环
+        speed: 8, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
+        fontSize: 20, // 文本模式下的字号
+        top: 10, // 弹幕轨道间的垂直间距
+        right: 0, // 同一轨道弹幕的水平间距
+        debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       },
       danmu: '',
-      danmus,
     }
   },
   created() {
@@ -180,6 +183,9 @@ export default {
       stats.dom.style.display = type
     },
     speedChange(val) {
+      if (this.config.speed === 1 && val === -1) {
+        return
+      }
       this.config.speed += val
       this.$refs.danmaku.reset()
     },
@@ -188,11 +194,10 @@ export default {
       this.$refs.danmaku.reset()
     },
     channelChange(val) {
-      if (val === 0) {
-        this.config.channels = 0
-      } else {
-        this.config.channels += val
+      if (!this.config.channels && val === -1) {
+        return
       }
+      this.config.channels += val
       this.$refs.danmaku.setChannels(this.config.channels)
     },
     resizeHandler: function() {
@@ -272,6 +277,7 @@ body {
         padding: 6px 16px;
         margin-right: 8px;
         border-radius: 5px;
+        min-height: 31px;
         outline: none;
         cursor: pointer;
         transition: all 0.3s;
@@ -283,6 +289,7 @@ body {
         }
       }
       .ipt {
+        width: 130px;
         padding: 8px 16px;
         border-radius: 5px;
         outline: none;

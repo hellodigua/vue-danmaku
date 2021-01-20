@@ -1,7 +1,11 @@
-import VueDanmaku from './main.vue'
+import vueDanmaku from './main.vue'
 
-VueDanmaku.install = function(Vue) {
-  Vue.component('VueDanmaku', VueDanmaku)
+vueDanmaku.install = function (Vue) {
+  Vue.component('vueDanmaku', vueDanmaku)
 }
 
-export default VueDanmaku
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(vueDanmaku)
+}
+
+export default vueDanmaku

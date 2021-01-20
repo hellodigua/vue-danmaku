@@ -23,7 +23,6 @@ module.exports = {
       })
     }
   },
-  css: { extract: !!process.env.NO_EXTRACT_CSS },
   configureWebpack: {
     plugins: isBuildPackage
       ? []

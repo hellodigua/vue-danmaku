@@ -35,6 +35,7 @@ export default {
         loop: false, // 是否循环
         slot: false, // 是否开启slot
         debounce: 50, // 弹幕刷新频率(ms)
+        randomChannel: false, // 随机选择轨道插入
       },
       danmu: {
         fontSize: 18, // 弹幕元素字号（slot下不可用）
@@ -82,7 +83,8 @@ export default {
         speed = 10,
         fontSize = 18,
         top = 4,
-        right = 2,
+        right = 0,
+        randomChannel = false,
       } = this.config
       this.danmaku.danmus = [...this.danmus]
       this.danmaku.autoplay = Boolean(autoplay)
@@ -90,6 +92,7 @@ export default {
       this.danmaku.loop = Boolean(loop)
       this.danmaku.slot = Boolean(slot)
       this.danmaku.debounce = Number(debounce)
+      this.danmaku.randomChannel = Boolean(randomChannel)
       this.danmu.speed = Number(speed)
       this.danmu.fontSize = Number(fontSize)
       this.danmu.top = Number(top)
@@ -186,17 +189,18 @@ export default {
       return ele
     },
     getChannelIndex(el) {
-      const tmp = this.$danmus.offsetWidth / ((this.$danmus.offsetWidth + el.offsetWidth) / 6)
-      for (let i = 0; i < this.danmaku.channels; i++) {
+      let channels = [...Array(this.danmaku.channels).keys()]
+
+      if (this.danmaku.randomChannel) {
+        channels = channels.sort(() => 0.5 - Math.random())
+      }
+      for (let i of channels) {
         const items = this.danChannel[i]
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
             const danRight = this.getDanRight(items[j]) - 10
-            if (
-              danRight <=
-                this.$danmus.offsetWidth - tmp * ((this.$danmus.offsetWidth + parseInt(items[j].offsetWidth)) / 6) ||
-              danRight <= 0
-            ) {
+            // 安全距离判断
+            if (danRight <= (el.offsetWidth - items[j].offsetWidth) * 0.88 || danRight <= 0) {
               break
             }
             if (j === items.length - 1) {
@@ -213,7 +217,7 @@ export default {
       }
       return -1
     },
-    // 弹幕到右侧的距离
+    // 弹幕右侧到屏幕右侧的距离
     getDanRight(el) {
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
       const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
