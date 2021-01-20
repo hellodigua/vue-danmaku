@@ -42,12 +42,12 @@ export default {
 
 ## 自定义弹幕
 
-自 0.3.1 版本起，vue-danmaku 支持通过 slot 插槽来自定义弹幕结构与样式，你可以传入任意结构的对象并通过 vue-danmaku 渲染出来。
+自 0.3.1 版本起，vue-danmaku 支持通过 slot 插槽来自定义弹幕结构与样式，你可以传入任意结构的对象并通过 slot 渲染出来。
 
 ```vue
 <template>
   <vue-danmaku ref="danmaku" :danmus="danmus" :config="config">
-    <!-- 弹幕插槽 -->
+    <!-- 弹幕插槽（vue 2.6.0 以下请使用 slot-scope语法） -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>

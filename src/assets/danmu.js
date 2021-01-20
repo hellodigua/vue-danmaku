@@ -16,6 +16,7 @@ export const customDanmus = [
   },
 ]
 
+// 弹幕来自b站首页
 export const danmus = [
   '草',
   '高技术力',

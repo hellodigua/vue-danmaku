@@ -1,13 +1,15 @@
 const WebpackCdnPlugin = require('webpack-cdn-plugin')
 
-const isPackage = process.env.VUE_APP_BUILD_MODE === 'package'
+const isBuildPackage = process.env.VUE_APP_BUILD_MODE === 'package'
+
+const isBuildDemo = process.env.NODE_ENV === 'production' && !isBuildPackage
 
 module.exports = {
   parallel: false,
-  publicPath: process.env.NODE_ENV === 'production' && isPackage ? '/' : '/vue-danmaku/',
-  outputDir: process.env.VUE_APP_BUILD_MODE === 'package' ? 'dist' : 'docs',
+  publicPath: isBuildDemo ? '/vue-danmaku/' : '/',
+  outputDir: isBuildPackage ? 'dist' : 'docs',
   chainWebpack: (config) => {
-    if (process.env.VUE_APP_BUILD_MODE !== 'package') {
+    if (!isBuildPackage) {
       config.resolve.alias.set('~', __dirname)
     } else {
       config.output.libraryExport('default')
@@ -23,7 +25,7 @@ module.exports = {
   },
   css: { extract: !!process.env.NO_EXTRACT_CSS },
   configureWebpack: {
-    plugins: isPackage
+    plugins: isBuildPackage
       ? []
       : [
         new WebpackCdnPlugin({
