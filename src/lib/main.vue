@@ -57,7 +57,7 @@ export default {
     this.init()
   },
   beforeDestroy() {
-    this.clearTimer()
+    this.clear()
   },
   methods: {
     init() {
@@ -111,7 +111,12 @@ export default {
         this.timer = setInterval(() => {
           if (!this.paused) {
             if (this.index > this.danmaku.danmus.length - 1) {
-              this.danmaku.loop ? this.insert() : this.clear()
+              if (this.danmaku.loop) {
+                this.index = 0
+                this.insert()
+              }
+              // 播放完成
+              this.$emit('done')
             } else {
               this.insert()
             }
@@ -243,6 +248,7 @@ export default {
       this.paused = true
       this.hidden = false
       this.clear()
+      this.initConfig()
     },
     pause() {
       this.paused = true
