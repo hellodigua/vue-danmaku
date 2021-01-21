@@ -60,7 +60,7 @@
         </p>
         <p>
           发送：
-          <input class="ipt" type="text" v-model="danmu" />
+          <input class="ipt" type="text" v-model="danmuMsg" />
           <button class="btn" @click="addDanmu">发送</button>
         </p>
         <p>
@@ -130,7 +130,7 @@ export default {
         right: 0, // 同一轨道弹幕的水平间距
         debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       },
-      danmu: '',
+      danmuMsg: '',
     }
   },
   created() {
@@ -207,16 +207,16 @@ export default {
       }, 500)
     },
     addDanmu() {
-      if (!this.danmu) return
-      const danmu = this.config.slot
+      if (!this.danmuMsg) return
+      const danmuMsg = this.config.slot
         ? {
             avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
             name: '你',
-            text: this.danmu,
+            text: this.danmuMsg,
           }
-        : this.danmu
-      this.$refs.danmaku.add(danmu)
-      this.danmu = ''
+        : this.danmuMsg
+      this.$refs.danmaku.add(danmuMsg)
+      this.danmuMsg = ''
     },
   },
 }

@@ -51,7 +51,14 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    danmus: {
+      handler(val) {
+        this.danmaku.danmus = [...val]
+      },
+      deep: true,
+    },
+  },
   created() {},
   mounted() {
     this.init()
