@@ -1,6 +1,6 @@
 <template>
-  <div ref="danmaku" class="vue-danmaku">
-    <div :class="['danmus', { show: !hidden }, { paused: paused }]" ref="danmus"></div>
+  <div ref="container" class="vue-danmaku">
+    <div :class="['danmus', { show: !hidden }, { paused: paused }]" ref="dmContainer"></div>
     <slot />
   </div>
 </template>
@@ -22,15 +22,14 @@ export default {
   },
   data() {
     return {
-      container: null,
-      isActive: false,
-      timer: null,
-      $danmaku: null,
-      $danmus: null,
+      $container: null,
+      $dmContainer: null,
+      container: {
+        width: 0, // 容器宽度
+        height: 0, // 容器高度
+      },
       danmaku: {
-        danmus: [],
         autoplay: true, // 自动播放
-        width: 0, // danmaku宽度
         channels: 0, // 轨道数量
         loop: false, // 是否循环
         slot: false, // 是否开启slot
@@ -44,6 +43,8 @@ export default {
         top: 4, // 弹幕垂直间距
         right: 2, // 弹幕水平间距
       },
+      danmuList: [],
+      timer: null,
       index: 0,
       hidden: false,
       paused: false,
@@ -54,7 +55,7 @@ export default {
   watch: {
     danmus: {
       handler(val) {
-        this.danmaku.danmus = [...val]
+        this.danmuList = [...val]
       },
       deep: true,
     },
@@ -70,15 +71,15 @@ export default {
     init() {
       this.initCore()
       this.initConfig()
-      if (this.danmaku.autoplay && this.danmaku.danmus.length) {
+      if (this.danmaku.autoplay && this.danmuList.length) {
         this.play()
       }
     },
     initCore() {
-      this.$danmaku = this.$refs.danmaku
-      this.$danmus = this.$refs.danmus
-      this.danmaku.width = this.$danmaku.offsetWidth
-      this.danmaku.height = this.$danmaku.offsetHeight
+      this.$container = this.$refs.container
+      this.$dmContainer = this.$refs.dmContainer
+      this.container.width = this.$container.offsetWidth
+      this.container.height = this.$container.offsetHeight
     },
     initConfig() {
       const {
@@ -93,7 +94,7 @@ export default {
         right = 0,
         randomChannel = false,
       } = this.config
-      this.danmaku.danmus = [...this.danmus]
+      this.danmuList = [...this.danmus]
       this.danmaku.autoplay = Boolean(autoplay)
       this.danmaku.channels = Number(channels)
       this.danmaku.loop = Boolean(loop)
@@ -106,18 +107,16 @@ export default {
       this.danmu.right = Number(right)
     },
     play() {
+      this.paused = false
       if (!this.timer) {
         this.draw()
-      }
-      if (this.paused) {
-        this.paused = false
       }
     },
     draw() {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
           if (!this.paused) {
-            if (this.index > this.danmaku.danmus.length - 1) {
+            if (this.index > this.danmuList.length - 1) {
               if (this.danmaku.loop) {
                 this.index = 0
                 this.insert()
@@ -132,24 +131,24 @@ export default {
       })
     },
     insert() {
-      const index = this.danmaku.loop ? this.index % this.danmaku.danmus.length : this.index
+      const index = this.danmaku.loop ? this.index % this.danmuList.length : this.index
       let el = document.createElement(`div`)
       if (this.danmaku.slot) {
         el = this.getSlotComponent(index).$el
       } else {
-        el.innerHTML = this.danmaku.danmus[index]
+        el.innerHTML = this.danmuList[index]
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.style.lineHeight = `${this.danmu.fontSize}px`
       }
       el.classList.add('dm')
       el.setAttribute('index', this.index)
-      this.$danmus.appendChild(el)
+      this.$dmContainer.appendChild(el)
       this.$nextTick(() => {
         if (!this.danmu.height || !this.danmaku.channels) {
           this.danmu.height = el.offsetHeight
           // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
           if (!this.danmaku.channels) {
-            this.danmaku.channels = Math.floor(this.danmaku.height / this.danmu.height)
+            this.danmaku.channels = Math.floor(this.container.height / this.danmu.height)
           }
         }
         let channelIndex = this.getChannelIndex(el)
@@ -160,16 +159,16 @@ export default {
           el.style.animationDuration = `${this.danmu.speed}s`
           el.style.top = channelIndex * (height + this.danmu.top) + 'px'
           el.style.width = width + this.danmu.right + 'px'
-          el.style.transform = `translateX(-${this.danmaku.width}px)`
+          el.style.transform = `translateX(-${this.container.width}px)`
           el.addEventListener('animationend', () => {
-            this.$danmus.removeChild(el)
+            this.$dmContainer.removeChild(el)
           })
           if (el.classList.length > 0) {
             this.index++
           }
         } else {
           if (el.classList.length > 0) {
-            this.$danmus.removeChild(el)
+            this.$dmContainer.removeChild(el)
           }
         }
       })
@@ -193,7 +192,7 @@ export default {
 
       const ele = new DmComponent({
         propsData: {
-          danmu: this.danmaku.danmus[index],
+          danmu: this.danmuList[index],
           index,
         },
       }).$mount(document.createElement('div'))
@@ -232,8 +231,8 @@ export default {
     // 弹幕右侧到屏幕右侧的距离
     getDanRight(el) {
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
-      const eleRight = el.getBoundingClientRect().right || this.$danmus.getBoundingClientRect().right + eleWidth
-      return this.$danmus.getBoundingClientRect().right - eleRight
+      const eleRight = el.getBoundingClientRect().right || this.$dmContainer.getBoundingClientRect().right + eleWidth
+      return this.$dmContainer.getBoundingClientRect().right - eleRight
     },
     clearTimer() {
       clearInterval(this.timer)
@@ -244,14 +243,14 @@ export default {
       this.index = 0
     },
     reset() {
-      this.$danmaku = null
-      this.$danmus = null
+      this.$container = null
+      this.$dmContainer = null
       this.danmu.height = 0
       this.init()
     },
     stop() {
       this.danChannel = {}
-      this.$refs.danmus.innerHTML = ''
+      this.$dmContainer.innerHTML = ''
       this.paused = true
       this.hidden = false
       this.clear()
@@ -262,8 +261,8 @@ export default {
     },
     // 添加弹幕
     add(danmu) {
-      const index = this.index % this.danmaku.danmus.length
-      this.danmaku.danmus.splice(index, 0, danmu)
+      const index = this.index % this.danmuList.length
+      this.danmuList.splice(index, 0, danmu)
     },
     setChannels(len) {
       this.danmaku.channels = len
@@ -279,9 +278,9 @@ export default {
     },
     resize() {
       this.initCore()
-      const items = this.$danmaku.getElementsByClassName('dm')
+      const items = this.$dmContainer.getElementsByClassName('dm')
       for (let i = 0; i < items.length; i++) {
-        items[i].style.transform = `translateX(-${this.danmaku.width}px)`
+        items[i].style.transform = `translateX(-${this.container.width}px)`
       }
     },
   },
@@ -320,6 +319,10 @@ export default {
         animation-name: moveLeft;
         animation-timing-function: linear;
         animation-play-state: running;
+      }
+      &.pause {
+        animation-play-state: paused;
+        z-index: 10;
       }
     }
     @keyframes moveLeft {

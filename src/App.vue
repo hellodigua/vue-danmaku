@@ -238,7 +238,7 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     background: linear-gradient(45deg, #5ac381, #20568b);
     .danmu-item {
       display: flex;
@@ -252,6 +252,8 @@ body {
     }
   }
   .main {
+    position: absolute;
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
