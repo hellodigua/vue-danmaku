@@ -1,6 +1,19 @@
 <template>
   <div id="app">
-    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" :config="config">
+    <vue-danmaku
+      ref="danmaku"
+      class="demo"
+      :danmus="danmus"
+      :channels="config.channels"
+      :slot="config.slot"
+      :loop="config.loop"
+      :speed="config.speed"
+      :fontSize="config.fontSize"
+      :top="config.top"
+      :right="config.right"
+      :debounce="config.debounce"
+      :config="config"
+    >
       <!-- 容器slot -->
       <div></div>
       <!-- 弹幕slot -->

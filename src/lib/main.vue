@@ -9,15 +9,61 @@ import Vue from 'vue'
 
 export default {
   props: {
+    // 弹幕列表数据
     danmus: {
       type: Array,
       required: true,
+      default: () => [],
     },
-    config: {
-      type: Object,
-      default: () => {
-        return {}
-      },
+    // 轨道数
+    channels: {
+      type: Number,
+      default: 0,
+    },
+    // 自动播放
+    autoplay: {
+      type: Boolean,
+      default: true,
+    },
+    // 循环播放
+    loop: {
+      type: Boolean,
+      default: false,
+    },
+    // 开启弹幕插槽
+    slot: {
+      type: Boolean,
+      default: false,
+    },
+    // 弹幕刷新频率(ms)
+    debounce: {
+      type: Number,
+      default: 100,
+    },
+    // 弹幕速度
+    speed: {
+      type: Number,
+      default: 10,
+    },
+    // 随机轨道注入弹幕
+    randomChannel: {
+      type: Boolean,
+      default: false,
+    },
+    // 弹幕字号（仅文本模式）
+    fontSize: {
+      type: Number,
+      default: 18,
+    },
+    // 弹幕垂直间距
+    top: {
+      type: Number,
+      default: 4,
+    },
+    // 弹幕水平间距
+    right: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -29,19 +75,19 @@ export default {
         height: 0, // 容器高度
       },
       danmaku: {
-        autoplay: true, // 自动播放
         channels: 0, // 轨道数量
+        autoplay: true, // 自动播放
         loop: false, // 是否循环
         slot: false, // 是否开启slot
-        debounce: 50, // 弹幕刷新频率(ms)
+        debounce: 100, // 弹幕刷新频率(ms)
         randomChannel: false, // 随机选择轨道插入
       },
       danmu: {
-        fontSize: 18, // 弹幕元素字号（slot下不可用）
         height: 0, // 弹幕元素高度
+        fontSize: 18, // 弹幕元素字号（slot下不可用）
         speed: 10, // 弹幕速度
         top: 4, // 弹幕垂直间距
-        right: 2, // 弹幕水平间距
+        right: 0, // 弹幕水平间距
       },
       danmuList: [],
       timer: null,
@@ -78,33 +124,29 @@ export default {
     initCore() {
       this.$container = this.$refs.container
       this.$dmContainer = this.$refs.dmContainer
-      this.container.width = this.$container.offsetWidth
-      this.container.height = this.$container.offsetHeight
+      this.container = {
+        width: this.$container.offsetWidth,
+        height: this.$container.offsetHeight,
+      }
     },
     initConfig() {
-      const {
-        autoplay = true,
-        channels = 0,
-        loop = false,
-        slot = false,
-        debounce = 50,
-        speed = 10,
-        fontSize = 18,
-        top = 4,
-        right = 0,
-        randomChannel = false,
-      } = this.config
       this.danmuList = [...this.danmus]
-      this.danmaku.autoplay = Boolean(autoplay)
-      this.danmaku.channels = Number(channels)
-      this.danmaku.loop = Boolean(loop)
-      this.danmaku.slot = Boolean(slot)
-      this.danmaku.debounce = Number(debounce)
-      this.danmaku.randomChannel = Boolean(randomChannel)
-      this.danmu.speed = Number(speed)
-      this.danmu.fontSize = Number(fontSize)
-      this.danmu.top = Number(top)
-      this.danmu.right = Number(right)
+      this.danmaku = {
+        ...this.danmaku,
+        channels: this.channels,
+        autoplay: this.autoplay,
+        loop: this.loop,
+        slot: this.slot,
+        debounce: this.debounce,
+        randomChannel: this.randomChannel,
+      }
+      this.danmu = {
+        ...this.danmu,
+        speed: this.speed,
+        fontSize: this.fontSize,
+        top: this.top,
+        right: this.right,
+      }
     },
     play() {
       this.paused = false
@@ -141,7 +183,6 @@ export default {
         el.style.lineHeight = `${this.danmu.fontSize}px`
       }
       el.classList.add('dm')
-      el.setAttribute('index', this.index)
       this.$dmContainer.appendChild(el)
       this.$nextTick(() => {
         if (!this.danmu.height || !this.danmaku.channels) {
@@ -160,6 +201,7 @@ export default {
           el.style.top = channelIndex * (height + this.danmu.top) + 'px'
           el.style.width = width + this.danmu.right + 'px'
           el.style.transform = `translateX(-${this.container.width}px)`
+          el.dataset.index = this.index
           el.addEventListener('animationend', () => {
             this.$dmContainer.removeChild(el)
           })
