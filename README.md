@@ -1,25 +1,18 @@
 # vue-danmaku
 
 [![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
-[![size](https://img.shields.io/badge/minifiedsize-14kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 
 > 基于 Vue.js 的弹幕交互组件
 
 Live Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
-## Feature
-
-- 🍖 灵活配置
-- 🎉 海量弹幕
-- 🍒 弹幕插槽
-- 🐳 支持移动端
-
 ## Preview
 
 ![1.gif](https://i.loli.net/2021/01/18/AhqP2nZBtLg9uwl.gif)
 
-自定义样式和海量弹幕：
+支持自定义样式和海量弹幕：
 
 ![2.gif](https://i.loli.net/2021/01/18/Rn3rHJeoAEsbiwZ.gif)
 
@@ -93,52 +86,100 @@ export default {
 
 ## Config Attributes
 
-| 参数     | 说明                                | 类型      | 可选值 | 默认值                 |
-| :------- | :---------------------------------- | :-------- | :----- | :--------------------- |
-| channels | 轨道数量                            | [Number]  |        | 0 容器可容纳最高轨道数 |
-| autoplay | 是否自动播放                        | [Boolean] |        | true                   |
-| slot     | 是否开启弹幕插槽                    | [Boolean] |        | false                  |
-| loop     | 是否开启弹幕循环                    | [Boolean] |        | false                  |
-| fontSize | 弹幕字号（slot 模式下不可用）       | [Number]  |        | 20                     |
-| speed    | 弹幕速度(s)（弹幕滚动过一屏的秒数） | [Number]  |        | 10                     |
-| debounce | 弹幕刷新频率(ms)                    | [Number]  |        | 50                     |
-| top      | 弹幕垂直间距(px)                    | [Number]  |        | 4                      |
-| right    | 弹幕水平间距(px) （额外宽度）       | [Number]  |        | 0                      |
+| 参数     | 说明                                | 类型      | 可选值 | 默认值 |
+| :------- | :---------------------------------- | :-------- | :----- | :----- |
+| channels | 轨道数量                            | [Number]  |        | 0      |
+| autoplay | 是否自动播放                        | [Boolean] |        | true   |
+| slot     | 是否开启弹幕插槽                    | [Boolean] |        | false  |
+| loop     | 是否开启弹幕循环                    | [Boolean] |        | false  |
+| fontSize | 弹幕字号（slot 模式下不可用）       | [Number]  |        | 20     |
+| speed    | 弹幕速度(s)（弹幕滚动过一屏的秒数） | [Number]  |        | 10     |
+| debounce | 弹幕刷新频率(ms)                    | [Number]  |        | 50     |
+| top      | 弹幕垂直间距(px)                    | [Number]  |        | 4      |
+| right    | 弹幕水平间距(px)                    | [Number]  |        | 0      |
+
+- 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
+- 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `this.$refs[refName].play()` 进行播放
+- 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
 
 ## Methods
 
+通过 `this.$refs[slotName].` 调用
+
 | 方法名      | 说明                                         | 参数 |
 | :---------- | :------------------------------------------- | :--- |
-| play        | 开始弹幕播放                                 |      |
+| play        | 开始/继续播放                                |      |
 | pause       | 暂停弹幕播放                                 |      |
-| stop        | 清空弹幕并停止播放                           |      |
+| stop        | 停止播放并清空弹幕                           |      |
 | setChannels | 动态设置轨道数                               |      |
 | show        | 弹幕显示                                     |      |
 | hide        | 弹幕隐藏                                     |      |
 | reset       | 重置配置                                     |      |
 | resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） |      |
-| add         | 新增弹幕                                     |      |
+| add         | 发送弹幕                                     |      |
+
+## TODO
+
+TODO按优先级排列，如有其他需求请在issues中提出
+
+- [ ] API参数改为直传 -> 动工中
+- [ ] 弹幕顶层DOM应支持样式配置 -> 动工中
+- [ ] 弹幕移入和移出事件 -> 动工中
+- [ ] 新增弹幕应支持两种新增模式，插队模式和队尾模式 - > 动工中
+- [ ] 弹幕点击事件 -> pending
+- [ ] loop为false时，播放完毕应调整定时器频率 -> pending
+- [ ] 新增弹幕应支持批量新增 -> pending
+- [ ] 按传入数组顺序播放或随机播放 -> pending
+- [ ] 顶部/底部弹幕 -> pending
+- [ ] 从左向右播放 -> pending
+- [ ] 时间控制器 - > pending
 
 ## Changelog
 
-- [x] 弹幕暂停 v0.0.5
-- [x] 弹幕速度 v0.0.5
-- [x] 轨道控制 v0.0.5
-- [x] 弹幕循环 v0.0.5
-- [x] 弹幕速度 v0.0.6
-- [x] 弹幕字号 v0.0.6
-- [x] 新增弹幕 v0.0.6
-- [x] 移动端支持 v0.1.0
-- [x] 弹幕插槽 v0.2.0
-- [x] Make Core Code Great Again v0.3.0
-- [x] 设置弹幕距离 v0.3.0
-- [x] 打包体积优化 v0.3.1
-- [x] 新增自动播放 v0.3.2
-- [x] 容器尺寸改变时，重新计算滚动距离 v0.3.2
-- [ ] 弹幕操作事件 -> 动工中
-- [ ] 随机轨道发送 - > 动工中
-- [ ] 顶部弹幕 - > pending
-- [ ] 倒放模式 -> pending
-- [ ] 时间控制器 - > pending
-- [ ] TS 类型支持
-- [ ] 支持 Vue3
+### v0.3.6
+
+- 支持异步加载弹幕（备注：异步加载后应手动调用play方法）
+### v0.3.4
+
+- 支持随机轨道发送弹幕
+- fix: 非循环模式，播放完成时不应当结束弹幕任务
+### v0.3.2
+
+- 支持自动播放
+- 弹幕容器尺寸改变时，重新计算滚动距离
+
+### v0.3.1
+
+- 打包体积优化
+
+### v0.3.0
+
+- Make Core Code Great Again
+- 支持设置弹幕距离
+- 支持设置弹幕刷新频率
+### v0.2.0
+
+- 支持弹幕插槽及对应样式优化
+### v0.1.1
+
+- fix: 修复0.1.0打包错误导致的无法下载
+
+### v0.1.0
+
+- 支持移动端播放
+
+### v0.0.6
+
+- 支持弹幕速度
+- 支持弹幕字号
+- 支持新增弹幕
+
+### v0.0.5
+
+- 支持弹幕暂停
+- 支持轨道数控制
+- 支持弹幕循环
+
+### v0.0.1
+
+Born in 2018.3.11
