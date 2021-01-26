@@ -84,7 +84,7 @@ export default {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" :config="config">
+  <vue-danmaku ref="danmaku" :danmus="danmus" slot loop :speed="8" :channels="5">
     <!-- 弹幕插槽（vue 2.6.0 以下请使用 slot-scope语法） -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
@@ -101,12 +101,6 @@ export default {
   data() {
     return {
       danmus: [{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...]
-      config: {
-        slot: true,
-        channels: 5,
-        loop: true,
-        speed: 5
-      }
     }
   }
 }
@@ -117,7 +111,6 @@ export default {
 
 TODO 按优先级排列，如有其他需求请在 issues 中提出
 
-- [ ] API 参数改为直传 -> 动工中
 - [ ] 弹幕顶层 DOM 应支持样式配置 -> 动工中
 - [ ] 弹幕移入和移出事件 -> 动工中
 - [ ] 新增弹幕应支持两种新增模式，插队模式和队尾模式 - > 动工中
@@ -130,6 +123,12 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 - [ ] 时间控制器 - > pending
 
 ## Changelog
+
+### v1.0.0
+
+考虑良久，为了后续版本的易用性，因此组件参数改为直传，为了避免已有用户踩坑，因此升级一个大版本。
+
+- 组件参数改为直传
 
 ### v0.3.6
 
