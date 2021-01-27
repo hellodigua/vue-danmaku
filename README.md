@@ -49,7 +49,7 @@ export default {
 | danmus        | 弹幕元素列表，支持纯文本或者自定义对象 | [Array]   |        |        |
 | channels      | 轨道数量                               | [Number]  |        | 0      |
 | autoplay      | 是否自动播放                           | [Boolean] |        | true   |
-| slot          | 是否开启弹幕插槽                       | [Boolean] |        | false  |
+| useSlot       | 是否开启弹幕插槽                       | [Boolean] |        | false  |
 | loop          | 是否开启弹幕循环                       | [Boolean] |        | false  |
 | fontSize      | 弹幕字号（slot 模式下不可用）          | [Number]  |        | 20     |
 | speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | [Number]  |        | 10     |
@@ -84,7 +84,7 @@ export default {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" slot loop :speed="8" :channels="5">
+  <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
     <!-- 弹幕插槽（vue 2.6.0 以下请使用 slot-scope语法） -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
@@ -124,11 +124,16 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 
 ## Changelog
 
+### v1.0.3
+
+- fix: 修复使用默认 slot 报错的 BUG
+
 ### v1.0.0
 
-考虑良久，为了后续版本的易用性，因此组件参数改为直传，为了避免已有用户踩坑，因此升级一个大版本。
+考虑良久，为了后续版本的易用性，因此组件参数改为直传，为了避免已有用户踩坑，因此升级一个大版本。前一个版本文档请查看 [https://www.npmjs.com/package/vue-danmaku/v/0.3.6](https://www.npmjs.com/package/vue-danmaku/v/0.3.6)
 
 - 组件参数改为直传
+- 部分代码重构
 
 ### v0.3.6
 
@@ -150,7 +155,8 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 
 ### v0.3.0
 
-- Make Core Code Great Again
+Make Core Code Great Again
+
 - 支持设置弹幕距离
 - 支持设置弹幕刷新频率
 
@@ -181,3 +187,5 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 ### v0.0.1
 
 Born in 2018.3.11
+
+- 支持弹幕效果

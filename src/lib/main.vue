@@ -31,7 +31,7 @@ export default {
       default: false,
     },
     // 开启弹幕插槽
-    slot: {
+    useSlot: {
       type: Boolean,
       default: false,
     },
@@ -78,7 +78,7 @@ export default {
         channels: 0, // 轨道数量
         autoplay: true, // 自动播放
         loop: false, // 是否循环
-        slot: false, // 是否开启slot
+        useSlot: false, // 是否开启slot
         debounce: 100, // 弹幕刷新频率(ms)
         randomChannel: false, // 随机选择轨道插入
       },
@@ -136,7 +136,7 @@ export default {
         channels: this.channels,
         autoplay: this.autoplay,
         loop: this.loop,
-        slot: this.slot,
+        useSlot: this.useSlot,
         debounce: this.debounce,
         randomChannel: this.randomChannel,
       }
@@ -175,7 +175,7 @@ export default {
     insert() {
       const index = this.danmaku.loop ? this.index % this.danmuList.length : this.index
       let el = document.createElement(`div`)
-      if (this.danmaku.slot) {
+      if (this.danmaku.useSlot) {
         el = this.getSlotComponent(index).$el
       } else {
         el.innerHTML = this.danmuList[index]
