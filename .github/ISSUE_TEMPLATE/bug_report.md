@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: Bug report
+title: "[BUG]"
 labels: ''
 assignees: ''
 
@@ -20,8 +20,7 @@ assignees: ''
 
 ``` 
 
-#### 环境 (如果你觉的不相关，可以删除它)
+#### 环境
 
- - 操作系统: [e.g. macOS, Windows, Linux]
- - Vue 版本: [e.g. v2.0, v2.5, v2.6]
  - vue-danmaku组件版本: [e.g. v1.0.3]
+ - Vue 版本: [e.g. v2.0, v2.5, v2.6]
