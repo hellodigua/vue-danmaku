@@ -5,7 +5,7 @@
       class="demo"
       :danmus="danmus"
       :channels="config.channels"
-      :slot="config.slot"
+      :useSlot="config.useSlot"
       :loop="config.loop"
       :speed="config.speed"
       :fontSize="config.fontSize"
@@ -60,8 +60,8 @@
         </p>
         <p>
           字号：
-          <button class="btn" :disabled="config.slot" @click="fontChange(-1)">缩小</button>
-          <button class="btn" :disabled="config.slot" @click="fontChange(1)">放大</button>
+          <button class="btn" :disabled="config.useSlot" @click="fontChange(-1)">缩小</button>
+          <button class="btn" :disabled="config.useSlot" @click="fontChange(1)">放大</button>
           <span>当前字号：{{ config.fontSize }}px</span>
         </p>
         <p>
@@ -135,7 +135,7 @@ export default {
       danmus,
       config: {
         channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
-        slot: false, // 是否开启slot
+        useSlot: false, // 是否开启slot
         loop: true, // 是否开启弹幕循环
         speed: 8, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
         fontSize: 20, // 文本模式下的字号
@@ -185,7 +185,7 @@ export default {
       }
     },
     switchSlot(slot) {
-      this.config.slot = slot
+      this.config.useSlot = slot
       this.danmus = slot ? customDanmus : danmus
       setTimeout(() => {
         this.$refs.danmaku.reset()
@@ -221,7 +221,7 @@ export default {
     },
     addDanmu() {
       if (!this.danmuMsg) return
-      const danmuMsg = this.config.slot
+      const danmuMsg = this.config.useSlot
         ? {
             avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
             name: '你',
