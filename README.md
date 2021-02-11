@@ -44,19 +44,19 @@ export default {
 
 ## Attributes
 
-| 参数          | 说明                                   | 类型      | 可选值 | 默认值 |
-| :------------ | :------------------------------------- | :-------- | :----- | :----- |
-| danmus        | 弹幕元素列表，支持纯文本或者自定义对象 | [Array]   |        |        |
-| channels      | 轨道数量                               | [Number]  |        | 0      |
-| autoplay      | 是否自动播放                           | [Boolean] |        | true   |
-| useSlot       | 是否开启弹幕插槽                       | [Boolean] |        | false  |
-| loop          | 是否开启弹幕循环                       | [Boolean] |        | false  |
-| fontSize      | 弹幕字号（slot 模式下不可用）          | [Number]  |        | 20     |
-| speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | [Number]  |        | 10     |
-| debounce      | 弹幕刷新频率(ms)                       | [Number]  |        | 50     |
-| randomChannel | 随机选择轨道插入                       | [Boolean] |        | false  |
-| top           | 弹幕垂直间距(px)                       | [Number]  |        | 4      |
-| right         | 弹幕水平间距(px)                       | [Number]  |        | 0      |
+| 参数          | 说明                                   | 类型    | 可选值       | 默认值 |
+| :------------ | :------------------------------------- | :------ | :----------- | :----- |
+| danmus        | 弹幕元素列表，支持纯文本或者自定义对象 | Array   | 字符串或对象 | []     |
+| channels      | 轨道数量                               | Number  |              | 0      |
+| autoplay      | 是否自动播放                           | Boolean |              | true   |
+| useSlot       | 是否开启弹幕插槽                       | Boolean |              | false  |
+| loop          | 是否开启弹幕循环                       | Boolean |              | false  |
+| fontSize      | 弹幕字号（slot 模式下不可用）          | Number  |              | 18     |
+| speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | Number  |              | 10     |
+| debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
+| randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
+| top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
+| right         | 弹幕水平间距(px)                       | Number  |              | 0      |
 
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `this.$refs[refName].play()` 进行播放
@@ -66,17 +66,17 @@ export default {
 
 通过 `this.$refs[refName].` 调用
 
-| 方法名      | 说明                                         | 参数 |
-| :---------- | :------------------------------------------- | :--- |
-| play        | 开始/继续播放                                |      |
-| pause       | 暂停弹幕播放                                 |      |
-| stop        | 停止播放并清空弹幕                           |      |
-| setChannels | 动态设置轨道数                               |      |
-| show        | 弹幕显示                                     |      |
-| hide        | 弹幕隐藏                                     |      |
-| reset       | 重置配置                                     |      |
-| resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） |      |
-| add         | 发送弹幕                                     |      |
+| 方法名      | 说明                                         | 参数   |
+| :---------- | :------------------------------------------- | :----- |
+| play        | 开始/继续播放                                | -      |
+| pause       | 暂停弹幕播放                                 | -      |
+| stop        | 停止播放并清空弹幕                           | -      |
+| setChannels | 动态设置轨道数                               | Number |
+| show        | 弹幕显示                                     | -      |
+| hide        | 弹幕隐藏                                     | -      |
+| reset       | 重置配置                                     | -      |
+| resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） | -      |
+| add         | 发送弹幕                                     | -      |
 
 ## Slot
 
@@ -85,8 +85,8 @@ export default {
 ```vue
 <template>
   <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
-    <!-- 弹幕插槽（vue 2.6.0 以下请使用 slot-scope语法） -->
-    <template v-slot:dm="{ index, danmu }">
+    <!-- 弹幕插槽（vue 2.6.0 及以上版本可使用 v-slot:dm="{ index, danmu }"语法） -->
+    <template slot="dm" slot-scope="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
     <!-- 容器插槽 -->

@@ -17,7 +17,7 @@
       <!-- 容器slot -->
       <div></div>
       <!-- 弹幕slot -->
-      <template v-slot:dm="{ index, danmu }">
+      <template slot="dm" slot-scope="{ index, danmu }">
         <div class="danmu-item">
           <img class="img" :src="danmu.avatar" />
           <span>{{ index }}{{ danmu.name }}：</span>
