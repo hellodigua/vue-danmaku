@@ -200,7 +200,7 @@ export default {
           el.style.animationDuration = `${this.danmu.speed}s`
           el.style.top = channelIndex * (height + this.danmu.top) + 'px'
           el.style.width = width + this.danmu.right + 'px'
-          el.style.transform = `translateX(-${this.container.width}px)`
+          el.style.setProperty('--dm-left-offset', `-${this.container.width}px`)
           el.dataset.index = this.index
           el.addEventListener('animationend', () => {
             this.$dmContainer.removeChild(el)
@@ -322,7 +322,7 @@ export default {
       this.initCore()
       const items = this.$dmContainer.getElementsByClassName('dm')
       for (let i = 0; i < items.length; i++) {
-        items[i].style.transform = `translateX(-${this.container.width}px)`
+        items[i].style.setProperty('--dm-left-offset', `-${this.container.width}px`)
       }
     },
   },
@@ -371,10 +371,16 @@ export default {
       from {
         transform: translateX(100%);
       }
+      to {
+        transform: translateX(var(--dm-left-offset));
+      }
     }
     @-webkit-keyframes moveLeft {
       from {
         -webkit-transform: translateX(100%);
+      }
+      to {
+        -webkit-transform: translateX(var(--dm-left-offset));
       }
     }
   }
