@@ -17,8 +17,10 @@
     "package": "vue-cli-service build --mode package --target lib --name vue-danmaku src/lib/index.js && rm ./dist/demo.html"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "core-js": "^3.6.5"
+  },
+  "peerDependencies": {
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
