@@ -124,6 +124,10 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 
 ## Changelog
 
+## v1.0.5
+
+- fix: 修复 iOS 下平移闪烁的问题
+
 ### v1.0.3
 
 - fix: 修复使用默认 slot 报错的 BUG
