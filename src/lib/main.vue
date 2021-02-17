@@ -117,7 +117,7 @@ export default {
     init() {
       this.initCore()
       this.initConfig()
-      if (this.danmaku.autoplay && this.danmuList.length) {
+      if (this.danmaku.autoplay) {
         this.play()
       }
     },
@@ -157,7 +157,7 @@ export default {
     draw() {
       this.$nextTick(() => {
         this.timer = setInterval(() => {
-          if (!this.paused) {
+          if (!this.paused && this.danmuList.length) {
             if (this.index > this.danmuList.length - 1) {
               if (this.danmaku.loop) {
                 this.index = 0
@@ -301,10 +301,14 @@ export default {
     pause() {
       this.paused = true
     },
-    // 添加弹幕
+    // 添加弹幕（插入到当前播放的弹幕位置）
     add(danmu) {
       const index = this.index % this.danmuList.length
       this.danmuList.splice(index, 0, danmu)
+    },
+    // 添加弹幕（插入到弹幕末尾）
+    push(danmu) {
+      this.danmuList.push(danmu)
     },
     setChannels(len) {
       this.danmaku.channels = len
