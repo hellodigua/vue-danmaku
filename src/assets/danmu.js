@@ -443,4 +443,4 @@ const danmus = [
   '火钳刘明',
 ]
 
-export { customDanmus, danmus }
+module.exports = { customDanmus, danmus }

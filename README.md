@@ -6,7 +6,9 @@
 
 > 基于 Vue.js 的弹幕交互组件
 
-Live Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
+Live Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
+
+Code Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
 ## Preview
 
