@@ -4,9 +4,7 @@
 set -e
 
 # build
-
 npm run package
 
 # publish
-
 npm publish
