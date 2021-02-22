@@ -65,6 +65,11 @@ export default {
       type: Number,
       default: 0,
     },
+    // 弹幕样式
+    extraStyle: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -179,6 +184,7 @@ export default {
         el = this.getSlotComponent(index).$el
       } else {
         el.innerHTML = this.danmuList[index]
+        el.style = this.extraStyle
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.style.lineHeight = `${this.danmu.fontSize}px`
       }

@@ -52,6 +52,7 @@ export default {
 | useSlot       | 是否开启弹幕插槽                       | Boolean |              | false  |
 | loop          | 是否开启弹幕循环                       | Boolean |              | false  |
 | fontSize      | 弹幕字号（slot 模式下不可用）          | Number  |              | 18     |
+| extraStyle    | 额外样式（slot 模式下不可用）          | String  |              |        |
 | speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | Number  |              | 10     |
 | debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
@@ -125,6 +126,10 @@ TODO 按优先级排列，如有其他需求请在 issues 中提出
 - [ ] 时间控制器 - > pending
 
 ## Changelog
+
+### v1.1.1
+
+- 新增 extraStyle，可控制普通弹幕的样式
 
 ### v1.1.0
 

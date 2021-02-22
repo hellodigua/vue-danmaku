@@ -1,4 +1,4 @@
-export const customDanmus = [
+const customDanmus = [
   {
     avatar: 'https://i.loli.net/2021/01/17/iI5hq9ozPxXNFfy.jpg',
     name: '美绪',
@@ -17,7 +17,7 @@ export const customDanmus = [
 ]
 
 // 弹幕来自b站首页
-export const danmus = [
+const danmus = [
   '草',
   '高技术力',
   '汤姆逊波纹疾走…啊哒哒哒哒哒哒……',
@@ -442,3 +442,5 @@ export const danmus = [
   '哈哈哈哈哈哈哈哈哈',
   '火钳刘明',
 ]
+
+export { customDanmus, danmus }
