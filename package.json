@@ -1,7 +1,7 @@
 {
   "name": "vue-danmaku",
   "description": "基于Vue.js的弹幕交互组件",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue-danmaku.umd.min.js",
