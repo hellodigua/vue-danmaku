@@ -117,12 +117,9 @@ export default {
 
 TODO 按优先级排列，如有其他需求请在 issues 中提出
 
-- [ ] 弹幕顶层 DOM 应支持样式配置 -> 动工中
 - [ ] 弹幕移入和移出事件 -> 动工中
 - [ ] 弹幕点击事件 -> pending
 - [ ] loop 为 false 时，播放完毕应调整定时器频率 -> pending
-- [ ] 新增弹幕应支持批量新增 -> pending
-- [ ] 按传入数组顺序播放或随机播放 -> pending
 - [ ] 顶部/底部弹幕 -> pending
 - [ ] 从左向右播放 -> pending
 - [ ] 时间控制器 - > pending
