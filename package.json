@@ -18,8 +18,8 @@
     "package": "vue-cli-service build --mode package --target lib --name vue-danmaku src/lib/index.js && rm ./dist/demo.html"
   },
   "dependencies": {
-    "vue": "^2.5.17",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "vue": "^2.6.12"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -37,7 +37,7 @@
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
     "stats.js": "^0.17.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.6.12"
     "webpack-cdn-plugin": "^3.3.1"
   },
   "homepage": "https://github.com/hellodigua/vue-danmaku",
