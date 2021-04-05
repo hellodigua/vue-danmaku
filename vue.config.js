@@ -1,5 +1,3 @@
-const WebpackCdnPlugin = require('webpack-cdn-plugin')
-
 const isBuildPackage = process.env.VUE_APP_BUILD_MODE === 'package'
 
 const isBuildDemo = process.env.NODE_ENV === 'production' && !isBuildPackage
@@ -25,15 +23,6 @@ module.exports = {
   },
   css: { extract: !!process.env.NO_EXTRACT_CSS },
   configureWebpack: {
-    plugins: isBuildPackage
-      ? []
-      : [
-        new WebpackCdnPlugin({
-          modules: [{ name: 'vue', var: 'Vue', path: 'dist/vue.runtime.min.js' }],
-          publicPath: '/node_modules',
-          prodUrl: '//cdn.jsdelivr.net/npm/:name@:version/:path',
-          crossOrigin: 'anonymous',
-        }),
-      ],
+    plugins: [],
   },
 }
