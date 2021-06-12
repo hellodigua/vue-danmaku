@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-// import VueDanmaku from './lib'
+import VueDanmaku from './lib/VueDanmaku.vue'
 
 const app = createApp(App)
 
-// app.use(VueDanmaku)
+app.component(VueDanmaku.name, VueDanmaku)
 app.mount('#app')
 
 window.app = app
