@@ -1,11 +1,62 @@
 <template>
-  <vue-danmaku class="demo" :danmus="danmus"> </vue-danmaku>
+  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" v-bind="config"> </vue-danmaku>
   <div class="main">
     <div class="intro">
       <h1>vue-danmaku</h1>
       <p>基于 Vue.js 的弹幕交互组件</p>
     </div>
-    <div class="action"></div>
+    <div class="action">
+      <p>
+        播放：
+        <button class="btn" @click="play('play')">播放</button>
+        <button class="btn" @click="play('pause')">暂停</button>
+        <button class="btn" @click="play('stop')">停止</button>
+      </p>
+      <p>
+        模式：
+        <button class="btn" @click="switchSlot(true)">弹幕 slot</button>
+        <button class="btn" @click="switchSlot(false)">普通文本</button>
+      </p>
+      <!-- <p>
+          循环：
+          <button class="btn" @click="play('show')">开启</button>
+          <button class="btn" @click="play('hide')">关闭</button>
+        </p> -->
+      <p>
+        显示：
+        <button class="btn" @click="play('show')">显示</button>
+        <button class="btn" @click="play('hide')">隐藏</button>
+      </p>
+      <p>
+        速度：
+        <button class="btn" @click="speedChange(1)">减速</button>
+        <button class="btn" @click="speedChange(-1)">增速</button>
+        <span>当前速度：{{ config.speed }}s/屏</span>
+      </p>
+      <p>
+        字号：
+        <button class="btn" :disabled="config.useSlot" @click="fontChange(-1)">缩小</button>
+        <button class="btn" :disabled="config.useSlot" @click="fontChange(1)">放大</button>
+        <span>当前字号：{{ config.fontSize }}px</span>
+      </p>
+      <p>
+        轨道：
+        <button class="btn" @click="channelChange(-1)">-1</button>
+        <button class="btn" @click="channelChange(1)">+1</button>
+        <button class="btn" @click="channelChange(-config.channels)">填满</button>
+        <span>当前轨道：{{ config.channels }}</span>
+      </p>
+      <p>
+        发送：
+        <input class="ipt" type="text" v-model="danmuMsg" />
+        <button class="btn" @click="addDanmu">发送</button>
+      </p>
+      <p>
+        性能：
+        <button class="btn" @click="setPerformance('block')">显示</button>
+        <button class="btn" @click="setPerformance('none')">隐藏</button>
+      </p>
+    </div>
   </div>
   <a
     href="https://github.com/hellodigua/vue-danmaku"
@@ -36,15 +87,117 @@
   </a>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { danmuData, customDanmuData } from './assets/danmu'
 
 export default defineComponent({
   components: {},
   props: {},
   setup(props) {
-    const danmus = ref(['测试弹幕', '测试弹幕2', '测试弹幕3'])
+    const danmaku = ref<any>(null)
+    const danmus = ref(danmuData)
+    const danmuMsg = ref<string>('')
+    let timer: number = 0
+    const config = reactive({
+      channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
+      useSlot: false, // 是否开启slot
+      loop: true, // 是否开启弹幕循环
+      speed: 8, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
+      fontSize: 20, // 文本模式下的字号
+      top: 10, // 弹幕轨道间的垂直间距
+      right: 0, // 同一轨道弹幕的水平间距
+      debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+    })
 
-    return { danmus }
+    onMounted(() => {})
+
+    function play(type: string) {
+      switch (type) {
+        case 'play':
+          danmaku.value.play()
+          break
+        case 'pause':
+          danmaku.value.pause()
+          break
+        case 'stop':
+          danmaku.value.stop()
+          break
+        case 'show':
+          danmaku.value.show()
+          break
+        case 'hide':
+          danmaku.value.hide()
+          break
+        case 'reset':
+          danmaku.value.reset()
+          break
+        default:
+          break
+      }
+    }
+
+    function switchSlot(slot: boolean) {
+      config.useSlot = slot
+      // danmus.value = slot ? customDanmuData : danmuData
+      setTimeout(() => {
+        danmaku.value.reset()
+        danmaku.value.play()
+      })
+    }
+    // function setPerformance(type: string) {
+    //   stats.dom.style.display = type
+    // }
+    function speedChange(val: number) {
+      if (config.speed === 1 && val === -1) {
+        return
+      }
+      config.speed += val
+      danmaku.value.reset()
+    }
+    function fontChange(val: number) {
+      config.fontSize += val
+      danmaku.value.reset()
+    }
+    function channelChange(val: number) {
+      if (!config.channels && val === -1) {
+        return
+      }
+      config.channels += val
+      danmaku.value.setChannels(config.channels)
+    }
+    function resizeHandler() {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => {
+        danmaku.value.resize()
+      }, 500)
+    }
+    function addDanmu() {
+      if (!danmuMsg.value) return
+      const _danmuMsg = config.useSlot
+        ? {
+            avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
+            name: '你',
+            text: danmuMsg.value,
+          }
+        : danmuMsg.value
+      danmaku.value.add(_danmuMsg)
+      danmuMsg.value = ''
+    }
+
+    return {
+      danmaku,
+      danmus,
+      config,
+      danmuMsg,
+
+      play,
+      switchSlot,
+      speedChange,
+      fontChange,
+      channelChange,
+      resizeHandler,
+      addDanmu,
+    }
   },
 })
 </script>

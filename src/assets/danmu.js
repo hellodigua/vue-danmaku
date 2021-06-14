@@ -1,4 +1,5 @@
-const customDanmus = [
+// 高级弹幕
+const customDanmuData = [
   {
     avatar: 'https://i.loli.net/2021/01/17/iI5hq9ozPxXNFfy.jpg',
     name: '美绪',
@@ -16,8 +17,8 @@ const customDanmus = [
   },
 ]
 
-// 弹幕来自b站首页
-const danmus = [
+// 普通弹幕
+const danmuData = [
   '草',
   '高技术力',
   '汤姆逊波纹疾走…啊哒哒哒哒哒哒……',
@@ -443,4 +444,4 @@ const danmus = [
   '火钳刘明',
 ]
 
-module.exports = { customDanmus, danmus }
+export { customDanmuData, danmuData }
