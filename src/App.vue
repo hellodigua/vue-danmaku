@@ -95,7 +95,7 @@ export default defineComponent({
   props: {},
   setup(props) {
     const danmaku = ref<any>(null)
-    const danmus = ref(danmuData)
+    const danmus = ref<any[]>(danmuData)
     const danmuMsg = ref<string>('')
     let timer: number = 0
     const config = reactive({
@@ -138,7 +138,7 @@ export default defineComponent({
 
     function switchSlot(slot: boolean) {
       config.useSlot = slot
-      // danmus.value = slot ? customDanmuData : danmuData
+      danmus.value = slot ? customDanmuData : danmuData
       setTimeout(() => {
         danmaku.value.reset()
         danmaku.value.play()

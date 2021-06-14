@@ -96,11 +96,11 @@ export default defineComponent({
     const danmakuHeight = ref(0)
     // 变量
     let timer: number = 0
-    const danmuList = ref<string[]>([])
+    const danmuList = ref<Danmu[]>([])
     const paused = ref(false)
     const index = ref<number>(0)
     const hidden = ref(false)
-    const danChannel = ref<any>({})
+    const danChannel = ref<DanChannel>({})
 
     const danmaku: DanmakuItem = reactive({
       channels: 0, // 轨道数量
@@ -118,6 +118,16 @@ export default defineComponent({
       top: 4, // 弹幕垂直间距
       right: 0, // 弹幕水平间距
     })
+
+    type Danmu = string | CustomDanmu
+
+    type CustomDanmu = {
+      [key: string]: any
+    }
+
+    interface DanChannel {
+      [index: number]: [HTMLDivElement]
+    }
 
     interface DanmuItem {
       height: number
@@ -154,7 +164,7 @@ export default defineComponent({
     }
 
     function initConfig() {
-      danmus.value.forEach((item: string) => {
+      danmus.value.forEach((item: Danmu) => {
         danmuList.value.push(item)
       })
 
@@ -208,9 +218,10 @@ export default defineComponent({
       let el = document.createElement(`div`)
 
       if (useSlot.value) {
+        // TODO
         // el = getSlotComponent(index).$el
       } else {
-        el.innerHTML = danmuList.value[_index]
+        el.innerHTML = danmuList.value[_index] as string
         // TODO add function to white it
         // el.style = extraStyle.value
         el.style.fontSize = `${danmu.fontSize}px`
@@ -322,13 +333,14 @@ export default defineComponent({
     function pause() {
       paused.value = true
     }
+    // TODO 两个方法合并，用第二个参数来控制
     // 添加弹幕（插入到当前播放的弹幕位置）
-    function add(danmu: string) {
+    function add(danmu: Danmu) {
       const _index = index.value % danmuList.value.length
       danmuList.value.splice(_index, 0, danmu)
     }
     // 添加弹幕（插入到弹幕末尾）
-    function push(danmu: string) {
+    function push(danmu: Danmu) {
       danmuList.value.push(danmu)
     }
     function setChannels(len: number) {
@@ -362,6 +374,10 @@ export default defineComponent({
       paused,
 
       // function
+      setChannels,
+      getPlayState,
+      resize,
+
       play,
       pause,
       stop,
