@@ -17,7 +17,7 @@ export default defineComponent({
       required: true,
       default: () => [],
     },
-    // 轨道数量，0为
+    // 轨道数量，0为最大轨道数量（撑满容器）
     channels: {
       type: Number,
       default: 0,
@@ -98,7 +98,7 @@ export default defineComponent({
     let timer: number = 0
     const danmuList = ref<string[]>([])
     const paused = ref(false)
-    const index = ref<any>(0)
+    const index = ref<number>(0)
     const hidden = ref(false)
     const danChannel = ref<any>({})
 
@@ -148,17 +148,11 @@ export default defineComponent({
       }
     }
 
-    /**
-     * 初始化容器
-     */
     function initCore() {
       danmakuWidth.value = container.value.offsetWidth
       danmakuHeight.value = container.value.offsetHeight
     }
 
-    /**
-     * 初始化配置
-     */
     function initConfig() {
       danmus.value.forEach((item: string) => {
         danmuList.value.push(item)
@@ -244,7 +238,7 @@ export default defineComponent({
           el.style.width = width + danmu.right + 'px'
           // @ts-ignore: HTML Element不一定有width属性
           el.style.setProperty('--dm-left-offset', `-${danmakuWidth.value}px`)
-          el.dataset.index = index.value
+          el.dataset.index = `${_index}`
           el.addEventListener('animationend', () => {
             dmContainer.value.removeChild(el)
           })
@@ -299,12 +293,81 @@ export default defineComponent({
       return dmContainer.value.getBoundingClientRect().right - eleRight
     }
 
+    function clearTimer() {
+      clearInterval(timer)
+      timer = 0
+    }
+
+    function clear() {
+      clearTimer()
+      index.value = 0
+    }
+
+    function reset() {
+      container.value = document.createElement('div')
+      dmContainer.value = document.createElement('div')
+      danmu.height = 0
+      init()
+    }
+
+    function stop() {
+      danChannel.value = {}
+      dmContainer.value.innerHTML = ''
+      paused.value = true
+      hidden.value = false
+      clear()
+      initConfig()
+    }
+
+    function pause() {
+      paused.value = true
+    }
+    // 添加弹幕（插入到当前播放的弹幕位置）
+    function add(danmu: string) {
+      const _index = index.value % danmuList.value.length
+      danmuList.value.splice(_index, 0, danmu)
+    }
+    // 添加弹幕（插入到弹幕末尾）
+    function push(danmu: string) {
+      danmuList.value.push(danmu)
+    }
+    function setChannels(len: number) {
+      danmaku.channels = len
+    }
+    function getPlayState() {
+      return !paused.value
+    }
+    function show() {
+      hidden.value = false
+    }
+    function hide() {
+      hidden.value = true
+    }
+    function resize() {
+      initCore()
+      const items = dmContainer.value.getElementsByClassName('dm')
+
+      for (let i = 0; i < items.length; i++) {
+        // items.[i].style.setProperty('--dm-left-offset', `-${container.value.offsetWidth}px`)
+      }
+    }
+
     return {
+      // element
       container,
       dmContainer,
 
+      // variable
       hidden,
       paused,
+
+      // function
+      play,
+      pause,
+      stop,
+      show,
+      hide,
+      reset,
     }
   },
 })
