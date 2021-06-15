@@ -1,5 +1,16 @@
 <template>
-  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" v-bind="config"> </vue-danmaku>
+  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" v-bind="config">
+    <!-- 容器slot -->
+    <div></div>
+    <!-- 弹幕slot -->
+    <template v-slot:dm="{ danmu, index }">
+      <div class="danmu-item">
+        <img class="img" :src="danmu.avatar" />
+        <span>{{ index }}{{ danmu.name }}：</span>
+        <span>{{ danmu.text }}</span>
+      </div>
+    </template>
+  </vue-danmaku>
   <div class="main">
     <div class="intro">
       <h1>vue-danmaku</h1>

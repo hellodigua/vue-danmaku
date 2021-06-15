@@ -5,7 +5,19 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, nextTick, onMounted, PropType, reactive, ref, toRefs } from 'vue'
+import {
+  createApp,
+  defineComponent,
+  nextTick,
+  onMounted,
+  onBeforeUnmount,
+  PropType,
+  ref,
+  toRefs,
+  reactive,
+  watch,
+  h,
+} from 'vue'
 
 export default defineComponent({
   name: 'VueDanmaku',
@@ -74,7 +86,7 @@ export default defineComponent({
     },
   },
   emits: ['done'],
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const {
       danmus,
       channels,
@@ -146,8 +158,17 @@ export default defineComponent({
       randomChannel: boolean
     }
 
+    watch(
+      () => props.danmus,
+      (val) => (danmuList.value = [...val])
+    )
+
     onMounted(() => {
       init()
+    })
+
+    onBeforeUnmount(() => {
+      clear()
     })
 
     function init() {
@@ -218,8 +239,7 @@ export default defineComponent({
       let el = document.createElement(`div`)
 
       if (useSlot.value) {
-        // TODO
-        // el = getSlotComponent(index).$el
+        el = getSlotComponent(_index).$el
       } else {
         el.innerHTML = danmuList.value[_index] as string
         // TODO add function to white it
@@ -293,6 +313,24 @@ export default defineComponent({
         }
       }
       return -1
+    }
+
+    function getSlotComponent(index: number) {
+      const DmComponent = createApp({
+        render() {
+          return h('div', {}, [
+            // @ts-ignore 我也不懂tslint报错的原因，以后再修吧
+            slots.dm({
+              danmu: danmuList.value[index],
+              index,
+            }),
+          ])
+        },
+      })
+
+      const ele = DmComponent.mount(document.createElement('div'))
+
+      return ele
     }
 
     /**
