@@ -4,7 +4,7 @@
       <!-- 容器slot -->
       <div></div>
       <!-- 弹幕slot -->
-      <template slot="dm" slot-scope="{ index, danmu }">
+      <template v-slot:dm="{ index, danmu }">
         <div class="danmu-item">
           <img class="img" :src="danmu.avatar" />
           <span>{{ index }}{{ danmu.name }}：</span>
@@ -200,7 +200,7 @@ export default {
       this.config.channels += val
       this.$refs.danmaku.setChannels(this.config.channels)
     },
-    resizeHandler: function() {
+    resizeHandler: function () {
       if (this.timer) clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.$refs.danmaku.resize()

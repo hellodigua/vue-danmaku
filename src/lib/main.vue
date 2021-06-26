@@ -184,7 +184,7 @@ export default {
         el = this.getSlotComponent(index).$el
       } else {
         el.innerHTML = this.danmuList[index]
-        el.style = this.extraStyle
+        el.setAttribute('style', this.extraStyle)
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.style.lineHeight = `${this.danmu.fontSize}px`
       }
