@@ -62,11 +62,11 @@
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
       </p>
-      <p>
+      <!-- <p>
         性能：
         <button class="btn" @click="setPerformance('block')">显示</button>
         <button class="btn" @click="setPerformance('none')">隐藏</button>
-      </p>
+      </p> -->
     </div>
   </div>
   <a
@@ -99,7 +99,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { danmuData, customDanmuData } from './assets/danmu'
+import { danmuData, customDanmuData } from './assets/danmu.js'
 
 export default defineComponent({
   components: {},

@@ -242,8 +242,7 @@ export default defineComponent({
         el = getSlotComponent(_index).$el
       } else {
         el.innerHTML = danmuList.value[_index] as string
-        // TODO add function to white it
-        // el.style = extraStyle.value
+        el.setAttribute('style', extraStyle.value)
         el.style.fontSize = `${danmu.fontSize}px`
         el.style.lineHeight = `${danmu.fontSize}px`
       }
@@ -255,7 +254,6 @@ export default defineComponent({
           danmu.height = el.offsetHeight
           // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
           if (!danmaku.channels) {
-            // @ts-ignore: HTML Element不一定有width属性
             danmaku.channels = Math.floor(danmakuHeight.value / (danmu.height + danmu.top))
           }
         }
@@ -353,8 +351,6 @@ export default defineComponent({
     }
 
     function reset() {
-      container.value = document.createElement('div')
-      dmContainer.value = document.createElement('div')
       danmu.height = 0
       init()
     }
@@ -371,7 +367,7 @@ export default defineComponent({
     function pause() {
       paused.value = true
     }
-    // TODO 两个方法合并，用第二个参数来控制
+    function addDanmu(danmu: Danmu, config: any) {}
     // 添加弹幕（插入到当前播放的弹幕位置）
     function add(danmu: Danmu) {
       const _index = index.value % danmuList.value.length
@@ -422,6 +418,8 @@ export default defineComponent({
       show,
       hide,
       reset,
+      add,
+      push,
     }
   },
 })

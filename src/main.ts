@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import VueDanmaku from './lib/VueDanmaku.vue'
+import VueDanmaku from './lib/Danmaku.vue'
 
 const app = createApp(App)
 

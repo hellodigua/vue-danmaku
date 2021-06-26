@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import VueDanmaku from './main.vue'
+import VueDanmaku from './Danmaku.vue'
 
 VueDanmaku.install = (app: App): void => {
   app.component(VueDanmaku.name, VueDanmaku)
