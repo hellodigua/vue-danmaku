@@ -18,6 +18,7 @@ import {
   watch,
   h,
 } from 'vue'
+import { Danmu, DanChannel, DanmuItem, DanmakuItem } from './Danmaku'
 
 export default defineComponent({
   components: {},
@@ -138,33 +139,6 @@ export default defineComponent({
       top: 4, // 弹幕垂直间距
       right: 0, // 弹幕水平间距
     })
-
-    type Danmu = string | CustomDanmu
-
-    type CustomDanmu = {
-      [key: string]: any
-    }
-
-    interface DanChannel {
-      [index: number]: [HTMLDivElement]
-    }
-
-    interface DanmuItem {
-      height: number
-      fontSize: number
-      speed: number
-      top: number
-      right: number
-    }
-
-    interface DanmakuItem {
-      channels: number
-      autoplay: boolean
-      loop: boolean
-      useSlot: boolean
-      debounce: number
-      randomChannel: boolean
-    }
 
     watch(
       () => props.danmus,
