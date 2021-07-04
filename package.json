@@ -1,21 +1,24 @@
 {
-  "name": "vue-danmaku",
+  "name": "vue3-danmaku",
   "description": "基于Vue.js的弹幕交互组件",
-  "version": "1.1.1",
+  "version": "0.1.0-beta.7",
   "author": "hellodigua",
   "private": false,
-  "main": "dist/vue-danmaku.umd.min.js",
+  "main": "dist/vue3-danmaku.cjs.js",
+  "module": "dist/vue3-danmaku.esm.js",
+  "style": "dist/vue3-danmaku.css",
+  "types": "dist/types/danmaku.vue.d.ts",
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
     "dev": "vite",
-    "dev:docs": "vitepress dev docs",
     "build": "rollup -c build/rollup.config.js",
     "build:docs": "vite build",
     "release:docs": "sh scripts/deploy.sh",
-    "release:package": "sh scripts/release.sh"
+    "release:package": "sh scripts/release.sh",
+    "package": "rollup -c build/rollup.config.js"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
@@ -24,8 +27,12 @@
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
     "prettier": "^2.2.1",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",
+    "typescript": "^4.3.4",
     "vite": "^2.2.3",
     "vue": "^3.0.5"
   },

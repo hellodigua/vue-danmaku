@@ -100,9 +100,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { danmuData, customDanmuData } from './assets/danmu.js'
+import VueDanmaku from './lib/Danmaku.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    VueDanmaku,
+  },
   props: {},
   setup(props) {
     const danmaku = ref<any>(null)
@@ -150,8 +153,9 @@ export default defineComponent({
     function switchSlot(slot: boolean) {
       config.useSlot = slot
       danmus.value = slot ? customDanmuData : danmuData
+
       setTimeout(() => {
-        danmaku.value.reset()
+        danmaku.value.stop()
         danmaku.value.play()
       })
     }

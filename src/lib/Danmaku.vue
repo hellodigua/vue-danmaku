@@ -20,7 +20,6 @@ import {
 } from 'vue'
 
 export default defineComponent({
-  name: 'VueDanmaku',
   components: {},
   props: {
     // 弹幕列表数据
@@ -101,9 +100,18 @@ export default defineComponent({
       right,
       extraStyle,
     } = toRefs(props)
+
+    onMounted(() => {
+      init()
+    })
+
+    onBeforeUnmount(() => {
+      clear()
+    })
+
     // 容器
-    const container = ref<HTMLDivElement>(document.createElement('div'))
-    const dmContainer = ref<HTMLDivElement>(document.createElement('div'))
+    let container = ref<HTMLDivElement>(document.createElement('div'))
+    let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
     const danmakuWidth = ref(0)
     const danmakuHeight = ref(0)
     // 变量
@@ -162,14 +170,6 @@ export default defineComponent({
       () => props.danmus,
       (val) => (danmuList.value = [...val])
     )
-
-    onMounted(() => {
-      init()
-    })
-
-    onBeforeUnmount(() => {
-      clear()
-    })
 
     function init() {
       initCore()
@@ -238,7 +238,7 @@ export default defineComponent({
       const _index = loop.value ? index.value % danmuList.value.length : index.value
       let el = document.createElement(`div`)
 
-      if (useSlot.value) {
+      if (danmaku.useSlot) {
         el = getSlotComponent(_index).$el
       } else {
         el.innerHTML = danmuList.value[_index] as string
