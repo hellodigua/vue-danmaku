@@ -1,16 +1,4 @@
 /**
- * 弹幕类型
- */
-export type Danmu = string | CustomDanmu
-
-/**
- * 自定义弹幕
- */
-export type CustomDanmu = {
-  [key: string]: any
-}
-
-/**
  * 弹幕轨道
  */
 export interface DanChannel {

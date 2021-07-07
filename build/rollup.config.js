@@ -8,9 +8,9 @@ let tsconfigOverride = {
     target: 'ES6',
     lib: ['ES2020', 'dom'],
     rootDir: 'src',
-    declarationDir: "dist/types"
+    declarationDir: "dist/typings"
   },
-  include: ['src/**/*'],
+  include: ['src/lib/**/*'],
 }
 
 export default [
@@ -29,9 +29,13 @@ export default [
   },
   {
     output: {
-      format: 'cjs',
-      file: 'dist/vue3-danmaku.cjs.js',
-      exports: 'default',
+      format: 'umd',
+      file: 'dist/vue3-danmaku.umd.js',
+      name: 'Vue3Danmaku',
+      // exports: 'default',
+      globals: {
+        vue: 'Vue',
+      },
     },
     plugins: [
       typescript({ tsconfigOverride, useTsconfigDeclarationDir: true }),

@@ -18,14 +18,26 @@ import {
   watch,
   h,
 } from 'vue'
-import { Danmu, DanChannel, DanmuItem, DanmakuItem } from './Danmaku'
+import { DanChannel, DanmuItem, DanmakuItem } from './Danmaku'
+
+/**
+ * 自定义弹幕
+ */
+type CustomDanmu = {
+  [key: string]: any
+}
+
+/**
+ * 弹幕类型
+ */
+type Danmu = string | CustomDanmu
 
 export default defineComponent({
   components: {},
   props: {
     // 弹幕列表数据
     danmus: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<Danmu[]>,
       required: true,
       default: () => [],
     },
@@ -319,16 +331,25 @@ export default defineComponent({
       timer = 0
     }
 
+    /**
+     * 清空弹幕
+     */
     function clear() {
       clearTimer()
       index.value = 0
     }
 
+    /**
+     * 重置弹幕
+     */
     function reset() {
       danmu.height = 0
       init()
     }
 
+    /**
+     * 停止弹幕
+     */
     function stop() {
       danChannel.value = {}
       dmContainer.value.innerHTML = ''
@@ -338,31 +359,57 @@ export default defineComponent({
       initConfig()
     }
 
-    function pause() {
+    /**
+     * 暂停弹幕
+     */
+    function pause(): void {
       paused.value = true
     }
     function addDanmu(danmu: Danmu, config: any) {}
-    // 添加弹幕（插入到当前播放的弹幕位置）
-    function add(danmu: Danmu) {
+
+    /**
+     * 添加弹幕（插入到当前播放的弹幕位置）
+     */
+    function add(danmu: Danmu): void {
       const _index = index.value % danmuList.value.length
       danmuList.value.splice(_index, 0, danmu)
     }
-    // 添加弹幕（插入到弹幕末尾）
-    function push(danmu: Danmu) {
+
+    /**
+     * 添加弹幕（插入到弹幕末尾）
+     */
+    function push(danmu: Danmu): void {
       danmuList.value.push(danmu)
     }
-    function setChannels(len: number) {
-      danmaku.channels = len
+
+    /**
+     * 设置轨道
+     */
+    function setChannels(channels: number): void {
+      danmaku.channels = channels
     }
-    function getPlayState() {
+
+    /**
+     * 获取播放状态
+     */
+    function getPlayState(): boolean {
       return !paused.value
     }
-    function show() {
+
+    /**
+     * 显示弹幕
+     */
+    function show(): void {
       hidden.value = false
     }
-    function hide() {
+
+    /**
+     * 隐藏弹幕
+     */
+    function hide(): void {
       hidden.value = true
     }
+
     function resize() {
       initCore()
       const items = dmContainer.value.getElementsByClassName('dm')

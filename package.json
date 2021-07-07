@@ -1,13 +1,13 @@
 {
   "name": "vue3-danmaku",
-  "description": "基于Vue.js的弹幕交互组件",
-  "version": "0.1.0-beta.7",
+  "description": "基于Vue.js 3.x的弹幕交互组件",
+  "version": "0.1.0-beta.10",
   "author": "hellodigua",
   "private": false,
-  "main": "dist/vue3-danmaku.cjs.js",
+  "main": "dist/vue3-danmaku.umd.js",
   "module": "dist/vue3-danmaku.esm.js",
   "style": "dist/vue3-danmaku.css",
-  "types": "dist/types/danmaku.vue.d.ts",
+  "types": "dist/typings/lib/danmaku.vue.d.ts",
   "files": [
     "dist",
     "src"
