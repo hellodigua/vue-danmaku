@@ -1,7 +1,7 @@
 {
   "name": "vue3-danmaku",
-  "description": "基于Vue.js 3.x的弹幕交互组件",
-  "version": "0.1.0-beta.10",
+  "description": "基于Vue.js的弹幕交互组件",
+  "version": "0.1.0",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue3-danmaku.umd.js",
@@ -39,12 +39,12 @@
   "homepage": "https://github.com/hellodigua/vue-danmaku",
   "keywords": [
     "vue",
+    "vue3",
     "danmaku",
     "vue-danmaku",
     "barrage",
     "vue-barrage",
-    "弹幕",
-    "年会"
+    "弹幕"
   ],
   "license": "MIT"
 }

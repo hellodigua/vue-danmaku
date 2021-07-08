@@ -18,7 +18,7 @@ import {
   watch,
   h,
 } from 'vue'
-import { DanChannel, DanmuItem, DanmakuItem } from './Danmaku'
+import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
 
 /**
  * 自定义弹幕
@@ -35,63 +35,87 @@ type Danmu = string | CustomDanmu
 export default defineComponent({
   components: {},
   props: {
-    // 弹幕列表数据
+    /**
+     * 弹幕列表数据
+     */
     danmus: {
       type: Array as PropType<Danmu[]>,
       required: true,
       default: () => [],
     },
-    // 轨道数量，0为最大轨道数量（撑满容器）
+    /**
+     * 轨道数量，0为最大轨道数量（撑满容器）
+     */
     channels: {
       type: Number,
       default: 0,
     },
-    // 自动播放
+    /**
+     * 是否自动播放
+     */
     autoplay: {
       type: Boolean,
       default: true,
     },
-    // 循环播放
+    /**
+     * 是否循环播放
+     */
     loop: {
       type: Boolean,
       default: false,
     },
-    // 开启弹幕插槽
+    /**
+     * 是否开启弹幕插槽，默认否
+     */
     useSlot: {
       type: Boolean,
       default: false,
     },
-    // 弹幕刷新频率(ms)
+    /**
+     * 弹幕刷新频率(ms)
+     */
     debounce: {
       type: Number,
       default: 400,
     },
-    // 是否开启随机轨道注入弹幕
+    /**
+     * 是否开启随机轨道注入弹幕
+     */
     randomChannel: {
       type: Boolean,
       default: false,
     },
-    // 弹幕速度（每屏滚过的时间）
+    /**
+     * 弹幕速度（每屏滚过的时间）
+     */
     speed: {
       type: Number,
       default: 10,
     },
-    // 弹幕字号（仅文本模式）
+    /**
+     * 弹幕字号（仅文本模式）
+     */
     fontSize: {
       type: Number,
       default: 18,
     },
-    // 弹幕垂直间距
+    /**
+     * 弹幕垂直间距
+     */
     top: {
       type: Number,
       default: 4,
     },
-    // 弹幕水平间距（默认会留一定安全距离）
+    /**
+     * 弹幕水平间距
+     */
     right: {
       type: Number,
       default: 0,
     },
-    // 弹幕样式
+    /**
+     * 弹幕额外样式
+     */
     extraStyle: {
       type: String,
       default: '',
@@ -432,7 +456,6 @@ export default defineComponent({
       setChannels,
       getPlayState,
       resize,
-
       play,
       pause,
       stop,

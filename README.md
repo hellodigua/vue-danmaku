@@ -1,10 +1,10 @@
-# vue-danmaku
+# vue3-danmaku
 
-[![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
-[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![npm-version](https://img.shields.io/npm/v/vue3-danmaku.svg)](https://www.npmjs.com/package/vue3-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 
-> 基于 Vue.js 的弹幕交互组件
+> 基于 Vue.js 3.x 的弹幕交互组件
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
@@ -19,7 +19,7 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 ## Install
 
 ```bash
-$ npm install vue-danmaku --save
+$ npm install vue3-danmaku --save
 ```
 
 ## Usage
@@ -30,13 +30,13 @@ $ npm install vue-danmaku --save
 </template>
 
 <script>
-import vueDanmaku from 'vue-danmaku'
+import vueDanmaku from 'vue3-danmaku'
 
 export default {
-  data() {
-    return {
-      danmus: ['danmu1', 'danmu2', 'danmu3', '...'],
-    }
+  setup(props) {
+    const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
+
+    return { danmus }
   },
 }
 </script>
@@ -60,12 +60,22 @@ export default {
 | right         | 弹幕水平间距(px)                       | Number  |              | 0      |
 
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
-- 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `this.$refs[refName].play()` 进行播放
+- 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
 
 ## 内置方法
 
-通过 `this.$refs[refName]` 调用
+通过以下方式调用：
+
+```js
+<vue-danmaku ref="danmaku"></vue-danmaku>
+
+setup() {
+  const danmaku = ref<any>(null)
+
+  danmaku.value.play()
+}
+```
 
 | 方法名      | 说明                                         | 参数                           |
 | :---------- | :------------------------------------------- | :----------------------------- |
@@ -84,13 +94,11 @@ export default {
 
 ## Slot
 
-自 0.3.1 版本起，vue-danmaku 支持通过 slot 插槽来自定义弹幕结构与样式，你可以传入任意结构的对象并通过 slot 渲染出来。
-
 ```vue
 <template>
   <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
-    <!-- 弹幕插槽（vue 2.6.0 及以上版本可使用 v-slot:dm="{ index, danmu }"语法） -->
-    <template slot="dm" slot-scope="{ index, danmu }">
+    <!-- 弹幕插槽 -->
+    <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
     <!-- 容器插槽 -->
@@ -99,105 +107,22 @@ export default {
 </template>
 
 <script>
-import vueDanmaku from 'vue-danmaku'
+import vueDanmaku from 'vue3-danmaku'
 
 export default {
-  data() {
-    return {
-      danmus: [{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...]
-    }
-  }
+  setup(props) {
+    const danmus = ref([{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...])
+
+    return { danmus }
+  },
 }
 </script>
 ```
 
-## TODO
-
-TODO 按优先级排列，如有其他需求请在 issues 中提出
-
-- [ ] 弹幕移入和移出事件 -> 动工中
-- [ ] 弹幕点击事件 -> pending
-- [ ] loop 为 false 时，播放完毕应调整定时器频率 -> pending
-- [ ] 顶部/底部弹幕 -> pending
-- [ ] 从左向右播放 -> pending
-- [ ] 时间控制器 - > pending
-
 ## Changelog
-
-### v1.1.1
-
-- 新增 extraStyle，可控制普通弹幕的样式
-
-### v1.1.0
-
-- 新增弹幕插入方法
-
-### v1.0.5
-
-- fix: 修复 iOS 下平移闪烁的问题
-
-### v1.0.3
-
-- fix: 修复使用默认 slot 报错的 BUG
-
-### v1.0.0
-
-考虑良久，为了后续版本的易用性，因此组件参数改为直传，为了避免已有用户踩坑，因此升级一个大版本。前一个版本文档请查看 [https://www.npmjs.com/package/vue-danmaku/v/0.3.6](https://www.npmjs.com/package/vue-danmaku/v/0.3.6)
-
-- 组件参数改为直传
-- 部分代码重构
-
-### v0.3.6
-
-- 支持异步加载弹幕（备注：异步加载后应手动调用 play 方法）
-
-### v0.3.4
-
-- 支持随机轨道发送弹幕
-- fix: 非循环模式，播放完成时不应当结束弹幕任务
-
-### v0.3.2
-
-- 支持自动播放
-- 弹幕容器尺寸改变时，重新计算滚动距离
-
-### v0.3.1
-
-- 打包体积优化
-
-### v0.3.0
-
-Make Core Code Great Again
-
-- 支持设置弹幕距离
-- 支持设置弹幕刷新频率
-
-### v0.2.0
-
-- 支持弹幕插槽及对应样式优化
-
-### v0.1.1
-
-- fix: 修复 0.1.0 打包错误导致的无法下载
 
 ### v0.1.0
 
-- 支持移动端播放
+Born in 2021.7.8
 
-### v0.0.6
-
-- 支持弹幕速度
-- 支持弹幕字号
-- 支持新增弹幕
-
-### v0.0.5
-
-- 支持弹幕暂停
-- 支持轨道数控制
-- 支持弹幕循环
-
-### v0.0.1
-
-Born in 2018.3.11
-
-- 支持弹幕效果
+- 支持 vue3
