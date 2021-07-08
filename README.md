@@ -8,6 +8,8 @@
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
+现已支持 vue3.x：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
+
 ## Preview
 
 ![1.gif](https://i.loli.net/2021/01/18/AhqP2nZBtLg9uwl.gif)
