@@ -156,26 +156,22 @@ export default {
     play() {
       this.paused = false
       if (!this.timer) {
-        this.draw()
+        this.timer = setInterval(() => this.draw(), this.danmaku.debounce)
       }
     },
     draw() {
-      this.$nextTick(() => {
-        this.timer = setInterval(() => {
-          if (!this.paused && this.danmuList.length) {
-            if (this.index > this.danmuList.length - 1) {
-              if (this.danmaku.loop) {
-                this.index = 0
-                this.insert()
-              }
-              // 播放完成
-              this.$emit('done')
-            } else {
-              this.insert()
-            }
+      if (!this.paused && this.danmuList.length) {
+        if (this.index > this.danmuList.length - 1) {
+          if (this.danmaku.loop) {
+            this.index = 0
+            this.insert()
           }
-        }, this.danmaku.debounce)
-      })
+          // 播放完成
+          this.$emit('done')
+        } else {
+          this.insert()
+        }
+      }
     },
     insert() {
       const index = this.danmaku.loop ? this.index % this.danmuList.length : this.index
