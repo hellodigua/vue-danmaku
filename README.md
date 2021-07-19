@@ -55,7 +55,7 @@ export default {
 | loop          | 是否开启弹幕循环                       | Boolean |              | false  |
 | fontSize      | 弹幕字号（slot 模式下不可用）          | Number  |              | 18     |
 | extraStyle    | 额外样式（slot 模式下不可用）          | String  |              |        |
-| speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | Number  |              | 10     |
+| speeds        | 弹幕速度（每秒移动的像素数）           | Number  |              | 200    |
 | debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
 | top           | 弹幕垂直间距(px)                       | Number  |              | 4      |

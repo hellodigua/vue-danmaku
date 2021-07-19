@@ -41,9 +41,9 @@ export default {
       default: 100,
     },
     // 弹幕速度
-    speed: {
+    speeds: {
       type: Number,
-      default: 10,
+      default: 200,
     },
     // 随机轨道注入弹幕
     randomChannel: {
@@ -90,7 +90,7 @@ export default {
       danmu: {
         height: 0, // 弹幕元素高度
         fontSize: 18, // 弹幕元素字号（slot下不可用）
-        speed: 10, // 弹幕速度
+        speeds: 200, // 弹幕速度
         top: 4, // 弹幕垂直间距
         right: 0, // 弹幕水平间距
       },
@@ -147,7 +147,7 @@ export default {
       }
       this.danmu = {
         ...this.danmu,
-        speed: this.speed,
+        speeds: this.speeds,
         fontSize: this.fontSize,
         top: this.top,
         right: this.right,
@@ -203,7 +203,10 @@ export default {
           const width = el.offsetWidth
           const height = this.danmu.height
           el.classList.add('move')
-          el.style.animationDuration = `${this.danmu.speed}s`
+          // 匀速
+          // const speeds = (this.container.width + width) / this.danmu.speeds
+          const speeds = this.container.width / this.danmu.speeds
+          el.style.animationDuration = `${speeds}s`
           el.style.top = channelIndex * (height + this.danmu.top) + 'px'
           el.style.width = width + this.danmu.right + 'px'
           el.style.setProperty('--dm-left-offset', `-${this.container.width}px`)
