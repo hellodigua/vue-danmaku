@@ -40,9 +40,9 @@
       </p>
       <p>
         速度：
-        <button class="btn" @click="speedChange(1)">减速</button>
-        <button class="btn" @click="speedChange(-1)">增速</button>
-        <span>当前速度：{{ config.speed }}s/屏</span>
+        <button class="btn" @click="speedsChange(-10)">减速</button>
+        <button class="btn" @click="speedsChange(10)">增速</button>
+        <span>当前速度：{{ config.speeds }}像素/s</span>
       </p>
       <p>
         字号：
@@ -116,7 +116,7 @@ export default defineComponent({
       channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
       useSlot: false, // 是否开启slot
       loop: true, // 是否开启弹幕循环
-      speed: 8, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
+      speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
       fontSize: 20, // 文本模式下的字号
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
@@ -162,11 +162,11 @@ export default defineComponent({
     // function setPerformance(type: string) {
     //   stats.dom.style.display = type
     // }
-    function speedChange(val: number) {
-      if (config.speed === 1 && val === -1) {
+    function speedsChange(val: number) {
+      if (config.speeds <= 10 && val === -10) {
         return
       }
-      config.speed += val
+      config.speeds += val
       danmaku.value.reset()
     }
     function fontChange(val: number) {
@@ -207,7 +207,7 @@ export default defineComponent({
 
       play,
       switchSlot,
-      speedChange,
+      speedsChange,
       fontChange,
       channelChange,
       resizeHandler,

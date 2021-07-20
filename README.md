@@ -53,7 +53,7 @@ export default {
 | loop          | 是否开启弹幕循环                       | Boolean |              | false  |
 | fontSize      | 弹幕字号（slot 模式下不可用）          | Number  |              | 18     |
 | extraStyle    | 额外样式（slot 模式下不可用）          | String  |              |        |
-| speed         | 弹幕速度(s)（弹幕滚动过一屏的秒数）    | Number  |              | 10     |
+| speeds        | 弹幕速度（每秒移动的像素数）           | Number  |              | 200    |
 | debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
 | top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
@@ -96,7 +96,7 @@ setup() {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
+  <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :channels="5">
     <!-- 弹幕插槽 -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
@@ -121,8 +121,12 @@ export default {
 
 ## Changelog
 
-### v0.1.0
+### v0.2.0
 
-Born in 2021.7.8
+- speed 参数改为 speeds 参数，含义同样发生变化(主要是为了保证不同屏幕下弹幕移动速度相同)
+  - speed: 弹幕经过屏幕的总时长
+  - speeds: 弹幕每秒走过的像素距离
+
+### v0.1.0
 
 - 支持 vue3

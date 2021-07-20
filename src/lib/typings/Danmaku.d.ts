@@ -11,7 +11,7 @@ export interface DanChannel {
 export interface DanmuItem {
   height: number
   fontSize: number
-  speed: number
+  speeds: number
   top: number
   right: number
 }

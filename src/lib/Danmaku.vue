@@ -86,11 +86,11 @@ export default defineComponent({
       default: false,
     },
     /**
-     * 弹幕速度（每屏滚过的时间）
+     * 弹幕速度（像素/秒）
      */
-    speed: {
+    speeds: {
       type: Number,
-      default: 10,
+      default: 200,
     },
     /**
      * 弹幕字号（仅文本模式）
@@ -131,7 +131,7 @@ export default defineComponent({
       useSlot,
       debounce,
       randomChannel,
-      speed,
+      speeds,
       fontSize,
       top,
       right,
@@ -171,7 +171,7 @@ export default defineComponent({
     const danmu: DanmuItem = reactive({
       height: 0, // 弹幕元素高度
       fontSize: 18, // 弹幕元素字号（slot下不可用）
-      speed: 10, // 弹幕速度
+      speeds: 200, // 弹幕速度
       top: 4, // 弹幕垂直间距
       right: 0, // 弹幕水平间距
     })
@@ -207,7 +207,7 @@ export default defineComponent({
       danmaku.randomChannel = randomChannel.value
 
       danmu.fontSize = fontSize.value
-      danmu.speed = speed.value
+      danmu.speeds = speeds.value
       danmu.top = top.value
       danmu.right = right.value
     }
@@ -215,7 +215,7 @@ export default defineComponent({
     function play() {
       paused.value = false
       if (!timer) {
-        draw()
+        timer = setInterval(() => draw(), debounce.value)
       }
     }
 
@@ -223,22 +223,18 @@ export default defineComponent({
      * 绘制弹幕
      */
     function draw() {
-      nextTick(() => {
-        timer = setInterval(() => {
-          if (!paused.value && danmuList.value.length) {
-            if (index.value > danmuList.value.length - 1) {
-              if (danmaku.loop) {
-                index.value = 0
-                insert()
-              }
-              // 播放完成
-              emit('done')
-            } else {
-              insert()
-            }
+      if (!paused.value && danmuList.value.length) {
+        if (index.value > danmuList.value.length - 1) {
+          if (danmaku.loop) {
+            index.value = 0
+            insert()
           }
-        }, debounce.value)
-      })
+          // 播放完成
+          emit('done')
+        } else {
+          insert()
+        }
+      }
     }
 
     /**
@@ -271,8 +267,9 @@ export default defineComponent({
         if (channelIndex >= 0) {
           const width = el.offsetWidth
           const height = danmu.height
+          const speeds = danmakuWidth.value / danmu.speeds
           el.classList.add('move')
-          el.style.animationDuration = `${danmu.speed}s`
+          el.style.animationDuration = `${speeds}s`
           el.style.top = channelIndex * (height + danmu.top) + 'px'
           el.style.width = width + danmu.right + 'px'
           // @ts-ignore: HTML Element不一定有width属性
