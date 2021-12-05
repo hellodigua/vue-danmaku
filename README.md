@@ -113,18 +113,15 @@ export default {
 </script>
 ```
 
-## TODO
+## 讨论交流和 BUG 反馈
 
-TODO 按优先级排列，如有其他需求请在 issues 中提出
-
-- [ ] 弹幕移入和移出事件 -> 动工中
-- [ ] 弹幕点击事件 -> pending
-- [ ] loop 为 false 时，播放完毕应调整定时器频率 -> pending
-- [ ] 顶部/底部弹幕 -> pending
-- [ ] 从左向右播放 -> pending
-- [ ] 时间控制器 - > pending
+QQ 群：747809274
 
 ## Changelog
+
+### v1.2.1
+
+- fix: 修复初始化时弹幕容器宽度可能出错的 BUG
 
 ### v1.2.0
 

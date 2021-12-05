@@ -113,7 +113,9 @@ export default {
   },
   created() {},
   mounted() {
-    this.init()
+    this.$nextTick(() => {
+      this.init()
+    })
   },
   beforeDestroy() {
     this.clear()
