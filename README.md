@@ -40,6 +40,9 @@ export default {
       danmus: ['danmu1', 'danmu2', 'danmu3', '...'],
     }
   },
+  components: {
+    vueDanmaku,
+  },
 }
 </script>
 ```
@@ -108,7 +111,10 @@ export default {
     return {
       danmus: [{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...]
     }
-  }
+  },
+  components: {
+    vueDanmaku,
+  },
 }
 </script>
 ```
