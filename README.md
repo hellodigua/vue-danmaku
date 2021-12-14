@@ -79,21 +79,21 @@ export default {
 | hide        | 弹幕隐藏                                     | -                              |
 | reset       | 重置配置                                     | -                              |
 | resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
-| push        | 发送弹幕（插入到弹幕列表末尾）               | danmu 数据，可以是字符串或对象 |
-| add         | 发送弹幕（插入到当前播放的位置）             | danmu 数据，可以是字符串或对象 |
+| push        | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
+| add         | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
 
 - 注 1： push 适用于非循环模式，add 适用于循环模式
 
 ## Slot
 
-自 0.3.1 版本起，vue-danmaku 支持通过 slot 插槽来自定义弹幕结构与样式，你可以传入任意结构的对象并通过 slot 渲染出来。
+如果你有自定义弹幕结构与样式的需求，你可以传入任意结构的对象并自己写内部样式。
 
 ```vue
 <template>
   <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
     <!-- 弹幕插槽（vue 2.6.0 及以上版本可使用 v-slot:dm="{ index, danmu }"语法） -->
     <template slot="dm" slot-scope="{ index, danmu }">
-      <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
+      <div>{{ index }}{{ danmu.name }}：{{ danmu.text }}</div>
     </template>
     <!-- 容器插槽 -->
     <div></div>
@@ -147,7 +147,7 @@ QQ 群：747809274
 
 ### v1.0.0
 
-考虑良久，为了后续版本的易用性，因此组件参数改为直传，为了避免已有用户踩坑，因此升级一个大版本。前一个版本文档请查看 [https://www.npmjs.com/package/vue-danmaku/v/0.3.6](https://www.npmjs.com/package/vue-danmaku/v/0.3.6)
+为了后续版本的易用性，组件参数改为直传。前版本文档请[点此查看](https://www.npmjs.com/package/vue-danmaku/v/0.3.6)
 
 - 组件参数改为直传
 - 部分代码重构

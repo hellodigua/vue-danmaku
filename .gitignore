@@ -16,6 +16,7 @@ yarn-error.log*
 
 # Editor
 .vscode/
+.idea/
 # 仅同步 settings
 !.vscode/settings.json
 
