@@ -79,14 +79,7 @@ export default {
         width: 0, // 容器宽度
         height: 0, // 容器高度
       },
-      danmaku: {
-        channels: 0, // 轨道数量
-        autoplay: true, // 自动播放
-        loop: false, // 是否循环
-        useSlot: false, // 是否开启slot
-        debounce: 100, // 弹幕刷新频率(ms)
-        randomChannel: false, // 随机选择轨道插入
-      },
+      calcChannels: 0,
       danmuHeight: 0, // 弹幕元素高度
       danmuList: [],
       timer: null,
@@ -104,6 +97,16 @@ export default {
         speeds: this.speeds,
         top: this.top,
         right: this.right,
+      }
+    },
+    danmaku() {
+      return {
+        channels: this.channels || this.calcChannels,
+        autoplay: this.autoplay,
+        loop: this.loop,
+        useSlot: this.useSlot,
+        debounce: this.debounce,
+        randomChannel: this.randomChannel,
       }
     },
   },
@@ -142,15 +145,6 @@ export default {
     },
     initConfig() {
       this.danmuList = [...this.danmus]
-      this.danmaku = {
-        ...this.danmaku,
-        channels: this.channels,
-        autoplay: this.autoplay,
-        loop: this.loop,
-        useSlot: this.useSlot,
-        debounce: this.debounce,
-        randomChannel: this.randomChannel,
-      }
     },
     play() {
       this.paused = false
@@ -186,12 +180,12 @@ export default {
       el.classList.add('dm')
       this.$dmContainer.appendChild(el)
       this.$nextTick(() => {
-        if (!this.danmu.height || !this.danmaku.channels) {
+        if (!this.danmu.height) {
           this.danmuHeight = el.offsetHeight
-          // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
-          if (!this.danmaku.channels) {
-            this.danmaku.channels = Math.floor(this.container.height / (this.danmu.height + this.danmu.top))
-          }
+        }
+        // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
+        if (!this.channels) {
+          this.calcChannels = Math.floor(this.container.height / (this.danmu.height + this.danmu.top))
         }
         let channelIndex = this.getChannelIndex(el)
         if (channelIndex >= 0) {
@@ -313,9 +307,6 @@ export default {
     // 添加弹幕（插入到弹幕末尾）
     push(danmu) {
       this.danmuList.push(danmu)
-    },
-    setChannels(len) {
-      this.danmaku.channels = len
     },
     getPlayState() {
       return !this.paused

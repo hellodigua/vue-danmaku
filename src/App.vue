@@ -197,7 +197,6 @@ export default {
         return
       }
       this.config.channels += val
-      this.$refs.danmaku.setChannels(this.config.channels)
     },
     resizeHandler() {
       if (this.timer) clearTimeout(this.timer)
