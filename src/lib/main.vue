@@ -193,7 +193,7 @@ export default {
           this.danmu.height = el.offsetHeight
           // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
           if (!this.danmaku.channels) {
-            this.danmaku.channels = Math.floor(this.container.height / this.danmu.height)
+            this.danmaku.channels = Math.floor(this.container.height / (this.danmu.height + this.danmu.top))
           }
         }
         let channelIndex = this.getChannelIndex(el)
