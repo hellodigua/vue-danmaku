@@ -87,13 +87,7 @@ export default {
         debounce: 100, // 弹幕刷新频率(ms)
         randomChannel: false, // 随机选择轨道插入
       },
-      danmu: {
-        height: 0, // 弹幕元素高度
-        fontSize: 18, // 弹幕元素字号（slot下不可用）
-        speeds: 200, // 弹幕速度
-        top: 4, // 弹幕垂直间距
-        right: 0, // 弹幕水平间距
-      },
+      danmuHeight: 0, // 弹幕元素高度
       danmuList: [],
       timer: null,
       index: 0,
@@ -102,7 +96,17 @@ export default {
       danChannel: {},
     }
   },
-  computed: {},
+  computed: {
+    danmu() {
+      return {
+        height: this.danmuHeight,
+        fontSize: this.fontSize,
+        speeds: this.speeds,
+        top: this.top,
+        right: this.right,
+      }
+    },
+  },
   watch: {
     danmus: {
       handler(val) {
@@ -147,13 +151,6 @@ export default {
         debounce: this.debounce,
         randomChannel: this.randomChannel,
       }
-      this.danmu = {
-        ...this.danmu,
-        speeds: this.speeds,
-        fontSize: this.fontSize,
-        top: this.top,
-        right: this.right,
-      }
     },
     play() {
       this.paused = false
@@ -190,7 +187,7 @@ export default {
       this.$dmContainer.appendChild(el)
       this.$nextTick(() => {
         if (!this.danmu.height || !this.danmaku.channels) {
-          this.danmu.height = el.offsetHeight
+          this.danmuHeight = el.offsetHeight
           // 如果没有设置轨道数，则在获取到所有高度后计算出最大轨道数
           if (!this.danmaku.channels) {
             this.danmaku.channels = Math.floor(this.container.height / (this.danmu.height + this.danmu.top))
@@ -294,7 +291,7 @@ export default {
     reset() {
       this.$container = null
       this.$dmContainer = null
-      this.danmu.height = 0
+      this.danmuHeight = 0
       this.init()
     },
     stop() {
