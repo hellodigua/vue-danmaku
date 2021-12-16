@@ -112,8 +112,10 @@ export default {
   },
   watch: {
     danmus: {
-      handler(val) {
-        this.danmuList = [...val]
+      handler() {
+        // 如果 danmus 数据被覆盖，则立刻开始播放新弹幕
+        this.index = 0
+        this.initDanmuList()
       },
       deep: true,
     },
@@ -130,7 +132,7 @@ export default {
   methods: {
     init() {
       this.initCore()
-      this.initConfig()
+      this.initDanmuList()
       if (this.danmaku.autoplay) {
         this.play()
       }
@@ -143,7 +145,7 @@ export default {
         height: this.$container.offsetHeight,
       }
     },
-    initConfig() {
+    initDanmuList() {
       this.danmuList = [...this.danmus]
     },
     play() {
@@ -297,7 +299,7 @@ export default {
       this.paused = true
       this.hidden = false
       this.clear()
-      this.initConfig()
+      this.initDanmuList()
     },
     pause() {
       this.paused = true
