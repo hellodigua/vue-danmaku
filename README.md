@@ -6,6 +6,8 @@
 
 > 基于 Vue.js 的弹幕交互组件
 
+Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
+
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
 现已支持 vue3.x：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
@@ -69,20 +71,27 @@ export default {
 
 通过 `this.$refs[refName]` 调用
 
-| 方法名      | 说明                                         | 参数                           |
-| :---------- | :------------------------------------------- | :----------------------------- |
-| play        | 开始/继续播放                                | -                              |
-| pause       | 暂停弹幕播放                                 | -                              |
-| stop        | 停止播放并清空弹幕                           | -                              |
-| setChannels | 动态设置轨道数                               | Number                         |
-| show        | 弹幕显示                                     | -                              |
-| hide        | 弹幕隐藏                                     | -                              |
-| reset       | 重置配置                                     | -                              |
-| resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
-| push        | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
-| add         | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
+| 方法名       | 说明                                         | 参数                           |
+| :----------- | :------------------------------------------- | :----------------------------- |
+| play         | 开始/继续播放                                | -                              |
+| pause        | 暂停弹幕播放                                 | -                              |
+| stop         | 停止播放并清空弹幕                           | -                              |
+| show         | 弹幕显示                                     | -                              |
+| hide         | 弹幕隐藏                                     | -                              |
+| reset        | 重置配置                                     | -                              |
+| resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
+| push         | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
+| add          | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
+| getPlayState | 获得当前播放状态                             |                                |
 
 - 注 1： push 适用于非循环模式，add 适用于循环模式
+
+### 事件
+
+| 事件名     | 说明                           | 返回值                      |
+| :--------- | :----------------------------- | :-------------------------- |
+| insert-end | 所有弹幕插入完毕               | -                           |
+| play-end   | 所有弹幕播放完成（已滚出屏幕） | index（最后一个弹幕的下标） |
 
 ## Slot
 
@@ -118,6 +127,14 @@ export default {
 QQ 群：747809274
 
 ## Changelog
+
+### v1.3.0
+
+- feat: 移除 setChannels，改为直传控制
+- feat: 新增弹幕插入完毕事件和播放完成事件
+- feat: 兼容弹幕数据被覆盖的情况
+- fix: 修复弹幕轨道数计算不准的问题
+- fix: 修复首次更新弹幕速度失效的问题
 
 ### v1.2.1
 
