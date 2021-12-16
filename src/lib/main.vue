@@ -159,8 +159,8 @@ export default {
             this.index = 0
             this.insert()
           }
-          // 播放完成
-          this.$emit('done')
+          // 一轮弹幕插入完毕
+          this.$emit('list-end')
         } else {
           this.insert()
         }
@@ -201,6 +201,9 @@ export default {
           el.style.setProperty('--dm-left-offset', `-${this.container.width}px`)
           el.dataset.index = this.index
           el.addEventListener('animationend', () => {
+            if (Number(el.dataset.index) === this.danmuList.length - 1 && !this.danmaku.loop) {
+              this.$emit('play-end', el.dataset.index)
+            }
             this.$dmContainer.removeChild(el)
           })
           if (el.classList.length > 0) {
