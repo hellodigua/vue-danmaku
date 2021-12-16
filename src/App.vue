@@ -102,7 +102,7 @@
 
 <script>
 import Stats from 'stats.js'
-import { danmus, customDanmus } from './assets/danmu.js'
+import { danmus, getDanmuData } from './assets/danmu.js'
 var stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
@@ -119,16 +119,17 @@ export default {
   components: {},
   data() {
     return {
-      danmus,
+      danmus: getDanmuData(),
       config: {
         channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
-        useSlot: false, // 是否开启slot
+        useSlot: true, // 是否开启slot
         loop: true, // 是否开启弹幕循环
         speeds: 200, // 弹幕速度，实际为每秒弹幕走过的像素距离
         fontSize: 20, // 文本模式下的字号
         top: 10, // 弹幕轨道间的垂直间距
         right: 0, // 同一轨道弹幕的水平间距
         debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+        randomChannel: true,
       },
       danmuMsg: '',
     }
@@ -172,7 +173,7 @@ export default {
     },
     switchSlot(slot) {
       this.config.useSlot = slot
-      this.danmus = slot ? customDanmus : danmus
+      this.danmus = slot ? getDanmuData() : danmus
       setTimeout(() => {
         this.$refs.danmaku.reset()
         this.$refs.danmaku.play()
