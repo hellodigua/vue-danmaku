@@ -113,8 +113,6 @@ export default {
   watch: {
     danmus: {
       handler() {
-        // 如果 danmus 数据被覆盖，则立刻开始播放新弹幕
-        this.index = 0
         this.initDanmuList()
       },
       deep: true,
