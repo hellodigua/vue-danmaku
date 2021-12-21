@@ -304,8 +304,13 @@ export default {
     },
     // 添加弹幕（插入到当前播放的弹幕位置）
     add(danmu) {
-      const index = this.index % this.danmuList.length
-      this.danmuList.splice(index, 0, danmu)
+      if (this.index === this.danmuList.length) {
+        // 如果当前弹幕已经播放完了，那么仍然走 push
+        this.push(danmu)
+      } else {
+        const index = this.index % this.danmuList.length
+        this.danmuList.splice(index, 0, danmu)
+      }
     },
     // 添加弹幕（插入到弹幕末尾）
     push(danmu) {
