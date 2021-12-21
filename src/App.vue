@@ -45,10 +45,10 @@
           <button class="btn" @click="speedsChange(10)">增速</button>
           <span>当前速度：{{ config.speeds }}像素/s</span>
         </p>
-        <p>
+        <p v-if="!config.useSlot">
           字号：
-          <button class="btn" :disabled="config.useSlot" @click="fontChange(-1)">缩小</button>
-          <button class="btn" :disabled="config.useSlot" @click="fontChange(1)">放大</button>
+          <button class="btn" @click="fontChange(-1)">缩小</button>
+          <button class="btn" @click="fontChange(1)">放大</button>
           <span>当前字号：{{ config.fontSize }}px</span>
         </p>
         <p>

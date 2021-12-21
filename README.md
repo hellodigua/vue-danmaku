@@ -128,6 +128,11 @@ QQ 群：747809274
 
 ## Changelog
 
+### v1.3.2
+
+- fix: 修复 iOS 部分版本下微信 webview 内打开可能发生闪屏的 BUG
+- fix: 修复当弹幕播放完调用 add 无法正常播放的 BUG
+
 ### v1.3.0
 
 - feat: 移除 setChannels，改为直传控制

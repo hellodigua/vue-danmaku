@@ -1,6 +1,6 @@
 import vueDanmaku from './main.vue'
 
-vueDanmaku.install = function (Vue) {
+vueDanmaku.install = function(Vue) {
   Vue.component('vueDanmaku', vueDanmaku)
 }
 
