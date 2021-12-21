@@ -358,6 +358,7 @@ export default {
       color: #fff;
       white-space: pre;
       transform: translateX(100%);
+      transform-style: preserve-3d;
       &.move {
         will-change: transform;
         animation-name: moveLeft;
