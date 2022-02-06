@@ -363,7 +363,7 @@ export default {
       position: absolute;
       right: 0;
       font-size: 20px;
-      color: #fff;
+      color: #ddd;
       white-space: pre;
       transform: translateX(100%);
       transform-style: preserve-3d;
