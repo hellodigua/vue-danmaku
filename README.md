@@ -10,7 +10,7 @@ Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-现已支持 vue3.x：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
+现已支持 vue3：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
 
 ## Preview
 
@@ -99,7 +99,7 @@ export default {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :speed="8" :channels="5">
+  <vue-danmaku ref="danmaku" :danmus="danmus" use-slot loop :speeds="200" :channels="5">
     <!-- 弹幕插槽（vue 2.6.0 及以上版本可使用 v-slot:dm="{ index, danmu }"语法） -->
     <template slot="dm" slot-scope="{ index, danmu }">
       <div>{{ index }}{{ danmu.name }}：{{ danmu.text }}</div>
@@ -126,7 +126,17 @@ export default {
 
 QQ 群：747809274
 
+## 注意事项
+
+- 必须给 vue-danmaku 组件设置宽高才能正常使用
+  <!-- - 目前 iOS 的微信内置浏览器插入时会闪屏，暂未解决（原因是没有iPhone可以测…） -->
+
 ## Changelog
+
+### v1.4.0
+
+- feat: 循环模式下，同屏不允许出现相同弹幕
+- feat: 默认颜色修改为灰色
 
 ### v1.3.2
 
