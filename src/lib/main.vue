@@ -155,12 +155,15 @@ export default {
     draw() {
       if (!this.paused && this.danmuList.length) {
         if (this.index > this.danmuList.length - 1) {
-          if (this.danmaku.loop) {
+          const screenDanmus = this.$refs.dmContainer.children.length
+
+          if (this.danmaku.loop && screenDanmus < this.index) {
+            // 一轮弹幕插入完毕
+            this.$emit('list-end')
+
             this.index = 0
             this.insert()
           }
-          // 一轮弹幕插入完毕
-          this.$emit('list-end')
         } else {
           this.insert()
         }
