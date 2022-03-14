@@ -182,6 +182,7 @@ export default {
       }
       el.classList.add('dm')
       this.$dmContainer.appendChild(el)
+      el.style.opacity = 0
       this.$nextTick(() => {
         if (!this.danmu.height) {
           this.danmuHeight = el.offsetHeight
@@ -195,6 +196,7 @@ export default {
           const width = el.offsetWidth
           const height = this.danmu.height
           el.classList.add('move')
+          el.style.opacity = 1
           // 匀速
           // const speeds = (this.container.width + width) / this.danmu.speeds
           const speeds = this.container.width / this.danmu.speeds
