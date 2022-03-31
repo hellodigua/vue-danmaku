@@ -60,6 +60,7 @@ export default {
 | speeds        | 弹幕速度（每秒移动的像素数）           | Number  |              | 200    |
 | debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
+| isSuspend     | 是否开启弹幕悬浮暂停（试验型功能）     | Boolean |              | false  |
 | top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
 | right         | 弹幕水平间距(px)                       | Number  |              | 0      |
 

@@ -6,6 +6,7 @@
 </template>
 <script>
 import Vue from 'vue'
+import { throttle } from './utils'
 
 export default {
   props: {
@@ -64,6 +65,11 @@ export default {
     right: {
       type: Number,
       default: 0,
+    },
+    // 是否开启悬浮暂停
+    isSuspend: {
+      type: Boolean,
+      default: false,
     },
     // 弹幕样式
     extraStyle: {
@@ -131,6 +137,7 @@ export default {
     init() {
       this.initCore()
       this.initDanmuList()
+      this.isSuspend && this.initSuspendEvents()
       if (this.danmaku.autoplay) {
         this.play()
       }
@@ -285,6 +292,43 @@ export default {
     clearTimer() {
       clearInterval(this.timer)
       this.timer = null
+    },
+    // 弹幕悬浮事件
+    initSuspendEvents() {
+      let suspendDanmus = []
+      this.$refs.dmContainer.addEventListener(
+        'mousemove',
+        throttle((e) => {
+          let target = e.target
+
+          if (!target.className.includes('dm')) {
+            target = target.closest('.dm') || e.target
+          }
+
+          if (!target.className.includes('dm')) return
+
+          target.classList.add('pause')
+          suspendDanmus.push(target)
+        }, 300)
+      )
+      this.$refs.dmContainer.addEventListener(
+        'mouseout',
+        throttle((e) => {
+          let target = e.target
+
+          if (!target.className.includes('dm')) {
+            target = target.closest('.dm') || e.target
+          }
+
+          if (!target.className.includes('dm')) return
+          target.classList.remove('pause')
+
+          suspendDanmus.forEach((item) => {
+            item.classList.remove('pause')
+          })
+          suspendDanmus = []
+        }, 300)
+      )
     },
     clear() {
       this.clearTimer()
