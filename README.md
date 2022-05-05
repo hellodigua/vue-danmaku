@@ -1,6 +1,7 @@
 # vue-danmaku
 
 [![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
+![npm download](https://img.shields.io/npm/dm/vue-danmaku)
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 
@@ -30,7 +31,9 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku :danmus="danmus"></vue-danmaku>
+  <div style="height:100px; width:300px;">
+    <vue-danmaku :danmus="danmus"></vue-danmaku>
+  </div>
 </template>
 
 <script>
@@ -241,6 +244,5 @@ Make Core Code Great Again
 
 ### v0.0.1
 
-Born in 2018.3.11
-
+- 2018.3.11: 发布 MVP 版本
 - 支持弹幕效果
