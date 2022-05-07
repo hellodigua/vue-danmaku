@@ -4,6 +4,7 @@
 ![npm download](https://img.shields.io/npm/dm/vue-danmaku)
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
+[![trackgit](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)]()
 
 > 基于 Vue.js 的弹幕交互组件
 
