@@ -32,8 +32,8 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <div style="height:100px; width:300px;">
-    <vue-danmaku :danmus="danmus"></vue-danmaku>
+  <div>
+    <vue-danmaku :danmus="danmus" style="height:100px; width:300px;"></vue-danmaku>
   </div>
 </template>
 
@@ -41,6 +41,9 @@ $ npm install vue-danmaku --save
 import vueDanmaku from 'vue-danmaku'
 
 export default {
+  components: {
+    vueDanmaku
+  },
   data() {
     return {
       danmus: ['danmu1', 'danmu2', 'danmu3', '...'],
