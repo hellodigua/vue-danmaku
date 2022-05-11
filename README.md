@@ -16,11 +16,7 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 
 ## Preview
 
-![1.gif](https://i.loli.net/2021/01/18/AhqP2nZBtLg9uwl.gif)
-
-支持自定义样式和海量弹幕：
-
-![2.gif](https://i.loli.net/2021/01/18/Rn3rHJeoAEsbiwZ.gif)
+![preview](https://cdn.jsdelivr.net/gh/hellodigua/cdn/img/vue-danmaku.webp)
 
 ## Install
 
@@ -42,7 +38,7 @@ import vueDanmaku from 'vue-danmaku'
 
 export default {
   components: {
-    vueDanmaku
+    vueDanmaku,
   },
   data() {
     return {
