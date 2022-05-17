@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" v-bind="config">
+    <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" isSuspend v-bind="config">
       <!-- 容器slot -->
       <div></div>
       <!-- 弹幕slot -->

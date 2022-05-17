@@ -6,7 +6,6 @@
 </template>
 <script>
 import Vue from 'vue'
-import { throttle } from './utils'
 
 export default {
   props: {
@@ -296,39 +295,33 @@ export default {
     // 弹幕悬浮事件
     initSuspendEvents() {
       let suspendDanmus = []
-      this.$refs.dmContainer.addEventListener(
-        'mousemove',
-        throttle((e) => {
-          let target = e.target
+      this.$refs.dmContainer.addEventListener('mousemove', (e) => {
+        let target = e.target
 
-          if (!target.className.includes('dm')) {
-            target = target.closest('.dm') || e.target
-          }
+        if (!target.className.includes('dm')) {
+          target = target.closest('.dm') || e.target
+        }
 
-          if (!target.className.includes('dm')) return
+        if (!target.className.includes('dm')) return
 
-          target.classList.add('pause')
-          suspendDanmus.push(target)
-        }, 300)
-      )
-      this.$refs.dmContainer.addEventListener(
-        'mouseout',
-        throttle((e) => {
-          let target = e.target
+        target.classList.add('pause')
+        suspendDanmus.push(target)
+      })
+      this.$refs.dmContainer.addEventListener('mouseout', (e) => {
+        let target = e.target
 
-          if (!target.className.includes('dm')) {
-            target = target.closest('.dm') || e.target
-          }
+        if (!target.className.includes('dm')) {
+          target = target.closest('.dm') || e.target
+        }
 
-          if (!target.className.includes('dm')) return
-          target.classList.remove('pause')
+        if (!target.className.includes('dm')) return
+        target.classList.remove('pause')
 
-          suspendDanmus.forEach((item) => {
-            item.classList.remove('pause')
-          })
-          suspendDanmus = []
-        }, 300)
-      )
+        suspendDanmus.forEach((item) => {
+          item.classList.remove('pause')
+        })
+        suspendDanmus = []
+      })
     },
     clear() {
       this.clearTimer()
