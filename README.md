@@ -137,6 +137,10 @@ QQ 群：747809274
 
 ## Changelog
 
+### v1.4.2
+
+- fix: 修复开启 isSuspend 时节流函数导致悬停失效的 BUG
+
 ### v1.4.1
 
 - feat: 新增参数 isSuspend (默认 false)，支持鼠标划过弹幕悬浮暂停
