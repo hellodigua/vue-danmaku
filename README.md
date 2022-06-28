@@ -250,3 +250,7 @@ Make Core Code Great Again
 
 - 2018.3.11: 发布 MVP 版本
 - 支持弹幕效果
+
+## License
+
+MIT
