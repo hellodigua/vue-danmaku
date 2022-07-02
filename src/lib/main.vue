@@ -349,14 +349,20 @@ export default {
       if (this.index === this.danmuList.length) {
         // 如果当前弹幕已经播放完了，那么仍然走 push
         this.push(danmu)
+
+        return this.danmuList.length - 1
       } else {
         const index = this.index % this.danmuList.length
         this.danmuList.splice(index, 0, danmu)
+
+        return index + 1
       }
     },
     // 添加弹幕（插入到弹幕末尾）
     push(danmu) {
       this.danmuList.push(danmu)
+
+      return this.danmuList.length - 1
     },
     getPlayState() {
       return !this.paused
