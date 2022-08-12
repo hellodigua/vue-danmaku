@@ -3,18 +3,15 @@
 [![npm-version](https://img.shields.io/npm/v/vue3-danmaku.svg)](https://www.npmjs.com/package/vue3-danmaku)
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
+[![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
-> 基于 Vue.js 3.x 的弹幕交互组件
+> 基于 Vue3 的弹幕交互组件
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
 ## Preview
 
-![1.gif](https://i.loli.net/2021/01/18/AhqP2nZBtLg9uwl.gif)
-
-支持自定义样式和海量弹幕：
-
-![2.gif](https://i.loli.net/2021/01/18/Rn3rHJeoAEsbiwZ.gif)
+![preview](https://cdn.jsdelivr.net/gh/hellodigua/cdn/img/vue-danmaku.webp)
 
 ## Install
 
@@ -56,11 +53,12 @@ export default {
 | speeds        | 弹幕速度（每秒移动的像素数）           | Number  |              | 200    |
 | debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
+| isSuspend     | 是否开启弹幕悬浮暂停（试验型功能）     | Boolean |              | false  |
 | top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
 | right         | 弹幕水平间距(px)                       | Number  |              | 0      |
 
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
-- 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `play()` 进行播放
+- 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
 
 ## 内置方法
@@ -68,31 +66,40 @@ export default {
 通过以下方式调用：
 
 ```js
-<vue-danmaku ref="danmaku"></vue-danmaku>
+<vue-danmaku ref="danmakuRef"></vue-danmaku>
 
 setup() {
-  const danmaku = ref<any>(null)
+  const danmakuRef = ref(null)
 
-  danmaku.value.play()
+  danmakuRef.value.play()
 }
 ```
 
-| 方法名      | 说明                                         | 参数                           |
-| :---------- | :------------------------------------------- | :----------------------------- |
-| play        | 开始/继续播放                                | -                              |
-| pause       | 暂停弹幕播放                                 | -                              |
-| stop        | 停止播放并清空弹幕                           | -                              |
-| setChannels | 动态设置轨道数                               | Number                         |
-| show        | 弹幕显示                                     | -                              |
-| hide        | 弹幕隐藏                                     | -                              |
-| reset       | 重置配置                                     | -                              |
-| resize      | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
-| push        | 发送弹幕（插入到弹幕列表末尾）               | danmu 数据，可以是字符串或对象 |
-| add         | 发送弹幕（插入到当前播放的位置）             | danmu 数据，可以是字符串或对象 |
+| 方法名       | 说明                                         | 参数                           |
+| :----------- | :------------------------------------------- | :----------------------------- |
+| play         | 开始/继续播放                                | -                              |
+| pause        | 暂停弹幕播放                                 | -                              |
+| stop         | 停止播放并清空弹幕                           | -                              |
+| show         | 弹幕显示                                     | -                              |
+| hide         | 弹幕隐藏                                     | -                              |
+| reset        | 重置配置                                     | -                              |
+| resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
+| push         | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
+| add          | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
+| getPlayState | 获得当前播放状态                             |                                |
 
-- 注 1： push 适用于非循环模式，add 适用于循环模式
+- 注 1：push 和 add 的返回值为插入后的下标，可通过判断下标的方式对当前插入弹幕进行样式定制
+
+## Events
+
+| 事件名   | 说明                           | 返回值                      |
+| :------- | :----------------------------- | :-------------------------- |
+| list-end | 所有弹幕插入完毕               | -                           |
+| play-end | 所有弹幕播放完成（已滚出屏幕） | index（最后一个弹幕的下标） |
 
 ## Slot
+
+如果你有自定义弹幕结构与样式的需求，你可以传入任意结构的对象并自己写内部样式。
 
 ```vue
 <template>
@@ -119,7 +126,20 @@ export default {
 </script>
 ```
 
+## 讨论交流和 BUG 反馈
+
+QQ 群：747809274
+
+## 注意事项
+
+- 必须给 vue-danmaku 组件设置宽高才能正常使用
+
 ## Changelog
+
+### v1.0.0
+
+- 修复大量遗留 BUG
+- 同步 Vue2 版本变更
 
 ### v0.2.0
 

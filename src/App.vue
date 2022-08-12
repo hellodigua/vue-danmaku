@@ -1,5 +1,5 @@
 <template>
-  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" v-bind="config">
+  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" isSuspend v-bind="config">
     <!-- 容器slot -->
     <div></div>
     <!-- 弹幕slot -->
@@ -62,11 +62,6 @@
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
       </p>
-      <!-- <p>
-        性能：
-        <button class="btn" @click="setPerformance('block')">显示</button>
-        <button class="btn" @click="setPerformance('none')">隐藏</button>
-      </p> -->
     </div>
   </div>
   <a
@@ -98,8 +93,8 @@
   </a>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { danmuData, customDanmuData } from './assets/danmu.js'
+import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { danmus as danmusData, getDanmuData } from './assets/danmu.js'
 import VueDanmaku from './lib/Danmaku.vue'
 
 export default defineComponent({
@@ -109,21 +104,28 @@ export default defineComponent({
   props: {},
   setup(props) {
     const danmaku = ref<any>(null)
-    const danmus = ref<any[]>(danmuData)
+    const danmus = ref<any[]>(getDanmuData())
     const danmuMsg = ref<string>('')
     let timer: number = 0
     const config = reactive({
       channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
-      useSlot: false, // 是否开启slot
+      useSlot: true, // 是否开启slot
       loop: true, // 是否开启弹幕循环
       speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
       fontSize: 20, // 文本模式下的字号
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
       debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+      randomChannel: true, // 随机弹幕轨道
     })
 
-    onMounted(() => {})
+    onMounted(() => {
+      window.onresize = () => danmaku.value.resizeHandler()
+    })
+
+    onUnmounted(() => {
+      window.onresize = null
+    })
 
     function play(type: string) {
       switch (type) {
@@ -152,16 +154,13 @@ export default defineComponent({
 
     function switchSlot(slot: boolean) {
       config.useSlot = slot
-      danmus.value = slot ? customDanmuData : danmuData
+      danmus.value = slot ? getDanmuData() : danmusData
 
       setTimeout(() => {
         danmaku.value.stop()
         danmaku.value.play()
       })
     }
-    // function setPerformance(type: string) {
-    //   stats.dom.style.display = type
-    // }
     function speedsChange(val: number) {
       if (config.speeds <= 10 && val === -10) {
         return
@@ -178,7 +177,6 @@ export default defineComponent({
         return
       }
       config.channels += val
-      danmaku.value.setChannels(config.channels)
     }
     function resizeHandler() {
       if (timer) clearTimeout(timer)
