@@ -23,7 +23,7 @@ $ npm install vue3-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku :danmus="danmus"></vue-danmaku>
+  <vue-danmaku v-model:danmus="danmus"></vue-danmaku>
 </template>
 
 <script>
@@ -41,22 +41,23 @@ export default {
 
 ## Attributes
 
-| 参数          | 说明                                   | 类型    | 可选值       | 默认值 |
-| :------------ | :------------------------------------- | :------ | :----------- | :----- |
-| danmus        | 弹幕元素列表，支持纯文本或者自定义对象 | Array   | 字符串或对象 | []     |
-| channels      | 轨道数量                               | Number  |              | 0      |
-| autoplay      | 是否自动播放                           | Boolean |              | true   |
-| useSlot       | 是否开启弹幕插槽                       | Boolean |              | false  |
-| loop          | 是否开启弹幕循环                       | Boolean |              | false  |
-| fontSize      | 弹幕字号（slot 模式下不可用）          | Number  |              | 18     |
-| extraStyle    | 额外样式（slot 模式下不可用）          | String  |              |        |
-| speeds        | 弹幕速度（每秒移动的像素数）           | Number  |              | 200    |
-| debounce      | 弹幕刷新频率(ms)                       | Number  |              | 100    |
-| randomChannel | 随机选择轨道插入                       | Boolean |              | false  |
-| isSuspend     | 是否开启弹幕悬浮暂停（试验型功能）     | Boolean |              | false  |
-| top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
-| right         | 弹幕水平间距(px)                       | Number  |              | 0      |
+| 参数          | 说明                                                 | 类型    | 可选值       | 默认值 |
+| :------------ | :--------------------------------------------------- | :------ | :----------- | :----- |
+| danmus        | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model) | Array   | 字符串或对象 | []     |
+| channels      | 轨道数量                                             | Number  |              | 0      |
+| autoplay      | 是否自动播放                                         | Boolean |              | true   |
+| useSlot       | 是否开启弹幕插槽                                     | Boolean |              | false  |
+| loop          | 是否开启弹幕循环                                     | Boolean |              | false  |
+| fontSize      | 弹幕字号（slot 模式下不可用）                        | Number  |              | 18     |
+| extraStyle    | 额外样式（slot 模式下不可用）                        | String  |              |        |
+| speeds        | 弹幕速度（每秒移动的像素数）                         | Number  |              | 200    |
+| debounce      | 弹幕刷新频率(ms)                                     | Number  |              | 100    |
+| randomChannel | 随机选择轨道插入                                     | Boolean |              | false  |
+| isSuspend     | 是否开启弹幕悬浮暂停（试验型功能）                   | Boolean |              | false  |
+| top           | 弹幕垂直间距(px)                                     | Number  |              | 4      |
+| right         | 弹幕水平间距(px)                                     | Number  |              | 0      |
 
+- 注 0：1.0.0 版本起，danmus 参数支持 v-model:danmus 写法变为双向绑定
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
@@ -103,7 +104,7 @@ setup() {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" useSlot loop :channels="5">
+  <vue-danmaku ref="danmaku" v-model:danmus="danmus" useSlot loop :channels="5">
     <!-- 弹幕插槽 -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
@@ -130,6 +131,8 @@ export default {
 
 QQ 群：747809274
 
+也可以给本项目[提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
+
 ## 注意事项
 
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
@@ -140,6 +143,7 @@ QQ 群：747809274
 
 - 修复大量遗留 BUG
 - 同步 Vue2 版本变更
+- 支持 danmus 双向绑定
 
 ### v0.2.0
 

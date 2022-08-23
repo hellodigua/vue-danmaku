@@ -1,5 +1,5 @@
 <template>
-  <vue-danmaku ref="danmaku" class="demo" :danmus="danmus" isSuspend v-bind="config">
+  <vue-danmaku ref="danmaku" class="demo" v-model:danmus="danmus" isSuspend v-bind="config">
     <!-- 容器slot -->
     <div></div>
     <!-- 弹幕slot -->
@@ -120,7 +120,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      window.onresize = () => danmaku.value.resizeHandler()
+      window.onresize = () => resizeHandler()
     })
 
     onUnmounted(() => {

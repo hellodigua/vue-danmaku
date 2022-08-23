@@ -13,13 +13,13 @@ import {
   onBeforeUnmount,
   PropType,
   ref,
-  toRefs,
   reactive,
   computed,
   watch,
   h,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
+import { useModelWrapper } from './utils'
 
 /**
  * 自定义弹幕
@@ -129,24 +129,8 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['list-end', 'play-end'],
+  emits: ['list-end', 'play-end', 'update:danmus'],
   setup(props, { emit, slots }) {
-    const {
-      danmus,
-      channels,
-      autoplay,
-      loop,
-      useSlot,
-      debounce,
-      randomChannel,
-      speeds,
-      fontSize,
-      top,
-      right,
-      isSuspend,
-      extraStyle,
-    } = toRefs(props)
-
     // 容器
     let container = ref<HTMLDivElement>(document.createElement('div'))
     let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
@@ -156,33 +140,29 @@ export default defineComponent({
     let timer: number = 0
     const calcChannels = ref(0)
     const danmuHeight = ref(0)
-    const danmuList = ref<Danmu[]>([])
     const index = ref<number>(0)
     const hidden = ref(false)
     const paused = ref(false)
     const danChannel = ref<DanChannel>({})
 
+    const danmuList = useModelWrapper<Danmu[]>(props, emit, 'danmus')
+
     const danmaku: DanmakuItem = reactive({
-      channels: computed(() => channels.value || calcChannels.value),
-      autoplay: computed(() => autoplay.value),
-      loop: computed(() => loop.value),
-      useSlot: computed(() => useSlot.value),
-      debounce: computed(() => debounce.value),
-      randomChannel: computed(() => randomChannel.value),
+      channels: computed(() => props.channels || calcChannels.value),
+      autoplay: computed(() => props.autoplay),
+      loop: computed(() => props.loop),
+      useSlot: computed(() => props.useSlot),
+      debounce: computed(() => props.debounce),
+      randomChannel: computed(() => props.randomChannel),
     })
 
     const danmu: DanmuItem = reactive({
       height: computed(() => danmuHeight.value),
-      fontSize: computed(() => fontSize.value),
-      speeds: computed(() => speeds.value),
-      top: computed(() => top.value),
-      right: computed(() => right.value),
+      fontSize: computed(() => props.fontSize),
+      speeds: computed(() => props.speeds),
+      top: computed(() => props.top),
+      right: computed(() => props.right),
     })
-
-    watch(
-      () => props.danmus,
-      () => initDanmuList()
-    )
 
     onMounted(() => {
       init()
@@ -194,8 +174,7 @@ export default defineComponent({
 
     function init() {
       initCore()
-      initDanmuList()
-      isSuspend.value && initSuspendEvents()
+      props.isSuspend && initSuspendEvents()
       if (danmaku.autoplay) {
         play()
       }
@@ -204,10 +183,6 @@ export default defineComponent({
     function initCore() {
       containerWidth.value = container.value.offsetWidth
       containerHeight.value = container.value.offsetHeight
-    }
-
-    function initDanmuList() {
-      danmuList.value = [...danmus.value]
     }
 
     function play() {
@@ -242,14 +217,14 @@ export default defineComponent({
      * 插入弹幕
      */
     function insert() {
-      const _index = loop.value ? index.value % danmuList.value.length : index.value
+      const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
       let el = document.createElement(`div`)
 
       if (danmaku.useSlot) {
         el = getSlotComponent(_index).$el
       } else {
         el.innerHTML = danmuList.value[_index] as string
-        el.setAttribute('style', extraStyle.value)
+        el.setAttribute('style', props.extraStyle)
         el.style.fontSize = `${danmu.fontSize}px`
         el.style.lineHeight = `${danmu.fontSize}px`
       }
@@ -295,13 +270,15 @@ export default defineComponent({
     }
 
     function getSlotComponent(index: number) {
+      const _danmu = danmuList.value[index]
+      const _index = index
       const DmComponent = createApp({
         render() {
           return h('div', {}, [
             slots.dm &&
               slots.dm({
-                danmu: danmuList.value[index],
-                index,
+                danmu: _danmu,
+                index: _index,
               }),
           ])
         },
@@ -413,7 +390,6 @@ export default defineComponent({
       paused.value = true
       hidden.value = false
       clear()
-      initDanmuList()
     }
 
     /**
@@ -429,7 +405,7 @@ export default defineComponent({
     function add(danmu: Danmu): number {
       if (index.value === danmuList.value.length) {
         // 如果当前弹幕已经播放完了，那么仍然走 push
-        push(danmu)
+        danmuList.value.push(danmu)
 
         return danmuList.value.length - 1
       } else {
@@ -488,6 +464,7 @@ export default defineComponent({
       // variable
       hidden,
       paused,
+      danmuList,
 
       // function
       getPlayState,
