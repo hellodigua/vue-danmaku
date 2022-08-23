@@ -8,6 +8,10 @@
 import Vue from 'vue'
 
 export default {
+  model: {
+    prop: 'danmus',
+    event: 'input',
+  },
   props: {
     // 弹幕列表数据
     danmus: {
@@ -114,11 +118,24 @@ export default {
         randomChannel: this.randomChannel,
       }
     },
+    dataWatcher() {
+      return JSON.parse(JSON.stringify(this.danmuList))
+    },
   },
   watch: {
     danmus: {
-      handler() {
-        this.initDanmuList()
+      handler(val) {
+        this.danmuList = [...val]
+      },
+      deep: true,
+      immediate: true,
+    },
+    dataWatcher: {
+      handler(val, oldVal) {
+        if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+          this.$emit('input', val)
+          this.$emit('change', val)
+        }
       },
       deep: true,
     },
@@ -348,7 +365,7 @@ export default {
     add(danmu) {
       if (this.index === this.danmuList.length) {
         // 如果当前弹幕已经播放完了，那么仍然走 push
-        this.push(danmu)
+        this.danmuList.push(danmu)
 
         return this.danmuList.length - 1
       } else {
