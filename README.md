@@ -29,7 +29,7 @@ $ npm install vue-danmaku --save
 ```vue
 <template>
   <div>
-    <vue-danmaku :danmus="danmus" style="height:100px; width:300px;"></vue-danmaku>
+    <vue-danmaku v-model="danmus" style="height:100px; width:300px;"></vue-danmaku>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
 
 | 参数          | 说明                                   | 类型    | 可选值       | 默认值 |
 | :------------ | :------------------------------------- | :------ | :----------- | :----- |
-| danmus        | 弹幕元素列表，支持纯文本或者自定义对象 | Array   | 字符串或对象 | []     |
+| v-model       | 弹幕元素列表，支持纯文本或者自定义对象 | Array   | 字符串或对象 | []     |
 | channels      | 轨道数量                               | Number  |              | 0      |
 | autoplay      | 是否自动播放                           | Boolean |              | true   |
 | useSlot       | 是否开启弹幕插槽                       | Boolean |              | false  |
@@ -67,6 +67,7 @@ export default {
 | top           | 弹幕垂直间距(px)                       | Number  |              | 4      |
 | right         | 弹幕水平间距(px)                       | Number  |              | 0      |
 
+- 注 0：v-model 为 1.5.0 版本起的新语法，支持弹幕的双向绑定，旧版本的 danmus 参数仍继续支持
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `this.$refs[refName].play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
@@ -103,7 +104,7 @@ export default {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" :danmus="danmus" use-slot loop :speeds="200" :channels="5">
+  <vue-danmaku ref="danmaku" v-model="danmus" use-slot loop :speeds="200" :channels="5">
     <!-- 弹幕插槽（vue 2.6.0 及以上版本可使用 v-slot:dm="{ index, danmu }"语法） -->
     <template slot="dm" slot-scope="{ index, danmu }">
       <div>{{ index }}{{ danmu.name }}：{{ danmu.text }}</div>
@@ -130,12 +131,18 @@ export default {
 
 QQ 群：747809274
 
+也可以给本项目[提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
+
 ## 注意事项
 
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
   <!-- - 目前 iOS 的微信内置浏览器插入时会闪屏，暂未解决（原因是没有iPhone可以测…） -->
 
 ## Changelog
+
+### v1.5.0
+
+- feat: 支持使用 v-model 双向绑定弹幕
 
 ### v1.4.3
 
