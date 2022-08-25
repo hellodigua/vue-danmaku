@@ -7,6 +7,8 @@
 
 > 基于 Vue3 的弹幕交互组件
 
+简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue3/README_en.md)
+
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
 ## Preview
