@@ -8,6 +8,8 @@
 
 > 基于 Vue.js 的弹幕交互组件
 
+简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/master/README_en.md)
+
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
