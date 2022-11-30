@@ -214,16 +214,18 @@ export default defineComponent({
     }
 
     /**
-     * 插入弹幕
+     * 插入弹幕（也暴露到外部，允许外部直接执行绘制弹幕方法）
+     * @param {Object} dm 外部定义的弹幕
      */
-    function insert() {
+    function insert(dm?: any) {
       const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
+      const _danmu = dm || danmuList.value[_index]
       let el = document.createElement(`div`)
 
       if (danmaku.useSlot) {
-        el = getSlotComponent(_index).$el
+        el = getSlotComponent(_danmu, _index).$el
       } else {
-        el.innerHTML = danmuList.value[_index] as string
+        el.innerHTML = _danmu as string
         el.setAttribute('style', props.extraStyle)
         el.style.fontSize = `${danmu.fontSize}px`
         el.style.lineHeight = `${danmu.fontSize}px`
@@ -258,20 +260,14 @@ export default defineComponent({
             }
             dmContainer.value.removeChild(el)
           })
-          if (el.classList.length > 0) {
-            index.value++
-          }
+          index.value++
         } else {
-          if (el.classList.length > 0) {
-            dmContainer.value.removeChild(el)
-          }
+          dmContainer.value.removeChild(el)
         }
       })
     }
 
-    function getSlotComponent(index: number) {
-      const _danmu = danmuList.value[index]
-      const _index = index
+    function getSlotComponent(_danmu: any, _index: number) {
       const DmComponent = createApp({
         render() {
           return h('div', {}, [
@@ -477,6 +473,7 @@ export default defineComponent({
       reset,
       add,
       push,
+      insert,
     }
   },
 })
