@@ -8,7 +8,7 @@ let tsconfigOverride = {
     target: 'ES6',
     lib: ['ES2020', 'dom'],
     rootDir: 'src',
-    declarationDir: "dist/typings"
+    declarationDir: 'dist/typings',
   },
   include: ['src/lib/**/*'],
 }
@@ -16,7 +16,7 @@ let tsconfigOverride = {
 export default [
   {
     output: {
-      format: 'esm',
+      format: 'cjs',
       file: 'dist/vue3-danmaku.esm.js',
     },
     plugins: [

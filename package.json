@@ -14,11 +14,11 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "rollup -c build/rollup.config.js",
+    "build": "rollup -c build/rollup.config.mjs",
     "build:docs": "vite build",
     "release:docs": "sh scripts/deploy.sh",
     "release:package": "sh scripts/release.sh",
-    "package": "rollup -c build/rollup.config.js"
+    "package": "rollup -c build/rollup.config.mjs"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
