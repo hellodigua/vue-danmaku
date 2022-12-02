@@ -258,7 +258,7 @@ export default defineComponent({
             if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
               emit('play-end', el.dataset.index)
             }
-            dmContainer.value.removeChild(el)
+            dmContainer.value && dmContainer.value.removeChild(el)
           })
           index.value++
         } else {
