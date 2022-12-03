@@ -120,7 +120,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      window.onresize = () => resizeHandler()
+      window.onresize = () => danmaku.value.resize()
     })
 
     onUnmounted(() => {
@@ -178,12 +178,6 @@ export default defineComponent({
       }
       config.channels += val
     }
-    function resizeHandler() {
-      if (timer) clearTimeout(timer)
-      timer = setTimeout(() => {
-        danmaku.value.resize()
-      }, 500)
-    }
     function addDanmu() {
       if (!danmuMsg.value) return
       const _danmuMsg = config.useSlot
@@ -208,7 +202,6 @@ export default defineComponent({
       speedsChange,
       fontChange,
       channelChange,
-      resizeHandler,
       addDanmu,
     }
   },

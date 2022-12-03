@@ -15,7 +15,6 @@ import {
   ref,
   reactive,
   computed,
-  watch,
   h,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
@@ -246,14 +245,13 @@ export default defineComponent({
           const width = el.offsetWidth
           const height = danmu.height
           el.classList.add('move')
+          el.dataset.index = `${_index}`
           el.style.opacity = '1'
-
-          const speeds = containerWidth.value / danmu.speeds
-          el.style.animationDuration = `${speeds}s`
           el.style.top = channelIndex * (height + danmu.top) + 'px'
           el.style.width = width + danmu.right + 'px'
-          el.style.setProperty('--dm-left-offset', `-${containerWidth.value}px`)
-          el.dataset.index = `${_index}`
+          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
+          el.style.left = `${containerWidth.value}px`
+          el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
           el.addEventListener('animationend', () => {
             if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
               emit('play-end', el.dataset.index)
@@ -501,11 +499,10 @@ export default defineComponent({
     }
     .dm {
       position: absolute;
-      right: 0;
       font-size: 20px;
       color: #ddd;
       white-space: pre;
-      transform: translateX(100%);
+      transform: translateX(0);
       transform-style: preserve-3d;
       &.move {
         will-change: transform;
@@ -520,18 +517,18 @@ export default defineComponent({
     }
     @keyframes moveLeft {
       from {
-        transform: translateX(100%);
+        transform: translateX(0);
       }
       to {
-        transform: translateX(var(--dm-left-offset));
+        transform: translateX(var(--dm-scroll-width));
       }
     }
     @-webkit-keyframes moveLeft {
       from {
-        -webkit-transform: translateX(100%);
+        -webkit-transform: translateX(0);
       }
       to {
-        -webkit-transform: translateX(var(--dm-left-offset));
+        -webkit-transform: translateX(var(--dm-scroll-width));
       }
     }
   }
