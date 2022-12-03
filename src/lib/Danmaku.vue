@@ -446,7 +446,10 @@ export default defineComponent({
 
       for (let i = 0; i < items.length; i++) {
         const el = items[i] as HTMLDivElement
-        el.style.setProperty('--dm-left-offset', `-${containerWidth}px`)
+
+        el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + el.offsetWidth}px`)
+        el.style.left = `${containerWidth.value}px`
+        el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
       }
     }
 
