@@ -109,12 +109,9 @@ setup() {
 ```vue
 <template>
   <vue-danmaku ref="danmaku" v-model:danmus="danmus" useSlot loop :channels="5">
-    <!-- 弹幕插槽 -->
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
-    <!-- 容器插槽 -->
-    <div></div>
   </vue-danmaku>
 </template>
 
@@ -142,6 +139,11 @@ QQ 群：747809274
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
 
 ## Changelog
+
+### v1.2.0
+
+- 优化 resize 逻辑
+- fix: 修复 iOS15 下部分机型的 APP 内置 webview 在弹幕初始化时可能会闪屏的 BUG
 
 ### v1.1.0
 

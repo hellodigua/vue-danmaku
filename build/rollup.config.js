@@ -16,7 +16,7 @@ let tsconfigOverride = {
 export default [
   {
     output: {
-      format: 'cjs',
+      format: 'esm',
       file: 'dist/vue3-danmaku.esm.js',
     },
     plugins: [
