@@ -1,7 +1,7 @@
 {
   "name": "vue-danmaku",
   "description": "基于Vue.js的弹幕交互组件",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue-danmaku.umd.min.js",
@@ -33,8 +33,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
+    "sass": "^1.56.1",
     "sass-loader": "^8.0.2",
     "stats.js": "^0.17.0",
     "vue-template-compiler": "^2.6.12",

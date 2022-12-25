@@ -192,13 +192,18 @@ export default {
         }
       }
     },
-    insert() {
+    /**
+     * insert也暴露到外部，允许外部直接执行绘制弹幕方法
+     * @param {Object} dm 外部定义的弹幕
+     */
+    insert(dm) {
       const index = this.danmaku.loop ? this.index % this.danmuList.length : this.index
+      const danmu = dm || this.danmuList[index]
       let el = document.createElement(`div`)
       if (this.danmaku.useSlot) {
-        el = this.getSlotComponent(index).$el
+        el = this.getSlotComponent(danmu, index).$el
       } else {
-        el.innerHTML = this.danmuList[index]
+        el.innerHTML = danmu
         el.setAttribute('style', this.extraStyle)
         el.style.fontSize = `${this.danmu.fontSize}px`
         el.style.lineHeight = `${this.danmu.fontSize}px`
@@ -229,22 +234,18 @@ export default {
           el.style.setProperty('--dm-left-offset', `-${this.container.width}px`)
           el.dataset.index = this.index
           el.addEventListener('animationend', () => {
-            if (Number(el.dataset.index) === this.danmuList.length - 1 && !this.danmaku.loop) {
+            if (+el.dataset.index === this.danmuList.length - 1 && !this.danmaku.loop) {
               this.$emit('play-end', el.dataset.index)
             }
             this.$dmContainer.removeChild(el)
           })
-          if (el.classList.length > 0) {
-            this.index++
-          }
+          this.index++
         } else {
-          if (el.classList.length > 0) {
-            this.$dmContainer.removeChild(el)
-          }
+          this.$dmContainer.removeChild(el)
         }
       })
     },
-    getSlotComponent(index) {
+    getSlotComponent(danmu, index) {
       const that = this
       const DmComponent = Vue.extend({
         props: {
@@ -262,10 +263,7 @@ export default {
       })
 
       const ele = new DmComponent({
-        propsData: {
-          danmu: this.danmuList[index],
-          index,
-        },
+        propsData: { danmu, index },
       }).$mount(document.createElement('div'))
 
       return ele
