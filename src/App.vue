@@ -203,7 +203,7 @@ export default {
       if (this.timer) clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.$refs.danmaku.resize()
-      }, 500)
+      })
     },
     addDanmu() {
       if (!this.danmuMsg) return

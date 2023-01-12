@@ -224,24 +224,23 @@ export default {
           const width = el.offsetWidth
           const height = this.danmu.height
           el.classList.add('move')
+          el.dataset.index = index
           el.style.opacity = 1
-          // 匀速
-          // const speeds = (this.container.width + width) / this.danmu.speeds
-          const speeds = this.container.width / this.danmu.speeds
-          el.style.animationDuration = `${speeds}s`
           el.style.top = channelIndex * (height + this.danmu.top) + 'px'
           el.style.width = width + this.danmu.right + 'px'
-          el.style.setProperty('--dm-left-offset', `-${this.container.width}px`)
-          el.dataset.index = this.index
+          el.style.setProperty('--dm-scroll-width', `-${this.container.width + width}px`)
+          el.style.left = `${this.container.width}px`
+          el.style.animationDuration = `${this.container.width / this.danmu.speeds}s`
+
           el.addEventListener('animationend', () => {
             if (+el.dataset.index === this.danmuList.length - 1 && !this.danmaku.loop) {
               this.$emit('play-end', el.dataset.index)
             }
-            this.$dmContainer.removeChild(el)
+            this.$dmContainer && this.$dmContainer.removeChild(el)
           })
           this.index++
         } else {
-          this.$dmContainer.removeChild(el)
+          this.$dmContainer && this.$dmContainer.removeChild(el)
         }
       })
     },
@@ -392,7 +391,10 @@ export default {
       this.initCore()
       const items = this.$dmContainer.getElementsByClassName('dm')
       for (let i = 0; i < items.length; i++) {
-        items[i].style.setProperty('--dm-left-offset', `-${this.container.width}px`)
+        const el = items[i]
+        el.style.setProperty('--dm-scroll-width', `-${this.container.width + el.offsetWidth}px`)
+        el.style.left = `${this.container.width}px`
+        el.style.animationDuration = `${this.container.width / this.danmu.speeds}s`
       }
     },
   },
@@ -421,11 +423,10 @@ export default {
     }
     .dm {
       position: absolute;
-      right: 0;
       font-size: 20px;
       color: #ddd;
       white-space: pre;
-      transform: translateX(100%);
+      transform: translateX(0);
       transform-style: preserve-3d;
       &.move {
         will-change: transform;
@@ -440,18 +441,18 @@ export default {
     }
     @keyframes moveLeft {
       from {
-        transform: translateX(100%);
+        transform: translateX(0);
       }
       to {
-        transform: translateX(var(--dm-left-offset));
+        transform: translateX(var(--dm-scroll-width));
       }
     }
     @-webkit-keyframes moveLeft {
       from {
-        -webkit-transform: translateX(100%);
+        -webkit-transform: translateX(0);
       }
       to {
-        -webkit-transform: translateX(var(--dm-left-offset));
+        -webkit-transform: translateX(var(--dm-scroll-width));
       }
     }
   }
