@@ -9,7 +9,7 @@
 
 简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue3/README_en.md)
 
-Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
+Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
 
 ## Preview
 
@@ -25,7 +25,7 @@ $ npm install vue3-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku v-model:danmus="danmus"></vue-danmaku>
+  <vue-danmaku v-model:danmus="danmus" style="height:100px; width:300px;"></vue-danmaku>
 </template>
 
 <script>
@@ -59,10 +59,10 @@ export default {
 | top           | 弹幕垂直间距(px)                                     | Number  |              | 4      |
 | right         | 弹幕水平间距(px)                                     | Number  |              | 0      |
 
-- 注 0：1.0.0 版本起，danmus 参数支持 v-model:danmus 写法变为双向绑定
+- 注 0：1.0.0 版本起，danmus 参数写法变为双向绑定 v-model:danmus
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
-- 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
+- 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
 
 ## 内置方法
 
@@ -89,7 +89,7 @@ setup() {
 | resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
 | push         | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
 | add          | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
-| insert       | 绘制弹幕（实时插入）                         | danmu 数据，可以是字符串或对象 |
+| insert       | 绘制弹幕（实时插入，不进行数据绑定）                         | danmu 数据，可以是字符串或对象 |
 | getPlayState | 获得当前播放状态                             |                                |
 
 - 注 1：push 和 add 的返回值为插入后的下标，可通过判断下标的方式对当前插入弹幕进行样式定制
@@ -130,15 +130,19 @@ export default {
 
 ## 讨论交流和 BUG 反馈
 
-QQ 群：747809274
+这个 [QA文档](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) 收集了一些常见问题，可以做阅读参考
 
-也可以给本项目[提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
+也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
 ## 注意事项
 
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
 
 ## Changelog
+
+### v1.3.0
+
+- 更新了文档
 
 ### v1.2.0
 
