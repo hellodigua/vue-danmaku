@@ -72,7 +72,7 @@ export default {
 - 注 0：v-model 为 1.5.0 版本起的新语法，支持弹幕的双向绑定，旧版本的 danmus 参数仍继续支持
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `this.$refs[refName].play()` 进行播放
-- 注 3：弹幕刷新频率为每隔多长时间插入一次弹幕
+- 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
 
 ## 内置方法
 
@@ -89,7 +89,7 @@ export default {
 | resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
 | push         | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
 | add          | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
-| insert       | 绘制弹幕（实时插入）                         | danmu 数据，可以是字符串或对象 |
+| insert       | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象 |
 | getPlayState | 获得当前播放状态                             |                                |
 
 - 注 1：push 和 add 的返回值为插入后的下标，可通过判断下标的方式对当前插入弹幕进行样式定制
@@ -133,14 +133,13 @@ export default {
 
 ## 讨论交流和 BUG 反馈
 
-QQ 群：747809274
+这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) 收集了一些常见问题，可以做阅读参考
 
-也可以给本项目[提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
+也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
 ## 注意事项
 
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
-  <!-- - 目前 iOS 的微信内置浏览器插入时会闪屏，暂未解决（原因是没有iPhone可以测…） -->
 
 ## Changelog
 
