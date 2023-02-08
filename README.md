@@ -134,9 +134,7 @@ export default {
 
 也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
-## 注意事项
-
-- 必须给 vue-danmaku 组件设置宽高才能正常使用
+如果vue-danmaku帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/)，你的 star 是我改 BUG 的动力 ヾ(*ゝω・*)ノ
 
 ## Changelog
 
