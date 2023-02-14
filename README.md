@@ -11,7 +11,7 @@
 
 Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
 
-[Vue 2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/master)
+[Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/master)
 
 ## Preview
 
