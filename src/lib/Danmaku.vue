@@ -200,11 +200,12 @@ export default defineComponent({
         if (index.value > danmuList.value.length - 1) {
           const screenDanmus = dmContainer.value.children.length
 
-          if (danmaku.loop && screenDanmus < index.value) {
-            // 一轮弹幕插入完毕
-            emit('list-end')
-
-            index.value = 0
+          if (danmaku.loop) {
+            if (screenDanmus < index.value) {
+              // 一轮弹幕插入完毕
+              emit('list-end')
+              index.value = 0
+            }
             insert()
           }
         } else {
@@ -250,7 +251,7 @@ export default defineComponent({
           el.style.opacity = '1'
           el.style.top = channelIndex * (height + danmu.top) + 'px'
           el.style.width = width + danmu.right + 'px'
-          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
+          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + (width * 2)}px`)
           el.style.left = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
           el.addEventListener('animationend', () => {
@@ -448,7 +449,7 @@ export default defineComponent({
       for (let i = 0; i < items.length; i++) {
         const el = items[i] as HTMLDivElement
 
-        el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + el.offsetWidth}px`)
+        el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + (el.offsetWidth * 2)}px`)
         el.style.left = `${containerWidth.value}px`
         el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
       }
