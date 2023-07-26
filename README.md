@@ -143,6 +143,10 @@ export default {
 
 ## Changelog
 
+### v1.7.2
+
+- 更新了文档
+
 ### v1.7.0
 
 - 优化 resize 逻辑
