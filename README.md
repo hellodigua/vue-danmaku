@@ -1,7 +1,7 @@
 # vue3-danmaku
 
 [![npm-version](https://img.shields.io/npm/v/vue3-danmaku.svg)](https://www.npmjs.com/package/vue3-danmaku)
-[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-9kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 [![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
@@ -27,19 +27,13 @@ $ npm install vue3-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku v-model:danmus="danmus" style="height:100px; width:300px;"></vue-danmaku>
+  <vue-danmaku v-model:danmus="danmus" loop style="height:100px; width:300px;"></vue-danmaku>
 </template>
 
-<script>
+<script setup>
 import vueDanmaku from 'vue3-danmaku'
 
-export default {
-  setup(props) {
-    const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
-
-    return { danmus }
-  },
-}
+const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 </script>
 ```
 
@@ -139,6 +133,10 @@ export default {
 如果vue-danmaku帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/)，你的 star 是我改 BUG 的动力 ヾ(*ゝω・*)ノ
 
 ## Changelog
+
+### v1.5.2
+
+- chore: 压缩打包体积
 
 ### v1.5.1
 

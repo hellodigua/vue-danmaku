@@ -1,6 +1,7 @@
 import vue from 'rollup-plugin-vue'
 import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
+import { terser } from 'rollup-plugin-terser';
 import path from 'path'
 
 let tsconfigOverride = {
@@ -25,6 +26,7 @@ export default [
       postcss({
         plugins: [],
       }),
+      terser()
     ],
   },
   {
@@ -41,10 +43,12 @@ export default [
       typescript({ tsconfigOverride, useTsconfigDeclarationDir: true }),
       vue({ css: false }),
       postcss({
+        minimize: true,
         extract: path.resolve('dist', 'vue3-danmaku.css'),
         inject: false,
         plugins: [],
       }),
+      terser()
     ],
   },
 ].map((v) => ({

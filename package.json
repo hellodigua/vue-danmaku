@@ -1,7 +1,7 @@
 {
   "name": "vue3-danmaku",
   "description": "基于 Vue3 的弹幕交互组件",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue3-danmaku.umd.js",
@@ -29,6 +29,7 @@
     "@vue/compiler-sfc": "^3.2.45",
     "prettier": "^2.8.1",
     "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.34.1",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.56.2",
