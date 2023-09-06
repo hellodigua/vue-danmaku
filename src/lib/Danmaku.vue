@@ -183,6 +183,9 @@ export default defineComponent({
     function initCore() {
       containerWidth.value = container.value.offsetWidth
       containerHeight.value = container.value.offsetHeight
+      if (containerWidth.value === 0 || containerHeight.value === 0) {
+        throw new Error('获取不到容器宽高')
+      }
     }
 
     function play() {

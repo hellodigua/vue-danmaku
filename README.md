@@ -134,6 +134,10 @@ export default {
 
 ## Changelog
 
+### v1.5.3
+
+- feat: 初始化时获取不到容器宽高时抛出异常
+
 ### v1.5.2
 
 - chore: 压缩打包体积
