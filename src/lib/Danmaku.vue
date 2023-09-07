@@ -129,7 +129,7 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['list-end', 'play-end', 'update:danmus'],
+  emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'update:danmus'],
   setup(props, { emit, slots }) {
     // 容器
     let container = ref<HTMLDivElement>(document.createElement('div'))
@@ -335,7 +335,7 @@ export default defineComponent({
 
     function initSuspendEvents() {
       let suspendDanmus: HTMLElement[] = []
-      dmContainer.value.addEventListener('mousemove', (e) => {
+      dmContainer.value.addEventListener('mouseover', (e) => {
         let target = e.target as EventTarget & HTMLElement
 
         if (!target.className.includes('dm')) {
@@ -344,7 +344,11 @@ export default defineComponent({
 
         if (!target.className.includes('dm')) return
 
+        if (suspendDanmus.includes(target)) return
+
+        emit('dm-over', { el: target })
         target.classList.add('pause')
+
         suspendDanmus.push(target)
       })
       dmContainer.value.addEventListener('mouseout', (e) => {
@@ -355,8 +359,10 @@ export default defineComponent({
         }
 
         if (!target.className.includes('dm')) return
+        emit('dm-out', { el: target })
         target.classList.remove('pause')
 
+        // 容错处理
         suspendDanmus.forEach((item) => {
           item.classList.remove('pause')
         })
@@ -520,7 +526,7 @@ export default defineComponent({
       }
       &.pause {
         animation-play-state: paused;
-        z-index: 10;
+        z-index: 100;
       }
     }
     @keyframes moveLeft {
