@@ -136,6 +136,10 @@ export default {
 
 ## Changelog
 
+### v1.6.1
+
+- fix: 修复定时器类型错误
+
 ### v1.6.0
 
 - feat: 新增弹幕悬浮暂停相关事件

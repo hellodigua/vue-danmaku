@@ -191,7 +191,7 @@ export default defineComponent({
     function play() {
       paused.value = false
       if (!timer) {
-        timer = setInterval(() => draw(), danmaku.debounce)
+        timer = window.setInterval(() => draw(), danmaku.debounce)
       }
     }
 
@@ -251,6 +251,7 @@ export default defineComponent({
           const height = danmu.height
           el.classList.add('move')
           el.dataset.index = `${_index}`
+          el.dataset.channel = channelIndex.toString()
           el.style.opacity = '1'
           el.style.top = channelIndex * (height + danmu.top) + 'px'
           el.style.width = width + danmu.right + 'px'
