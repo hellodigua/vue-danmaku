@@ -43,25 +43,26 @@ const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 
 ## Attributes
 
-| 参数            | 说明                                                 | 类型    | 可选值       | 默认值 |
-| :-------------- | :--------------------------------------------------- | :------ | :----------- | :----- |
-| danmus          | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model) | Array   | 字符串或对象 | []     |
-| channels        | 轨道数量                                             | Number  |              | 0      |
-| autoplay        | 是否自动播放                                         | Boolean |              | true   |
-| loop            | 是否开启弹幕循环                                     | Boolean |              | false  |
-| speeds          | 弹幕速度（每秒移动的像素数）                         | Number  |              | 200    |
-| debounce        | 弹幕刷新频率(ms)                                     | Number  |              | 100    |
-| randomChannel   | 随机选择轨道插入                                     | Boolean |              | false  |
-| isSuspend       | 是否开启弹幕悬浮暂停（试验型功能）                   | Boolean |              | false  |
-| top             | 弹幕垂直间距(px)                                     | Number  |              | 4      |
-| right           | 弹幕水平间距(px)                                     | Number  |              | 0      |
-| performanceMode | 是否开启性能模式                                     | Boolean |              | true   |
+| 参数            | 说明                                                             | 类型    | 可选值       | 默认值 |
+| :-------------- | :--------------------------------------------------------------- | :------ | :----------- | :----- |
+| danmus          | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model)             | Array   | 字符串或对象 | []     |
+| channels        | 轨道数量                                                         | Number  |              | 0      |
+| autoplay        | 是否自动播放                                                     | Boolean |              | true   |
+| loop            | 是否开启弹幕循环                                                 | Boolean |              | false  |
+| speeds          | 弹幕速度（每秒移动的像素数）                                     | Number  |              | 200    |
+| debounce        | 弹幕刷新频率(ms)                                                 | Number  |              | 100    |
+| randomChannel   | 随机选择轨道插入                                                 | Boolean |              | false  |
+| isSuspend       | 是否开启弹幕悬浮暂停（试验型功能）                               | Boolean |              | false  |
+| top             | 弹幕垂直间距(px)                                                 | Number  |              | 4      |
+| right           | 弹幕水平间距(px)                                                 | Number  |              | 0      |
+| performanceMode | 是否开启性能模式（默认使用 requestAnimationFrame 代替 CSS 动画） | Boolean |              | true   |
+| zIndex          | 弹幕层级                                                         | Number  |              | 10     |
 
 - 注 0：1.0.0 版本起，danmus 参数写法变为双向绑定 v-model:danmus
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
-- 注 4：性能模式默认使用 requestAnimationFrame 代替 CSS 动画
+- 注 4：性能模式默认使用 requestAnimationFrame 代替 CSS 动画，在浏览器不开启硬件加速时，FPS 会非常稳定
 
 ## 内置方法
 

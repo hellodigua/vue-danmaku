@@ -115,6 +115,13 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    /**
+     * 弹幕默认层级
+     */
+    zIndex: {
+      type: Number,
+      default: 10,
+    },
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'update:danmus'],
   setup(props, { emit, slots }) {
@@ -511,8 +518,8 @@ export default defineComponent({
 
       emit('dm-over', { el: target })
 
-      // 提高暂停弹幕的层级
-      target.style.zIndex = '100'
+      // 提高暂停弹幕的层级，在默认层级基础上+1
+      target.style.zIndex = (props.zIndex + 1).toString()
 
       if (props.performanceMode) {
         // 性能模式下，暂停单个弹幕的动画
@@ -536,8 +543,8 @@ export default defineComponent({
 
       emit('dm-out', { el: target })
 
-      // 恢复弹幕的层级
-      target.style.zIndex = ''
+      // 恢复弹幕的默认层级
+      target.style.zIndex = props.zIndex.toString()
 
       if (props.performanceMode) {
         // 性能模式下，恢复单个弹幕的动画
@@ -557,8 +564,8 @@ export default defineComponent({
 
       // 容错处理
       suspendDanmus.forEach((item) => {
-        // 恢复所有弹幕的层级
-        item.style.zIndex = ''
+        // 恢复所有弹幕的默认层级
+        item.style.zIndex = props.zIndex.toString()
 
         if (props.performanceMode) {
           const width = item.offsetWidth
@@ -625,6 +632,8 @@ export default defineComponent({
         el.style.opacity = '1'
         el.style.top = channelIndex * (height + danmu.top) + 'px'
         el.style.width = width + danmu.right + 'px'
+        // 设置默认层级
+        el.style.zIndex = props.zIndex.toString()
 
         if (props.performanceMode) {
           // 使用新的动画模块启动动画
