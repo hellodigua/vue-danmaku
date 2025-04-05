@@ -10,7 +10,6 @@ export interface DanChannel {
  */
 export interface DanmuItem {
   height: number
-  fontSize: number
   speeds: number
   top: number
   right: number
@@ -23,7 +22,6 @@ export interface DanmakuItem {
   channels: number
   autoplay: boolean
   loop: boolean
-  useSlot: boolean
   debounce: number
   randomChannel: boolean
 }

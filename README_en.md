@@ -47,11 +47,6 @@ export default {
 | :------------ | :----------------------------------------------------------------------------- | :------ | :--------------- | :------ |
 | danmus        | List of popup elements, support plain text or custom objects (v-model support) | Array   | String or object | []      |
 | channels      | Number of tracks                                                               |         | 0                |
-| autoplay      | whether to auto-play                                                           | Boolean |                  | true    |
-| useSlot       | whether to enable popup slots                                                  | Boolean |                  | false   |
-| useSlot       | useSlot                                                                        | true    |
-| fontSize      | The font size of the popup screen (not available in slot mode)                 | Number  |                  | 18      |
-| extraStyle    | extraStyle (not available in slot mode)                                        | String  |                  |         |
 | speed         | speed of the popup (number of pixels per second)                               | Number  |                  | 200     |
 | debounce      | debounce frequency(ms)                                                         | Number  |                  | 100     |
 | randomChannel | Randomly select the track to insert                                            | Boolean |                  | false   |
@@ -106,7 +101,7 @@ If you have the need to customize the structure and style of the popup, you can 
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" v-model:danmus="danmus" useSlot loop :channels="5">
+  <vue-danmaku ref="danmaku" v-model:danmus="danmus" loop :channels="5">
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>

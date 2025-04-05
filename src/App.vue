@@ -23,11 +23,6 @@
         <button class="btn" @click="play('pause')">暂停</button>
         <button class="btn" @click="play('stop')">停止</button>
       </p>
-      <p>
-        模式：
-        <button class="btn" @click="switchSlot(true)">弹幕 slot</button>
-        <button class="btn" @click="switchSlot(false)">普通文本</button>
-      </p>
       <!-- <p>
           循环：
           <button class="btn" @click="play('show')">开启</button>
@@ -44,12 +39,12 @@
         <button class="btn" @click="speedsChange(10)">增速</button>
         <span>当前速度：{{ config.speeds }}像素/s</span>
       </p>
-      <p>
+      <!-- <p>
         字号：
-        <button class="btn" :disabled="config.useSlot" @click="fontChange(-1)">缩小</button>
-        <button class="btn" :disabled="config.useSlot" @click="fontChange(1)">放大</button>
+        <button class="btn" @click="fontChange(-1)">缩小</button>
+        <button class="btn" @click="fontChange(1)">放大</button>
         <span>当前字号：{{ config.fontSize }}px</span>
-      </p>
+      </p> -->
       <p>
         轨道：
         <button class="btn" @click="channelChange(-1)">-1</button>
@@ -94,7 +89,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { danmus as danmusData, getDanmuData } from './assets/danmu.js'
+import { getDanmuData } from './assets/danmu.js'
 import VueDanmaku from './lib/Danmaku.vue'
 
 export default defineComponent({
@@ -109,10 +104,8 @@ export default defineComponent({
     let timer: number = 0
     const config = reactive({
       channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
-      useSlot: true, // 是否开启slot
       loop: true, // 是否开启弹幕循环
       speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
-      fontSize: 20, // 文本模式下的字号
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
       debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
@@ -151,25 +144,11 @@ export default defineComponent({
           break
       }
     }
-
-    function switchSlot(slot: boolean) {
-      config.useSlot = slot
-      danmus.value = slot ? getDanmuData() : danmusData
-
-      setTimeout(() => {
-        danmaku.value.stop()
-        danmaku.value.play()
-      })
-    }
     function speedsChange(val: number) {
       if (config.speeds <= 10 && val === -10) {
         return
       }
       config.speeds += val
-      danmaku.value.reset()
-    }
-    function fontChange(val: number) {
-      config.fontSize += val
       danmaku.value.reset()
     }
     function channelChange(val: number) {
@@ -180,13 +159,12 @@ export default defineComponent({
     }
     function addDanmu() {
       if (!danmuMsg.value) return
-      const _danmuMsg = config.useSlot
-        ? {
-            avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
-            name: '你',
-            text: danmuMsg.value,
-          }
-        : danmuMsg.value
+      const _danmuMsg = {
+        avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
+        name: '你',
+        text: danmuMsg.value,
+      }
+
       danmaku.value.add(_danmuMsg)
       danmuMsg.value = ''
     }
@@ -198,9 +176,7 @@ export default defineComponent({
       danmuMsg,
 
       play,
-      switchSlot,
       speedsChange,
-      fontChange,
       channelChange,
       addDanmu,
     }

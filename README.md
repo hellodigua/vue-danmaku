@@ -27,7 +27,11 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku v-model:danmus="danmus" loop style="height:100px; width:300px;"></vue-danmaku>
+  <vue-danmaku v-model:danmus="danmus" loop style="height:100px; width:300px;">
+    <template v-slot:dm="{ index, danmu }">
+      <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
+    </template>
+  </vue-danmaku>
 </template>
 
 <script setup>
@@ -44,10 +48,7 @@ const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 | danmus        | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model) | Array   | 字符串或对象 | []     |
 | channels      | 轨道数量                                             | Number  |              | 0      |
 | autoplay      | 是否自动播放                                         | Boolean |              | true   |
-| useSlot       | 是否开启弹幕插槽                                     | Boolean |              | false  |
 | loop          | 是否开启弹幕循环                                     | Boolean |              | false  |
-| fontSize      | 弹幕字号（slot 模式下不可用）                        | Number  |              | 18     |
-| extraStyle    | 额外样式（slot 模式下不可用）                        | String  |              |        |
 | speeds        | 弹幕速度（每秒移动的像素数）                         | Number  |              | 200    |
 | debounce      | 弹幕刷新频率(ms)                                     | Number  |              | 100    |
 | randomChannel | 随机选择轨道插入                                     | Boolean |              | false  |
@@ -106,7 +107,7 @@ setup() {
 
 ```vue
 <template>
-  <vue-danmaku ref="danmaku" v-model:danmus="danmus" useSlot loop :channels="5">
+  <vue-danmaku ref="danmaku" v-model:danmus="danmus" loop :channels="5">
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>

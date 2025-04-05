@@ -66,13 +66,6 @@ export default defineComponent({
       default: false,
     },
     /**
-     * 是否开启弹幕插槽，默认否
-     */
-    useSlot: {
-      type: Boolean,
-      default: false,
-    },
-    /**
      * 弹幕刷新频率(ms)
      */
     debounce: {
@@ -94,13 +87,6 @@ export default defineComponent({
       default: false,
     },
     /**
-     * 弹幕字号（仅文本模式）
-     */
-    fontSize: {
-      type: Number,
-      default: 18,
-    },
-    /**
      * 弹幕垂直间距
      */
     top: {
@@ -120,13 +106,6 @@ export default defineComponent({
     isSuspend: {
       type: Boolean,
       default: false,
-    },
-    /**
-     * 弹幕额外样式
-     */
-    extraStyle: {
-      type: String,
-      default: '',
     },
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'update:danmus'],
@@ -151,14 +130,12 @@ export default defineComponent({
       channels: computed(() => props.channels || calcChannels.value),
       autoplay: computed(() => props.autoplay),
       loop: computed(() => props.loop),
-      useSlot: computed(() => props.useSlot),
       debounce: computed(() => props.debounce),
       randomChannel: computed(() => props.randomChannel),
     })
 
     const danmu: DanmuItem = reactive({
       height: computed(() => danmuHeight.value),
-      fontSize: computed(() => props.fontSize),
       speeds: computed(() => props.speeds),
       top: computed(() => props.top),
       right: computed(() => props.right),
@@ -224,16 +201,7 @@ export default defineComponent({
     function insert(dm?: any) {
       const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
       const _danmu = dm || danmuList.value[_index]
-      let el = document.createElement(`div`)
-
-      if (danmaku.useSlot) {
-        el = getSlotComponent(_danmu, _index).$el
-      } else {
-        el.innerHTML = _danmu as string
-        el.setAttribute('style', props.extraStyle)
-        el.style.fontSize = `${danmu.fontSize}px`
-        el.style.lineHeight = `${danmu.fontSize}px`
-      }
+      const el = getSlotComponent(_danmu, _index).$el
       el.classList.add('dm')
       dmContainer.value.appendChild(el)
       el.style.opacity = '0'
