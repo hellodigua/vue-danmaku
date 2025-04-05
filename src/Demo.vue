@@ -18,49 +18,38 @@
     </div>
     <div class="action">
       <p>
-        播放：
-        <button class="btn" @click="play('play')">播放</button>
-        <button class="btn" @click="play('pause')">暂停</button>
-        <button class="btn" @click="play('stop')">停止</button>
+        <span class="title">播放：</span>
+        <button class="btn" @click="handleInvoke('play')">播放</button>
+        <button class="btn" @click="handleInvoke('pause')">暂停</button>
+        <button class="btn" @click="handleInvoke('stop')">停止</button>
       </p>
       <p>
-        模式：
-        <button class="btn" @click="switchSlot(true)">弹幕 slot</button>
-        <button class="btn" @click="switchSlot(false)">普通文本</button>
-      </p>
-      <!-- <p>
-          循环：
-          <button class="btn" @click="play('show')">开启</button>
-          <button class="btn" @click="play('hide')">关闭</button>
-        </p> -->
-      <p>
-        显示：
-        <button class="btn" @click="play('show')">显示</button>
-        <button class="btn" @click="play('hide')">隐藏</button>
+        <span class="title">显示：</span>
+        <button class="btn" @click="handleInvoke('show')">显示</button>
+        <button class="btn" @click="handleInvoke('hide')">隐藏</button>
       </p>
       <p>
-        速度：
-        <button class="btn" @click="speedsChange(-10)">减速</button>
-        <button class="btn" @click="speedsChange(10)">增速</button>
+        <span class="title">速度：</span>
+        <button class="btn" @click="handleChange('speeds', -10)">减速</button>
+        <button class="btn" @click="handleChange('speeds', 10)">增速</button>
         <span>当前速度：{{ config.speeds }}像素/s</span>
       </p>
       <p>
-        字号：
-        <button class="btn" :disabled="config.useSlot" @click="fontChange(-1)">缩小</button>
-        <button class="btn" :disabled="config.useSlot" @click="fontChange(1)">放大</button>
-        <span>当前字号：{{ config.fontSize }}px</span>
-      </p>
-      <p>
-        轨道：
-        <button class="btn" @click="channelChange(-1)">-1</button>
-        <button class="btn" @click="channelChange(1)">+1</button>
-        <button class="btn" @click="channelChange(-config.channels)">填满</button>
+        <span class="title">轨道：</span>
+        <button class="btn" @click="handleChange('channels', -1)">-1</button>
+        <button class="btn" @click="handleChange('channels', 1)">+1</button>
+        <button class="btn" @click="handleChange('channels', -config.channels)">填满</button>
         <span>当前轨道：{{ config.channels }}</span>
       </p>
       <p>
-        发送：
+        <span class="title">发送：</span>
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
+      </p>
+      <p>
+        <span class="title">性能模式：</span>
+        <button class="btn" @click="togglePerformanceMode">{{ config.performanceMode ? '关闭' : '开启' }}</button>
+        <span>{{ config.performanceMode ? ' requestAnimationFrame' : 'CSS Animation' }}</span>
       </p>
     </div>
   </div>
@@ -94,7 +83,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { danmus as danmusData, getDanmuData } from './assets/danmu.js'
+import { getDanmuData } from './assets/danmu.js'
 import VueDanmaku from './lib/Danmaku.vue'
 
 export default defineComponent({
@@ -109,14 +98,13 @@ export default defineComponent({
     let timer: number = 0
     const config = reactive({
       channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
-      useSlot: true, // 是否开启slot
       loop: true, // 是否开启弹幕循环
       speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
-      fontSize: 20, // 文本模式下的字号
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
-      debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+      debounce: 10, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       randomChannel: true, // 随机弹幕轨道
+      performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
     })
 
     onMounted(() => {
@@ -127,7 +115,7 @@ export default defineComponent({
       window.onresize = null
     })
 
-    function play(type: string) {
+    function handleInvoke(type: string) {
       switch (type) {
         case 'play':
           danmaku.value.play()
@@ -151,44 +139,43 @@ export default defineComponent({
           break
       }
     }
-
-    function switchSlot(slot: boolean) {
-      config.useSlot = slot
-      danmus.value = slot ? getDanmuData() : danmusData
-
-      setTimeout(() => {
-        danmaku.value.stop()
-        danmaku.value.play()
-      })
-    }
-    function speedsChange(val: number) {
-      if (config.speeds <= 10 && val === -10) {
-        return
+    function handleChange(type: string, val: number) {
+      if (type === 'speeds') {
+        if (config.speeds <= 10 && val === -10) {
+          return
+        }
+        config.speeds += val
+        danmaku.value.reset()
       }
-      config.speeds += val
-      danmaku.value.reset()
-    }
-    function fontChange(val: number) {
-      config.fontSize += val
-      danmaku.value.reset()
-    }
-    function channelChange(val: number) {
-      if (!config.channels && val === -1) {
-        return
+
+      if (type === 'channels') {
+        if (!config.channels && val === -1) {
+          return
+        }
+        config.channels += val
       }
-      config.channels += val
     }
+
     function addDanmu() {
       if (!danmuMsg.value) return
-      const _danmuMsg = config.useSlot
-        ? {
-            avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
-            name: '你',
-            text: danmuMsg.value,
-          }
-        : danmuMsg.value
+      const _danmuMsg = {
+        avatar: 'https://i.loli.net/2021/01/17/xpwbm3jKytfaNOD.jpg',
+        name: '你',
+        text: danmuMsg.value,
+      }
+
       danmaku.value.add(_danmuMsg)
       danmuMsg.value = ''
+    }
+
+    /**
+     * 切换性能模式
+     */
+    function togglePerformanceMode() {
+      config.performanceMode = !config.performanceMode
+      // 切换性能模式后重置弹幕以应用新设置
+      danmaku.value.stop()
+      danmaku.value.reset()
     }
 
     return {
@@ -197,12 +184,10 @@ export default defineComponent({
       config,
       danmuMsg,
 
-      play,
-      switchSlot,
-      speedsChange,
-      fontChange,
-      channelChange,
+      handleInvoke,
+      handleChange,
       addDanmu,
+      togglePerformanceMode,
     }
   },
 })
@@ -229,6 +214,7 @@ body {
     .danmu-item {
       display: flex;
       align-items: center;
+      z-index: 10;
       .img {
         height: 25px;
         width: 25px;
@@ -259,6 +245,11 @@ body {
       color: #fff;
       min-width: 360px;
       min-height: 300px;
+      .title {
+        width: 80px;
+        display: inline-block;
+        text-align: right;
+      }
       .btn {
         color: #000;
         background: #fff;

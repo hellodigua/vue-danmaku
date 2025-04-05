@@ -43,7 +43,7 @@
 
 ### 如何从 vue2 升级到 vue3
 
-目前 vue2 和 vue3 的版本功能是保持同步的（包括API），所以你只需要升级 vue 本身的语法，然后从 vue-danmaku 升级为 vue3-danmaku 即可
+目前 vue2 和 vue3 的版本功能是保持同步的（包括API），所以你只需要升级 vue 本身的语法，然后从 vue-danmaku@1.x.x 升级为 vue-danmaku@2.x.x 即可
 
 ### 支持小程序吗
 

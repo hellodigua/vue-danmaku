@@ -18,7 +18,7 @@ export default [
   {
     output: {
       format: 'esm',
-      file: 'dist/vue3-danmaku.esm.js',
+      file: 'dist/vue-danmaku.esm.js',
     },
     plugins: [
       typescript({ tsconfigOverride, useTsconfigDeclarationDir: true }),
@@ -32,9 +32,8 @@ export default [
   {
     output: {
       format: 'umd',
-      file: 'dist/vue3-danmaku.umd.js',
-      name: 'Vue3Danmaku',
-      // exports: 'default',
+      file: 'dist/vue-danmaku.umd.js',
+      name: 'VueDanmaku',
       globals: {
         vue: 'Vue',
       },
@@ -44,7 +43,7 @@ export default [
       vue({ css: false }),
       postcss({
         minimize: true,
-        extract: path.resolve('dist', 'vue3-danmaku.css'),
+        extract: path.resolve('dist', 'vue-danmaku.css'),
         inject: false,
         plugins: [],
       }),
