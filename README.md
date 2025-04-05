@@ -5,7 +5,7 @@
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 
-> 基于 Vue.js 的弹幕交互组件
+> 基于 Vue 的弹幕交互组件 | A danmaku component for Vue
 
 简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_en.md) | [日本語](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_jp.md)
 
@@ -146,9 +146,9 @@ export default {
 
 ## Changelog
 
-### v1.7.3
+### v1.7.4
 
-- 逻辑优化
+- 更新了文档
 
 ### v1.7.2
 
