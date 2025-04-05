@@ -7,7 +7,7 @@
 
 > A Vue.js component for danmaku (bullet screen) interaction
 
-[简体中文](https://github.com/hellodigua/vue-danmaku/blob/master/README.md) | English
+[简体中文](https://github.com/hellodigua/vue-danmaku/blob/master/README.md) | English | [日本語](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_jp.md)
 
 Demo: [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
@@ -24,7 +24,7 @@ Vue 3 is now supported: [vue3-danmaku](https://github.com/hellodigua/vue-danmaku
 ## Install
 
 ```bash
-$ npm install vue-danmaku@1.7.3 --save
+$ npm install vue-danmaku@1 --save
 ```
 
 ## Usage
@@ -141,6 +141,110 @@ You can also [submit an issue](https://github.com/hellodigua/vue-danmaku/issues)
 ## Important Notes
 
 - You must set width and height for the vue-danmaku component to use it properly
+
+## Changelog
+
+### v1.7.3
+
+- Logic optimization
+
+### v1.7.2
+
+- Updated documentation
+
+### v1.7.0
+
+- Optimized resize logic
+- fix: Fixed a bug where some iOS15 devices might have screen flashing in built-in app webviews during danmaku initialization
+
+### v1.6.0
+
+- feat: Exposed insert method, allowing direct external danmaku drawing
+
+### v1.5.0
+
+- feat: Added support for v-model two-way binding for danmaku
+
+### v1.4.3
+
+- feat: push and add methods now return insertion index
+
+### v1.4.2
+
+- fix: Fixed a bug where throttle function caused hover suspension to fail when isSuspend was enabled
+
+### v1.4.1
+
+- feat: Added isSuspend parameter (default false), supporting danmaku pause on mouse hover
+- fix: Fixed potential screen flashing bug on some iOS15 devices
+
+### v1.4.0
+
+- feat: In loop mode, identical danmaku are not allowed on screen at the same time
+- feat: Default color changed to gray
+
+### v1.3.2
+
+- fix: Fixed a bug where add method wouldn't work properly after danmaku playback finished
+
+### v1.3.0
+
+- feat: Removed setChannels, switched to direct control
+- feat: Added events for danmaku insertion completion and playback completion
+- feat: Added compatibility for when danmaku data is overwritten
+- fix: Fixed inaccurate danmaku track number calculation
+- fix: Fixed issue where initial danmaku speed update was ineffective
+
+### v1.2.1
+
+- fix: Fixed a bug where danmaku container width might be incorrect during initialization
+
+### v1.2.0
+
+- Changed speed parameter to speeds, with different meaning (primarily to ensure consistent danmaku movement speed across different screens)
+  - speed: Total time for danmaku to cross the screen
+  - speeds: Pixels per second that danmaku travels
+
+### v1.1.1
+
+- Added extraStyle, allowing control of regular danmaku styles
+
+### v1.1.0
+
+- Added danmaku insertion method
+
+### v1.0.5
+
+- fix: Fixed translation flicker issues on iOS
+
+### v1.0.3
+
+- fix: Fixed a bug where using the default slot would cause errors
+
+### v1.0.0
+
+For ease of use in future versions, component parameters are now passed directly. For previous version documentation, [click here](https://www.npmjs.com/package/vue-danmaku/v/0.3.6)
+
+- Component parameters are now passed directly
+- Partial code refactoring
+
+### v0.3.6
+
+- Added support for asynchronous danmaku loading (Note: After async loading, you should manually call the play method)
+
+### v0.3.4
+
+- Added support for random track danmaku sending
+- fix: In non-loop mode, danmaku task should not end when playback completes
+
+### v0.3.2
+
+- Added autoplay support
+- Recalculating scroll distance when danmaku container size changes
+
+### v0.3.1
+
+- Package size optimization
 
 ## License
 

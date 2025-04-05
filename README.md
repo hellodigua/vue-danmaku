@@ -7,7 +7,7 @@
 
 > 基于 Vue.js 的弹幕交互组件
 
-简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_en.md)
+简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_en.md) | [日本語](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_jp.md)
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
@@ -15,7 +15,7 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 
 现已支持 vue3：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
 
-> **版本说明**: v1.7.x 是支持 Vue 2 的最后一个版本。v2.0.0 及以上版本仅支持 Vue 3 及以上版本
+**版本说明**: vue-danmaku@1.7.x 是支持 Vue 2 的最后一个版本。从 v2.0.0 开始仅支持 Vue 3 及以上版本
 
 ## Preview
 
@@ -23,8 +23,10 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 
 ## Install
 
+安装 vue2 版本
+
 ```bash
-$ npm install vue-danmaku@1.7.3 --save
+$ npm install vue-danmaku@1 --save
 ```
 
 ## Usage
@@ -143,6 +145,10 @@ export default {
 - 必须给 vue-danmaku 组件设置宽高才能正常使用
 
 ## Changelog
+
+### v1.7.3
+
+- 逻辑优化
 
 ### v1.7.2
 
