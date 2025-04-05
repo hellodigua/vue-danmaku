@@ -43,23 +43,25 @@ const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 
 ## Attributes
 
-| 参数          | 说明                                                 | 类型    | 可选值       | 默认值 |
-| :------------ | :--------------------------------------------------- | :------ | :----------- | :----- |
-| danmus        | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model) | Array   | 字符串或对象 | []     |
-| channels      | 轨道数量                                             | Number  |              | 0      |
-| autoplay      | 是否自动播放                                         | Boolean |              | true   |
-| loop          | 是否开启弹幕循环                                     | Boolean |              | false  |
-| speeds        | 弹幕速度（每秒移动的像素数）                         | Number  |              | 200    |
-| debounce      | 弹幕刷新频率(ms)                                     | Number  |              | 100    |
-| randomChannel | 随机选择轨道插入                                     | Boolean |              | false  |
-| isSuspend     | 是否开启弹幕悬浮暂停（试验型功能）                   | Boolean |              | false  |
-| top           | 弹幕垂直间距(px)                                     | Number  |              | 4      |
-| right         | 弹幕水平间距(px)                                     | Number  |              | 0      |
+| 参数            | 说明                                                 | 类型    | 可选值       | 默认值 |
+| :-------------- | :--------------------------------------------------- | :------ | :----------- | :----- |
+| danmus          | 弹幕元素列表，支持纯文本或者自定义对象(支持 v-model) | Array   | 字符串或对象 | []     |
+| channels        | 轨道数量                                             | Number  |              | 0      |
+| autoplay        | 是否自动播放                                         | Boolean |              | true   |
+| loop            | 是否开启弹幕循环                                     | Boolean |              | false  |
+| speeds          | 弹幕速度（每秒移动的像素数）                         | Number  |              | 200    |
+| debounce        | 弹幕刷新频率(ms)                                     | Number  |              | 100    |
+| randomChannel   | 随机选择轨道插入                                     | Boolean |              | false  |
+| isSuspend       | 是否开启弹幕悬浮暂停（试验型功能）                   | Boolean |              | false  |
+| top             | 弹幕垂直间距(px)                                     | Number  |              | 4      |
+| right           | 弹幕水平间距(px)                                     | Number  |              | 0      |
+| performanceMode | 是否开启性能模式                                     | Boolean |              | true   |
 
 - 注 0：1.0.0 版本起，danmus 参数写法变为双向绑定 v-model:danmus
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
+- 注 4：性能模式默认使用 requestAnimationFrame 代替 CSS 动画
 
 ## 内置方法
 
@@ -86,7 +88,7 @@ setup() {
 | resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                              |
 | push         | 发送弹幕（插入到弹幕列表末尾，排队显示）     | danmu 数据，可以是字符串或对象 |
 | add          | 发送弹幕（插入到当前播放位置，实时显示）     | danmu 数据，可以是字符串或对象 |
-| insert       | 绘制弹幕（实时插入，不进行数据绑定）                         | danmu 数据，可以是字符串或对象 |
+| insert       | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象 |
 | getPlayState | 获得当前播放状态                             |                                |
 
 - 注 1：push 和 add 的返回值为插入后的下标，可通过判断下标的方式对当前插入弹幕进行样式定制
@@ -94,12 +96,12 @@ setup() {
 
 ## Events
 
-| 事件名   | 说明                           | 返回值                      |
-| :------- | :----------------------------- | :-------------------------- |
-| list-end | 所有弹幕插入完毕               | -                           |
-| play-end | 所有弹幕播放完成（已滚出屏幕） | index（最后一个弹幕的下标） |
-| dm-over | 开启弹幕悬浮暂停时，当进入弹幕，暂停时触发 | 触发的弹幕对象元素 |
-| dm-out | 开启弹幕悬浮暂停时，当离开弹幕，恢复滚动时触发 | 触发的弹幕对象元素 |
+| 事件名   | 说明                                           | 返回值                      |
+| :------- | :--------------------------------------------- | :-------------------------- |
+| list-end | 所有弹幕插入完毕                               | -                           |
+| play-end | 所有弹幕播放完成（已滚出屏幕）                 | index（最后一个弹幕的下标） |
+| dm-over  | 开启弹幕悬浮暂停时，当进入弹幕，暂停时触发     | 触发的弹幕对象元素          |
+| dm-out   | 开启弹幕悬浮暂停时，当离开弹幕，恢复滚动时触发 | 触发的弹幕对象元素          |
 
 ## Slot
 
@@ -129,11 +131,11 @@ export default {
 
 ## 讨论交流和 BUG 反馈
 
-这个 [QA文档](https://github.com/hellodigua/vue-danmaku/blob/main/QA.md) 收集了一些常见问题，可以做阅读参考
+这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/main/QA.md) 收集了一些常见问题，可以做阅读参考
 
 也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
-如果vue-danmaku帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/)，你的 star 是我改 BUG 的动力 ヾ(*ゝω・*)ノ
+如果 vue-danmaku 帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/)，你的 star 是我改 BUG 的动力 ヾ(_ゝ ω・_)ノ
 
 ## Changelog
 

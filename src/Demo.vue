@@ -46,6 +46,11 @@
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
       </p>
+      <p>
+        <span class="title">性能模式：</span>
+        <button class="btn" @click="togglePerformanceMode">{{ config.performanceMode ? '关闭' : '开启' }}</button>
+        <span>{{ config.performanceMode ? ' requestAnimationFrame' : 'CSS Animation' }}</span>
+      </p>
     </div>
   </div>
   <a
@@ -97,8 +102,9 @@ export default defineComponent({
       speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
-      debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+      debounce: 10, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       randomChannel: true, // 随机弹幕轨道
+      performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
     })
 
     onMounted(() => {
@@ -162,6 +168,16 @@ export default defineComponent({
       danmuMsg.value = ''
     }
 
+    /**
+     * 切换性能模式
+     */
+    function togglePerformanceMode() {
+      config.performanceMode = !config.performanceMode
+      // 切换性能模式后重置弹幕以应用新设置
+      danmaku.value.stop()
+      danmaku.value.reset()
+    }
+
     return {
       danmaku,
       danmus,
@@ -171,6 +187,7 @@ export default defineComponent({
       handleInvoke,
       handleChange,
       addDanmu,
+      togglePerformanceMode,
     }
   },
 })
@@ -197,6 +214,7 @@ body {
     .danmu-item {
       display: flex;
       align-items: center;
+      z-index: 10;
       .img {
         height: 25px;
         width: 25px;
