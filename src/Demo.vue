@@ -18,42 +18,31 @@
     </div>
     <div class="action">
       <p>
-        播放：
-        <button class="btn" @click="play('play')">播放</button>
-        <button class="btn" @click="play('pause')">暂停</button>
-        <button class="btn" @click="play('stop')">停止</button>
-      </p>
-      <!-- <p>
-          循环：
-          <button class="btn" @click="play('show')">开启</button>
-          <button class="btn" @click="play('hide')">关闭</button>
-        </p> -->
-      <p>
-        显示：
-        <button class="btn" @click="play('show')">显示</button>
-        <button class="btn" @click="play('hide')">隐藏</button>
+        <span class="title">播放：</span>
+        <button class="btn" @click="handleInvoke('play')">播放</button>
+        <button class="btn" @click="handleInvoke('pause')">暂停</button>
+        <button class="btn" @click="handleInvoke('stop')">停止</button>
       </p>
       <p>
-        速度：
-        <button class="btn" @click="speedsChange(-10)">减速</button>
-        <button class="btn" @click="speedsChange(10)">增速</button>
+        <span class="title">显示：</span>
+        <button class="btn" @click="handleInvoke('show')">显示</button>
+        <button class="btn" @click="handleInvoke('hide')">隐藏</button>
+      </p>
+      <p>
+        <span class="title">速度：</span>
+        <button class="btn" @click="handleChange('speeds', -10)">减速</button>
+        <button class="btn" @click="handleChange('speeds', 10)">增速</button>
         <span>当前速度：{{ config.speeds }}像素/s</span>
       </p>
-      <!-- <p>
-        字号：
-        <button class="btn" @click="fontChange(-1)">缩小</button>
-        <button class="btn" @click="fontChange(1)">放大</button>
-        <span>当前字号：{{ config.fontSize }}px</span>
-      </p> -->
       <p>
-        轨道：
-        <button class="btn" @click="channelChange(-1)">-1</button>
-        <button class="btn" @click="channelChange(1)">+1</button>
-        <button class="btn" @click="channelChange(-config.channels)">填满</button>
+        <span class="title">轨道：</span>
+        <button class="btn" @click="handleChange('channels', -1)">-1</button>
+        <button class="btn" @click="handleChange('channels', 1)">+1</button>
+        <button class="btn" @click="handleChange('channels', -config.channels)">填满</button>
         <span>当前轨道：{{ config.channels }}</span>
       </p>
       <p>
-        发送：
+        <span class="title">发送：</span>
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
       </p>
@@ -120,7 +109,7 @@ export default defineComponent({
       window.onresize = null
     })
 
-    function play(type: string) {
+    function handleInvoke(type: string) {
       switch (type) {
         case 'play':
           danmaku.value.play()
@@ -144,19 +133,23 @@ export default defineComponent({
           break
       }
     }
-    function speedsChange(val: number) {
-      if (config.speeds <= 10 && val === -10) {
-        return
+    function handleChange(type: string, val: number) {
+      if (type === 'speeds') {
+        if (config.speeds <= 10 && val === -10) {
+          return
+        }
+        config.speeds += val
+        danmaku.value.reset()
       }
-      config.speeds += val
-      danmaku.value.reset()
-    }
-    function channelChange(val: number) {
-      if (!config.channels && val === -1) {
-        return
+
+      if (type === 'channels') {
+        if (!config.channels && val === -1) {
+          return
+        }
+        config.channels += val
       }
-      config.channels += val
     }
+
     function addDanmu() {
       if (!danmuMsg.value) return
       const _danmuMsg = {
@@ -175,9 +168,8 @@ export default defineComponent({
       config,
       danmuMsg,
 
-      play,
-      speedsChange,
-      channelChange,
+      handleInvoke,
+      handleChange,
       addDanmu,
     }
   },
@@ -235,6 +227,11 @@ body {
       color: #fff;
       min-width: 360px;
       min-height: 300px;
+      .title {
+        width: 80px;
+        display: inline-block;
+        text-align: right;
+      }
       .btn {
         color: #000;
         background: #fff;
