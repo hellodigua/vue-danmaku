@@ -13,7 +13,7 @@
 
 ライブデモ： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-Vue3 もサポートしています：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
+Vue3 もサポートしています：[vue-danmaku](https://github.com/hellodigua/vue-danmaku)
 
 **バージョン情報**: vue-danmaku@1.7.x は Vue 2 をサポートする最後のバージョンです。v2.0.0 以降は Vue 3 以上のバージョンのみをサポートします。
 
@@ -136,7 +136,7 @@ export default {
 
 ## ディスカッションとバグ報告
 
-この [QA ドキュメント](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) には、よくある質問が収集されています。参考にしてください。
+この [QA ドキュメント](https://github.com/hellodigua/vue-danmaku/blob/vue2/QA.md) には、よくある質問が収集されています。参考にしてください。
 
 また、このプロジェクトに [issue を提出](https://github.com/hellodigua/vue-danmaku/issues) することもできます。
 

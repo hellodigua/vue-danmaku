@@ -13,7 +13,7 @@ Demo: [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vu
 
 Live Demo: [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-Vue 3 is now supported: [vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
+Vue 3 is now supported: [vue-danmaku](https://github.com/hellodigua/vue-danmaku)
 
 > **Version Note**: v1.7.x is the last version supporting Vue 2. v2.0.0 and above only support Vue 3 and above.
 
@@ -134,7 +134,7 @@ export default {
 
 ## Discussion and Bug Reports
 
-This [QA document](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) collects some common questions for reference.
+This [QA document](https://github.com/hellodigua/vue-danmaku/blob/vue2/QA.md) collects some common questions for reference.
 
 You can also [submit an issue](https://github.com/hellodigua/vue-danmaku/issues) for this project.
 

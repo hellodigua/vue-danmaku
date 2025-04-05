@@ -13,8 +13,6 @@ Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-现已支持 vue3：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
-
 **版本说明**: vue-danmaku@1.7.x 是支持 Vue 2 的最后一个版本。从 v2.0.0 开始仅支持 Vue 3 及以上版本
 
 ## Preview
@@ -136,7 +134,7 @@ export default {
 
 ## 讨论交流和 BUG 反馈
 
-这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) 收集了一些常见问题，可以做阅读参考
+这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/vue2/QA.md) 收集了一些常见问题，可以做阅读参考
 
 也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
