@@ -146,7 +146,12 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
+      stop()
       clear()
+      if (dmContainer.value) {
+        dmContainer.value.removeEventListener('mouseover', onMouseOver)
+        dmContainer.value.removeEventListener('mouseout', onMouseOut)
+      }
     })
 
     function init() {
@@ -205,6 +210,13 @@ export default defineComponent({
       el.classList.add('dm')
       dmContainer.value.appendChild(el)
       el.style.opacity = '0'
+
+      // 保存组件实例的引用，以便后续清理
+      el._vueInstance = {
+        instance: el.__vueParentComponent,
+        el: el,
+      }
+
       nextTick(() => {
         if (!danmu.height) {
           danmuHeight.value = el.offsetHeight
@@ -226,15 +238,30 @@ export default defineComponent({
           el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
           el.style.left = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
-          el.addEventListener('animationend', () => {
+
+          const onAnimationEnd = () => {
             if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
               emit('play-end', el.dataset.index)
             }
-            dmContainer.value && dmContainer.value.removeChild(el)
-          })
+
+            // 清理元素前，移除所有事件监听器
+            cleanupElement(el)
+
+            if (dmContainer.value) {
+              dmContainer.value.removeChild(el)
+            }
+          }
+
+          el._animationEndHandler = onAnimationEnd
+          el.addEventListener('animationend', onAnimationEnd)
+
           index.value++
         } else {
-          dmContainer.value.removeChild(el)
+          // 清理不能放入轨道的元素
+          cleanupElement(el)
+          if (dmContainer.value) {
+            dmContainer.value.removeChild(el)
+          }
         }
       })
     }
@@ -253,6 +280,9 @@ export default defineComponent({
       })
 
       const ele = DmComponent.mount(document.createElement('div'))
+
+      // 保存对应用实例的引用以便后续清理
+      ele.$el.__vueApp = DmComponent
 
       return ele
     }
@@ -275,13 +305,13 @@ export default defineComponent({
             }
             if (j === items.length - 1) {
               danChannel.value[i].push(el)
-              el.addEventListener('animationend', () => danChannel.value[i].splice(0, 1))
+              // 不在这里添加animationend事件，统一在insert函数中处理
               return i % danmaku.channels
             }
           }
         } else {
           danChannel.value[i] = [el]
-          el.addEventListener('animationend', () => danChannel.value[i].splice(0, 1))
+          // 不在这里添加animationend事件，统一在insert函数中处理
           return i % danmaku.channels
         }
       }
@@ -304,39 +334,8 @@ export default defineComponent({
 
     function initSuspendEvents() {
       let suspendDanmus: HTMLElement[] = []
-      dmContainer.value.addEventListener('mouseover', (e) => {
-        let target = e.target as EventTarget & HTMLElement
-
-        if (!target.className.includes('dm')) {
-          target = target.closest('.dm') || target
-        }
-
-        if (!target.className.includes('dm')) return
-
-        if (suspendDanmus.includes(target)) return
-
-        emit('dm-over', { el: target })
-        target.classList.add('pause')
-
-        suspendDanmus.push(target)
-      })
-      dmContainer.value.addEventListener('mouseout', (e) => {
-        let target = e.target as EventTarget & HTMLElement
-
-        if (!target.className.includes('dm')) {
-          target = target.closest('.dm') || target
-        }
-
-        if (!target.className.includes('dm')) return
-        emit('dm-out', { el: target })
-        target.classList.remove('pause')
-
-        // 容错处理
-        suspendDanmus.forEach((item) => {
-          item.classList.remove('pause')
-        })
-        suspendDanmus = []
-      })
+      dmContainer.value.addEventListener('mouseover', onMouseOver)
+      dmContainer.value.addEventListener('mouseout', onMouseOut)
     }
 
     /**
@@ -359,8 +358,17 @@ export default defineComponent({
      * 停止弹幕
      */
     function stop() {
+      // 清理所有弹幕元素
+      if (dmContainer.value) {
+        const danmus = Array.from(dmContainer.value.getElementsByClassName('dm'))
+        danmus.forEach((dm) => {
+          cleanupElement(dm as HTMLDivElement)
+        })
+
+        dmContainer.value.innerHTML = ''
+      }
+
       danChannel.value = {}
-      dmContainer.value.innerHTML = ''
       paused.value = true
       hidden.value = false
       clear()
@@ -430,6 +438,72 @@ export default defineComponent({
         el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + el.offsetWidth}px`)
         el.style.left = `${containerWidth.value}px`
         el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+      }
+    }
+
+    // 提取事件处理函数为命名函数，以便可以移除
+    let suspendDanmus: HTMLElement[] = []
+    function onMouseOver(e: MouseEvent) {
+      let target = e.target as EventTarget & HTMLElement
+
+      if (!target.className.includes('dm')) {
+        target = target.closest('.dm') || target
+      }
+
+      if (!target.className.includes('dm')) return
+
+      if (suspendDanmus.includes(target)) return
+
+      emit('dm-over', { el: target })
+      target.classList.add('pause')
+
+      suspendDanmus.push(target)
+    }
+
+    function onMouseOut(e: MouseEvent) {
+      let target = e.target as EventTarget & HTMLElement
+
+      if (!target.className.includes('dm')) {
+        target = target.closest('.dm') || target
+      }
+
+      if (!target.className.includes('dm')) return
+      emit('dm-out', { el: target })
+      target.classList.remove('pause')
+
+      // 容错处理
+      suspendDanmus.forEach((item) => {
+        item.classList.remove('pause')
+      })
+      suspendDanmus = []
+    }
+
+    // 清理元素的所有事件监听器和引用
+    function cleanupElement(el: HTMLDivElement) {
+      // 移除animationend事件监听器
+      if (el._animationEndHandler) {
+        el.removeEventListener('animationend', el._animationEndHandler)
+        delete el._animationEndHandler
+      }
+
+      // 从轨道管理中移除对该元素的引用
+      const channelIndex = el.dataset.channel ? parseInt(el.dataset.channel) : -1
+      if (channelIndex >= 0 && danChannel.value[channelIndex]) {
+        const index = danChannel.value[channelIndex].indexOf(el)
+        if (index > -1) {
+          danChannel.value[channelIndex].splice(index, 1)
+        }
+      }
+
+      // 卸载Vue组件实例
+      if (el._vueInstance && el._vueInstance.instance) {
+        // 尝试使用unmount方法卸载组件实例
+        try {
+          el._vueInstance.instance.ctx.unmount && el._vueInstance.instance.ctx.unmount()
+        } catch (e) {
+          console.warn('Failed to unmount component instance', e)
+        }
+        delete el._vueInstance
       }
     }
 
