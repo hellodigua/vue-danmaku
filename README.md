@@ -4,17 +4,18 @@
 ![npm download](https://img.shields.io/npm/dm/vue-danmaku)
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
-[![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
 > 基于 Vue.js 的弹幕交互组件
 
-简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/master/README_en.md)
+简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue2/README_en.md)
 
 Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-现已支持 vue3：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
+现已支持 vue3：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
+
+> **版本说明**: v1.7.x 是支持 Vue 2 的最后一个版本。v2.0.0 及以上版本仅支持 Vue 3 及以上版本
 
 ## Preview
 
@@ -23,7 +24,7 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 ## Install
 
 ```bash
-$ npm install vue-danmaku --save
+$ npm install vue-danmaku@1.7.3 --save
 ```
 
 ## Usage

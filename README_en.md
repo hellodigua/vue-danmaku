@@ -4,17 +4,18 @@
 ![npm download](https://img.shields.io/npm/dm/vue-danmaku)
 [![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
-[![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
-> A Danmaku component based on Vue.js
+> A Vue.js component for danmaku (bullet screen) interaction
 
-English | [简体中文](https://github.com/hellodigua/vue-danmaku/blob/master/README.md)
+[简体中文](https://github.com/hellodigua/vue-danmaku/blob/master/README.md) | English
 
-Demo： [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
+Demo: [https://hellodigua.github.io/vue-danmaku](https://hellodigua.github.io/vue-danmaku)
 
-Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
+Live Demo: [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
-vue3 supported：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/vue3)
+Vue 3 is now supported: [vue3-danmaku](https://github.com/hellodigua/vue-danmaku)
+
+> **Version Note**: v1.7.x is the last version supporting Vue 2. v2.0.0 and above only support Vue 3 and above.
 
 ## Preview
 
@@ -23,7 +24,7 @@ vue3 supported：[vue3-danmaku](https://github.com/hellodigua/vue-danmaku/tree/v
 ## Install
 
 ```bash
-$ npm install vue-danmaku --save
+$ npm install vue-danmaku@1.7.3 --save
 ```
 
 ## Usage
@@ -53,63 +54,68 @@ export default {
 
 ## Attributes
 
-| Parameters    | Description                                                           | Type    | Optional         | Default |
-| :------------ | :-------------------------------------------------------------------- | :------ | :--------------- | :------ |
-| v-model       | List of popup elements, support plain text or custom objects          | Array   | String or object | []      |
-| channels      | Number                                                                |         | 0                |
-| autoplay      | Boolean                                                               |         | true             |
-| useSlot       | whether to enable popup slots                                         | Boolean |                  | false   |
-| useSlot       | useSlot                                                               | true    |
-| fontSize      | The font size of the popup screen (not available in slot mode)        | Number  |                  | 18      |
-| extraStyle    | extraStyle (not available in slot mode)                               | String  |                  |         |
-| speed         | speed of the popup (number of pixels per second)                      | Number  |                  | 200     |
-| debounce      | debounce frequency(ms)                                                | Number  |                  | 100     |
-| randomChannel | Randomly select the track to insert                                   | Boolean |                  | false   |
-| isSuspend     | Whether or not to enable debounce hover pause (experimental function) | Boolean |                  | false   |
-| top           | Vertical Pitch(px)                                                    | Number  |                  | 4       |
-| right         | horizontal spacing(px)                                                | Number  |                  | 0       |
+| Parameter     | Description                                                 | Type    | Options       | Default |
+| :------------ | :---------------------------------------------------------- | :------ | :------------ | :------ |
+| v-model       | Danmaku element list, supports plain text or custom objects | Array   | String/Object | []      |
+| channels      | Number of tracks                                            | Number  |               | 0       |
+| autoplay      | Whether to autoplay                                         | Boolean |               | true    |
+| useSlot       | Whether to enable danmaku slot                              | Boolean |               | false   |
+| loop          | Whether to enable danmaku loop                              | Boolean |               | false   |
+| fontSize      | Font size (not available in slot mode)                      | Number  |               | 18      |
+| extraStyle    | Additional styles (not available in slot mode)              | String  |               |         |
+| speeds        | Danmaku speed (pixels per second)                           | Number  |               | 200     |
+| debounce      | Danmaku refresh rate (ms)                                   | Number  |               | 100     |
+| randomChannel | Randomly select track for insertion                         | Boolean |               | false   |
+| isSuspend     | Enable danmaku hover pause (experimental)                   | Boolean |               | false   |
+| top           | Vertical spacing between danmaku (px)                       | Number  |               | 4       |
+| right         | Horizontal spacing between danmaku (px)                     | Number  |               | 0       |
 
-- v-model is a new syntax since version 1.5.0, which supports two-way binding of pop-ups.
-- If channels is 0, the number of tracks is the maximum number of tracks the container can hold.
-- If danmus is empty after initialization, autoplay will be invalidated. So for asynchronously loaded popup data, you need to manually call `this.$refs[refName].play()` to play it.
-- The popup refresh frequency is how often the popups are inserted
+- Note 0: v-model is a new syntax since version 1.5.0, supporting two-way binding for danmaku. The old danmus parameter is still supported
+- Note 1: When channels is 0, the number of tracks will be the maximum number that the container can accommodate
+- Note 2: If danmus is empty after initialization, autoplay will be disabled. For asynchronously loaded danmaku data, you need to manually call `this.$refs[refName].play()` to start playback
+- Note 3: Danmaku refresh rate determines how often a new danmaku is inserted
 
-## Methods
+## Built-in Methods
 
-Called via `this.$refs[refName]`
+Call through `this.$refs[refName]`
 
-| Method Name  | Description                                                                                | Parameters                               |
-| :----------- | :----------------------------------------------------------------------------------------- | :--------------------------------------- |
-| play         | start/resume playback                                                                      | -                                        |
-| pause        | pause play                                                                                 | -                                        |
-| stop         | stop playing and clear the pop-ups                                                         | -                                        |
-| show         | show                                                                                       | show                                     |
-| hide         | hide                                                                                       | Hide                                     | - - - |
-| reset        | reset configuration                                                                        | -                                        |
-| resize       | recalculate the scroll distance when the container size is changed (to be called manually) | - -                                      |
-| push         | send curtain (inserted at the end of the curtain list, queued)                             | danmu data, can be string or object      |
-| add          | send a popup (inserted into the current play position, displayed in real time)             | danmu data, can be a string or an object |
-| getPlayState | Get the current play state                                                                 |                                          |
+| Method Name  | Description                                                           | Parameters                          |
+| :----------- | :-------------------------------------------------------------------- | :---------------------------------- |
+| play         | Start/Resume playback                                                 | -                                   |
+| pause        | Pause danmaku playback                                                | -                                   |
+| stop         | Stop playback and clear danmaku                                       | -                                   |
+| show         | Show danmaku                                                          | -                                   |
+| hide         | Hide danmaku                                                          | -                                   |
+| reset        | Reset configuration                                                   | -                                   |
+| resize       | Recalculate scroll distance when container size changes (manual call) | -                                   |
+| push         | Send danmaku (append to list end, queued display)                     | danmu data, can be string or object |
+| add          | Send danmaku (insert at current position, real-time display)          | danmu data, can be string or object |
+| insert       | Draw danmaku (real-time insert, no data binding)                      | danmu data, can be string or object |
+| getPlayState | Get current playback state                                            |                                     |
 
-- The return value of push and add is the subscript after insertion, and you can customize the style of the current inserted pop-up by judging the subscript
+- Note 1: push and add methods return the index after insertion, allowing style customization based on the index
+- Note 2: The difference between insert and push/add is that insert doesn't perform data binding but directly inserts DOM, suitable for live streaming scenarios
 
-## Event
+## Events
 
-| Event Name | Description                               | Return Value                        |
-| :--------- | :---------------------------------------- | :---------------------------------- |
-| list-end   | All pop-ups inserted                      | -                                   |
-| play-end   | All popups finished (scrolled off screen) | index (subscript of the last popup) |
+| Event Name | Description                                          | Return Value                  |
+| :--------- | :--------------------------------------------------- | :---------------------------- |
+| list-end   | All danmaku inserted                                 | -                             |
+| play-end   | All danmaku playback completed (scrolled off screen) | index (index of last danmaku) |
 
 ## Slot
 
-If you have the need to customize the structure and style of the popup, you can pass in any structure of the object and write your own internal style.
+If you need to customize danmaku structure and style, you can pass in objects with any structure and write internal styles.
 
 ```vue
 <template>
   <vue-danmaku ref="danmaku" v-model="danmus" use-slot loop :speeds="200" :channels="5">
+    <!-- Danmaku slot (for vue 2.6.0 and above, you can use v-slot:dm="{ index, danmu }" syntax) -->
     <template slot="dm" slot-scope="{ index, danmu }">
-      <div>{{ index }}{{ danmu.name }}：{{ danmu.text }}</div>
+      <div>{{ index }}{{ danmu.name }}: {{ danmu.text }}</div>
     </template>
+    <!-- Container slot -->
+    <div></div>
   </vue-danmaku>
 </template>
 
@@ -126,13 +132,15 @@ export default {
 </script>
 ```
 
-## Discuss and exchange and bug feedback
+## Discussion and Bug Reports
 
-You can also [submit issue](https://github.com/hellodigua/vue-danmaku/issues) to this project
+This [QA document](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) collects some common questions for reference.
 
-## Tips
+You can also [submit an issue](https://github.com/hellodigua/vue-danmaku/issues) for this project.
 
-- You must set the width and height for the vue-danmaku component to work properly
+## Important Notes
+
+- You must set width and height for the vue-danmaku component to use it properly
 
 ## License
 
