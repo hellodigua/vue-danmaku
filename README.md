@@ -1,13 +1,13 @@
-# vue3-danmaku
+# vue-danmaku
 
-[![npm-version](https://img.shields.io/npm/v/vue3-danmaku.svg)](https://www.npmjs.com/package/vue3-danmaku)
-[![size](https://img.shields.io/badge/minifiedsize-9kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
+[![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-9kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 [![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
-> 基于 Vue3 的弹幕交互组件
+> 基于 Vue 的弹幕交互组件
 
-简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue3/README_en.md)
+简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/main/README_en.md)
 
 Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
 
@@ -20,7 +20,7 @@ Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io
 ## Install
 
 ```bash
-$ npm install vue3-danmaku --save
+$ npm install vue-danmaku --save
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ $ npm install vue3-danmaku --save
 </template>
 
 <script setup>
-import vueDanmaku from 'vue3-danmaku'
+import vueDanmaku from 'vue-danmaku'
 
 const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 </script>
@@ -114,7 +114,7 @@ setup() {
 </template>
 
 <script>
-import vueDanmaku from 'vue3-danmaku'
+import vueDanmaku from 'vue-danmaku'
 
 export default {
   setup(props) {
@@ -128,7 +128,7 @@ export default {
 
 ## 讨论交流和 BUG 反馈
 
-这个 [QA文档](https://github.com/hellodigua/vue-danmaku/blob/vue3/QA.md) 收集了一些常见问题，可以做阅读参考
+这个 [QA文档](https://github.com/hellodigua/vue-danmaku/blob/main/QA.md) 收集了一些常见问题，可以做阅读参考
 
 也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 

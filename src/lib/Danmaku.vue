@@ -33,7 +33,7 @@ type CustomDanmu = {
 type Danmu = string | CustomDanmu
 
 export default defineComponent({
-  name: 'vue3-danmaku',
+  name: 'vue-danmaku',
   components: {},
   props: {
     /**

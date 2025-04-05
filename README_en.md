@@ -1,13 +1,13 @@
-# vue3-danmaku
+# vue-danmaku
 
-[![npm-version](https://img.shields.io/npm/v/vue3-danmaku.svg)](https://www.npmjs.com/package/vue3-danmaku)
-[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue3-danmaku)
+[![npm-version](https://img.shields.io/npm/v/vue-danmaku.svg)](https://www.npmjs.com/package/vue-danmaku)
+[![size](https://img.shields.io/badge/minifiedsize-15kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 [![views](https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/l2vhhsgs5ei8uo1hftsl)](https://trackgit.com)
 
 > A Danmaku component based on Vue3
 
-English | [简体中文](https://github.com/hellodigua/vue-danmaku/blob/vue3/README.md)
+English | [简体中文](https://github.com/hellodigua/vue-danmaku/blob/main/README.md)
 
 Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net/hellodigua/j78h6429/99/)
 
@@ -18,7 +18,7 @@ Live Demo： [https://jsfiddle.net/hellodigua/j78h6429/99/](https://jsfiddle.net
 ## Install
 
 ```bash
-$ npm install vue3-danmaku --save
+$ npm install vue-danmaku --save
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ $ npm install vue3-danmaku --save
 </template>
 
 <script>
-import vueDanmaku from 'vue3-danmaku'
+import vueDanmaku from 'vue-danmaku'
 
 export default {
   setup(props) {
@@ -114,7 +114,7 @@ If you have the need to customize the structure and style of the popup, you can 
 </template>
 
 <script>
-import vueDanmaku from 'vue3-danmaku'
+import vueDanmaku from 'vue-danmaku'
 
 export default {
   setup(props) {
