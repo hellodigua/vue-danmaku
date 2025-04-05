@@ -23,8 +23,8 @@ import { useModelWrapper } from './utils'
 /**
  * 自定义弹幕
  */
-type CustomDanmu = {
-  [key: string]: any
+type CustomDanmu<T = any> = {
+  [key: string]: T
 }
 
 /**
@@ -201,9 +201,9 @@ export default defineComponent({
 
     /**
      * 插入弹幕（也暴露到外部，允许外部直接执行绘制弹幕方法）
-     * @param {Object} dm 外部定义的弹幕
+     * @param {Danmu} dm 外部定义的弹幕
      */
-    function insert(dm?: any) {
+    function insert(dm?: Danmu) {
       const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
       const _danmu = dm || danmuList.value[_index]
       const el = getSlotComponent(_danmu, _index).$el
@@ -213,7 +213,7 @@ export default defineComponent({
 
       // 保存组件实例的引用，以便后续清理
       el._vueInstance = {
-        instance: el.__vueParentComponent,
+        instance: el.__vueParentComponent || { ctx: {} },
         el: el,
       }
 
@@ -266,7 +266,17 @@ export default defineComponent({
       })
     }
 
-    function getSlotComponent(_danmu: any, _index: number) {
+    /**
+     * 获取弹幕组件实例
+     * @returns 组件挂载结果
+     */
+    function getSlotComponent(
+      _danmu: Danmu,
+      _index: number
+    ): {
+      $el: HTMLDivElement
+      [key: string]: any
+    } {
       const DmComponent = createApp({
         render() {
           return h('div', {}, [
@@ -333,7 +343,6 @@ export default defineComponent({
     }
 
     function initSuspendEvents() {
-      let suspendDanmus: HTMLElement[] = []
       dmContainer.value.addEventListener('mouseover', onMouseOver)
       dmContainer.value.addEventListener('mouseout', onMouseOut)
     }
@@ -500,7 +509,7 @@ export default defineComponent({
         // 尝试使用unmount方法卸载组件实例
         try {
           el._vueInstance.instance.ctx.unmount && el._vueInstance.instance.ctx.unmount()
-        } catch (e) {
+        } catch (e: unknown) {
           console.warn('Failed to unmount component instance', e)
         }
         delete el._vueInstance

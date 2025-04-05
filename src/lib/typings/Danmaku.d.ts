@@ -2,7 +2,7 @@
  * 弹幕轨道
  */
 export interface DanChannel {
-  [index: number]: [HTMLDivElement]
+  [index: number]: HTMLDivElement[]
 }
 
 /**
@@ -27,6 +27,24 @@ export interface DanmakuItem {
 }
 
 /**
+ * Vue组件实例类型
+ */
+export interface VueComponentInstance {
+  ctx: {
+    unmount?: () => void
+  }
+  [key: string]: any
+}
+
+/**
+ * Vue应用实例类型
+ */
+export interface VueAppInstance {
+  unmount: () => void
+  [key: string]: any
+}
+
+/**
  * 自定义弹幕元素接口扩展
  */
 declare global {
@@ -40,18 +58,18 @@ declare global {
      * Vue组件实例引用
      */
     _vueInstance?: {
-      instance: any
+      instance: VueComponentInstance
       el: HTMLDivElement
     }
 
     /**
      * Vue应用实例引用
      */
-    __vueApp?: any
+    __vueApp?: VueAppInstance
 
     /**
      * Vue父组件引用
      */
-    __vueParentComponent?: any
+    __vueParentComponent?: VueComponentInstance
   }
 }
