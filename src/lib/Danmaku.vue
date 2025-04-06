@@ -444,29 +444,43 @@ export default defineComponent({
     }
 
     /**
-     * 添加弹幕（插入到当前播放的弹幕位置）
+     * 添加弹幕
+     * @param danmu 弹幕内容
+     * @param position 插入位置，'current'表示当前播放位置，'end'表示末尾，默认为'end'
+     * @returns 插入的索引位置
      */
-    function add(danmu: Danmu): number {
-      if (index.value === danmuList.value.length) {
-        // 如果当前弹幕已经播放完了，那么仍然走 push
-        danmuList.value.push(danmu)
-
-        return danmuList.value.length - 1
+    function addDanmu(danmu: Danmu, position: 'current' | 'end' = 'current'): number {
+      if (position === 'current') {
+        if (index.value === danmuList.value.length) {
+          // 如果当前弹幕已经播放完了，那么仍然插入到末尾
+          danmuList.value.push(danmu)
+          return danmuList.value.length - 1
+        } else {
+          const _index = index.value % danmuList.value.length
+          danmuList.value.splice(_index, 0, danmu)
+          return _index + 1
+        }
       } else {
-        const _index = index.value % danmuList.value.length
-        danmuList.value.splice(_index, 0, danmu)
-
-        return _index + 1
+        // 插入到末尾
+        danmuList.value.push(danmu)
+        return danmuList.value.length - 1
       }
     }
 
     /**
+     * 添加弹幕（插入到当前播放的弹幕位置）
+     * @deprecated 请使用 addDanmu(danmu, 'current') 代替
+     */
+    function add(danmu: Danmu): number {
+      return addDanmu(danmu, 'current')
+    }
+
+    /**
      * 添加弹幕（插入到弹幕末尾）
+     * @deprecated 请使用 addDanmu(danmu, 'end') 代替
      */
     function push(danmu: Danmu): number {
-      danmuList.value.push(danmu)
-
-      return danmuList.value.length - 1
+      return addDanmu(danmu, 'end')
     }
 
     /**
@@ -700,6 +714,7 @@ export default defineComponent({
       reset,
       add,
       push,
+      addDanmu,
       insert,
     }
   },
