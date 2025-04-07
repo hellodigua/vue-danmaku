@@ -55,6 +55,11 @@ declare global {
     _animationEndHandler?: (event: AnimationEvent) => void
 
     /**
+     * Click事件处理函数引用
+     */
+    _clickHandler?: (event: MouseEvent) => void
+
+    /**
      * Vue组件实例引用
      */
     _vueInstance?: {

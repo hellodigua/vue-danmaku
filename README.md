@@ -4,13 +4,15 @@
 [![size](https://img.shields.io/badge/minifiedsize-9kB-blue.svg)](https://www.npmjs.com/package/vue-danmaku)
 [![license](https://img.shields.io/npm/l/express.svg)]()
 
-> 基于 Vue 的弹幕交互组件
+> 基于 Vue3 的弹幕交互组件
 
 简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/main/README_en.md)
 
 Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
 
 [Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/master)
+
+**Tips: 2.0.0 版本开始，vue-danmaku 不再支持 Vue2 项目使用，仅支持 Vue3**
 
 ## Preview
 
@@ -83,30 +85,122 @@ setup() {
 }
 ```
 
-| 方法名                    | 说明                                         | 参数                                                                       |
-| :------------------------ | :------------------------------------------- | :------------------------------------------------------------------------- |
-| play()                    | 开始/继续播放                                | -                                                                          |
-| pause()                   | 暂停弹幕播放                                 | -                                                                          |
-| stop()                    | 停止播放并清空弹幕                           | -                                                                          |
-| show()                    | 弹幕显示                                     | -                                                                          |
-| hide()                    | 弹幕隐藏                                     | -                                                                          |
-| reset()                   | 重置配置                                     | -                                                                          |
-| resize()                  | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                                                                          |
-| addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 'current','end'，默认为'current' |
-| insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                             |
-| getPlayState()            | 获得当前播放状态                             |                                                                            |
+| 方法名                    | 说明                                         | 参数                                                                                      |
+| :------------------------ | :------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| play()                    | 开始/继续播放                                | -                                                                                         |
+| pause()                   | 暂停弹幕播放                                 | -                                                                                         |
+| stop()                    | 停止播放并清空弹幕                           | -                                                                                         |
+| show()                    | 弹幕显示                                     | -                                                                                         |
+| hide()                    | 弹幕隐藏                                     | -                                                                                         |
+| reset()                   | 重置配置                                     | -                                                                                         |
+| resize()                  | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                                                                                         |
+| addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 当前插入的位置 'current','end'，默认为'current' |
+| insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                                            |
+| getPlayState()            | 获得当前播放状态                             |                                                                                           |
 
 - 注 1：push 和 add 方法已废弃，请使用 addDanmu 代替
 - 注 2：insert 跟 addDanmu 的区别在于，insert 不存储于内部变量，而是直接插入 DOM，适用于直播等场景
 
 ## Events
 
-| 事件名   | 说明                                           | 返回值                      |
-| :------- | :--------------------------------------------- | :-------------------------- |
-| list-end | 所有弹幕插入完毕                               | -                           |
-| play-end | 所有弹幕播放完成（已滚出屏幕）                 | index（最后一个弹幕的下标） |
-| dm-over  | 开启弹幕悬浮暂停时，当进入弹幕，暂停时触发     | 触发的弹幕对象元素          |
-| dm-out   | 开启弹幕悬浮暂停时，当离开弹幕，恢复滚动时触发 | 触发的弹幕对象元素          |
+| 事件名    | 说明                                           | 返回值                      |
+| :-------- | :--------------------------------------------- | :-------------------------- |
+| list-end  | 所有弹幕插入完毕                               | -                           |
+| play-end  | 所有弹幕播放完成（已滚出屏幕）                 | index（最后一个弹幕的下标） |
+| dm-over   | 开启弹幕悬浮暂停时，当进入弹幕，暂停时触发     | 触发的弹幕对象元素          |
+| dm-out    | 开启弹幕悬浮暂停时，当离开弹幕，恢复滚动时触发 | 触发的弹幕对象元素          |
+| dm-click  | 弹幕被点击时触发                               | {el, index, danmu, event}   |
+| dm-remove | 弹幕被移除时触发                               | {el, index, danmu}          |
+| error     | 发生错误时触发                                 | {message, code}             |
+
+## 性能监控模块
+
+vue-danmaku 提供了独立的性能监控模块，完全独立于主组件，用户可以根据需要自行导入使用：
+
+```js
+import {
+  createFpsMonitor,
+  createDanmakuPerformanceMonitor,
+  createDanmakuMonitor,
+  PERFORMANCE_CONSTANTS,
+} from 'vue-danmaku'
+
+// 创建FPS监控
+const fpsMonitor = createFpsMonitor(30, (data) => {
+  console.log(`FPS下降到${data.fps}，低于阈值${data.threshold}`)
+})
+fpsMonitor.start() // 开始监控
+fpsMonitor.stop() // 停止监控
+
+// 创建弹幕性能监控
+const performanceMonitor = createDanmakuPerformanceMonitor(100, (data) => {
+  console.log(data.message) // 弹幕数量超过阈值警告
+})
+performanceMonitor.checkPerformance(110) // 检查弹幕数量
+
+// 同时创建FPS和弹幕性能监控
+const monitor = createDanmakuMonitor({
+  fpsThreshold: 25,
+  warningThreshold: 150,
+  onFpsDrop: (data) => console.log(`FPS下降: ${data.fps}`),
+  onPerformanceWarning: (data) => console.log(`性能警告: ${data.message}`),
+})
+monitor.startAll() // 启动所有监控
+monitor.checkDanmakuCount(160) // 检查弹幕数量
+monitor.stopAll() // 停止所有监控
+```
+
+### 在组件中使用性能监控
+
+您可以在组件中结合使用 vue-danmaku 组件和性能监控模块：
+
+```vue
+<template>
+  <vue-danmaku ref="danmakuRef" v-model:danmus="danmus"></vue-danmaku>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import vueDanmaku, { createDanmakuMonitor } from 'vue-danmaku'
+
+const danmakuRef = ref(null)
+const danmus = ref(['弹幕1', '弹幕2', '弹幕3'])
+
+// 创建性能监控实例
+const monitor = createDanmakuMonitor({
+  fpsThreshold: 30,
+  warningThreshold: 100,
+  onFpsDrop: (data) => {
+    console.log(`FPS下降到${data.fps}`)
+  },
+  onPerformanceWarning: (data) => {
+    console.log(`性能警告: ${data.message}`)
+  },
+})
+
+onMounted(() => {
+  // 启动性能监控
+  monitor.startAll()
+
+  // 在添加大量弹幕后检查性能
+  const addManyDanmus = () => {
+    for (let i = 0; i < 150; i++) {
+      danmus.value.push(`大量弹幕${i}`)
+    }
+    // 手动检查弹幕数量
+    monitor.checkDanmakuCount(danmus.value.length)
+  }
+
+  // 例如，5秒后添加大量弹幕
+  setTimeout(addManyDanmus, 5000)
+})
+
+// 在组件销毁时停止监控
+onUnmounted(() => {
+  monitor.stopAll()
+})
+</script>
+```
 
 ## 讨论交流和 BUG 反馈
 
@@ -125,10 +219,11 @@ setup() {
 - 新增 addDanmu 方法，统一弹幕添加接口
 - 新增 performanceMode 参数，默认开启性能模式
 - 新增 zIndex 参数，默认 10
+- 新增多个事件：dm-click, dm-remove, error
+- 新增性能监控模块，可单独导入使用
 
 优化：
 
-- 优化 add 和 push 方法，内部调用 addDanmu 方法
 - 在移除弹幕时清理相关引用
 - 移除 useSlot 和文本模式，默认使用 slot 模式
 
@@ -136,6 +231,8 @@ setup() {
 
 - 移除以下参数： useSlot、fontSize、extraStyle
 - 移除 push 和 add 方法
+- 移除 fps-drop 和 performance-warning 事件
+- 移除组件内置的性能监控功能
 
 ### v1.6.1
 
