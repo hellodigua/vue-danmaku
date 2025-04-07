@@ -560,15 +560,54 @@ export default defineComponent({
     }
 
     function resize() {
+      const oldContainerWidth = containerWidth.value // 保存旧容器宽度用于计算进度比例
       initCore()
       const items = dmContainer.value.getElementsByClassName('dm')
 
       for (let i = 0; i < items.length; i++) {
         const el = items[i] as HTMLDivElement
+        const width = el.offsetWidth
 
-        el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + el.offsetWidth}px`)
-        el.style.left = `${containerWidth.value}px`
-        el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+        if (props.performanceMode) {
+          // 获取当前位置信息
+          const currentPosition = el.getBoundingClientRect().left
+          const containerLeft = container.value.getBoundingClientRect().left
+
+          // 计算已移动距离和总距离
+          const totalDistance = oldContainerWidth + width
+          const movedDistance = oldContainerWidth - (currentPosition - containerLeft)
+
+          // 计算进度比例
+          let progressRatio = movedDistance / totalDistance
+          progressRatio = Math.max(0, Math.min(1, progressRatio))
+
+          rafAnimation.cancelAnimation(el)
+
+          if (progressRatio >= 1) {
+            // 如果已经播放完成，直接触发结束事件
+            handleAnimationEnd(el)
+          } else {
+            const newStartX = containerWidth.value - (containerWidth.value + width) * progressRatio
+
+            el.style.left = `${containerWidth.value}px`
+            el.style.transform = `translateX(${newStartX - containerWidth.value}px)`
+
+            // 使用resumeAnimation函数继续动画
+            rafAnimation.resumeAnimation(
+              el,
+              width,
+              containerWidth.value,
+              danmu.speeds,
+              () => paused.value,
+              handleAnimationEnd
+            )
+          }
+        } else {
+          // CSS动画模式下的处理
+          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
+          el.style.left = `${containerWidth.value}px`
+          el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+        }
       }
     }
 
