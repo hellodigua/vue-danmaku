@@ -26,17 +26,23 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku v-model:danmus="danmus" loop style="height:100px; width:300px;">
+  <vue-danmaku v-model:danmus="danmus" style="height: 100px;">
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
   </vue-danmaku>
 </template>
 
-<script setup>
+<script>
 import vueDanmaku from 'vue-danmaku'
 
-const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
+export default {
+  setup(props) {
+    const danmus = ref([{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...])
+
+    return { danmus }
+  },
+}
 </script>
 ```
 
@@ -63,7 +69,7 @@ const danmus = ref(['danmu1', 'danmu2', 'danmu3', '...'])
 - 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
 - 注 4：性能模式默认使用 requestAnimationFrame 代替 CSS 动画，在浏览器不开启硬件加速时，FPS 会非常稳定
 
-## 内置方法
+## Methods
 
 通过以下方式调用：
 
@@ -77,18 +83,18 @@ setup() {
 }
 ```
 
-| 方法名       | 说明                                         | 参数                                                |
-| :----------- | :------------------------------------------- | :-------------------------------------------------- | ---------------------- |
-| play         | 开始/继续播放                                | -                                                   |
-| pause        | 暂停弹幕播放                                 | -                                                   |
-| stop         | 停止播放并清空弹幕                           | -                                                   |
-| show         | 弹幕显示                                     | -                                                   |
-| hide         | 弹幕隐藏                                     | -                                                   |
-| reset        | 重置配置                                     | -                                                   |
-| resize       | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                                                   |
-| addDanmu     | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 'current' | 'end'，默认为'current' |
-| insert       | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                      |
-| getPlayState | 获得当前播放状态                             |                                                     |
+| 方法名                    | 说明                                         | 参数                                                                       |
+| :------------------------ | :------------------------------------------- | :------------------------------------------------------------------------- |
+| play()                    | 开始/继续播放                                | -                                                                          |
+| pause()                   | 暂停弹幕播放                                 | -                                                                          |
+| stop()                    | 停止播放并清空弹幕                           | -                                                                          |
+| show()                    | 弹幕显示                                     | -                                                                          |
+| hide()                    | 弹幕隐藏                                     | -                                                                          |
+| reset()                   | 重置配置                                     | -                                                                          |
+| resize()                  | 容器尺寸改变时重新计算滚动距离（需手动调用） | -                                                                          |
+| addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 'current','end'，默认为'current' |
+| insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                             |
+| getPlayState()            | 获得当前播放状态                             |                                                                            |
 
 - 注 1：push 和 add 方法已废弃，请使用 addDanmu 代替
 - 注 2：insert 跟 addDanmu 的区别在于，insert 不存储于内部变量，而是直接插入 DOM，适用于直播等场景
@@ -101,32 +107,6 @@ setup() {
 | play-end | 所有弹幕播放完成（已滚出屏幕）                 | index（最后一个弹幕的下标） |
 | dm-over  | 开启弹幕悬浮暂停时，当进入弹幕，暂停时触发     | 触发的弹幕对象元素          |
 | dm-out   | 开启弹幕悬浮暂停时，当离开弹幕，恢复滚动时触发 | 触发的弹幕对象元素          |
-
-## Slot
-
-如果你有自定义弹幕结构与样式的需求，你可以传入任意结构的对象并自己写内部样式。
-
-```vue
-<template>
-  <vue-danmaku ref="danmaku" v-model:danmus="danmus" loop :channels="5">
-    <template v-slot:dm="{ index, danmu }">
-      <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
-    </template>
-  </vue-danmaku>
-</template>
-
-<script>
-import vueDanmaku from 'vue-danmaku'
-
-export default {
-  setup(props) {
-    const danmus = ref([{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...])
-
-    return { danmus }
-  },
-}
-</script>
-```
 
 ## 讨论交流和 BUG 反馈
 
