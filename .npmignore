@@ -1,2 +1,26 @@
+# 构建和发布相关
 dist/demo.html
+build/
+scripts/
+.env.package
+rollup.config.js
+vite.config.ts
+
+# 源代码中的示例和资源文件
+src/Demo.vue
+src/assets/
+src/main.ts
+
+# 配置文件
+.prettierrc.cjs
+.editorconfig
+tsconfig.json
+index.html
+
+# 文档和示例
+QA.md
+.github/
+
 .DS_Store
+.vscode/
+!.vscode/settings.json

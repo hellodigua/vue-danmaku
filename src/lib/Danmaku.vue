@@ -19,7 +19,7 @@ import {
   watch,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
-import * as rafAnimation from './animation/rafAnimation'
+import * as rafAnimation from './utils/rafAnimation'
 
 /**
  * 自定义弹幕
@@ -67,39 +67,11 @@ export default defineComponent({
       default: false,
     },
     /**
-     * 弹幕刷新频率(ms)
-     */
-    debounce: {
-      type: Number,
-      default: 100,
-    },
-    /**
-     * 弹幕速度（像素/秒）
-     */
-    speeds: {
-      type: Number,
-      default: 200,
-    },
-    /**
      * 是否开启随机轨道注入弹幕
      */
     randomChannel: {
       type: Boolean,
       default: false,
-    },
-    /**
-     * 弹幕垂直间距
-     */
-    top: {
-      type: Number,
-      default: 4,
-    },
-    /**
-     * 弹幕水平间距
-     */
-    right: {
-      type: Number,
-      default: 0,
     },
     /**
      * 是否开启悬浮暂停
@@ -116,6 +88,34 @@ export default defineComponent({
       default: true,
     },
     /**
+     * 弹幕刷新频率(ms)
+     */
+    debounce: {
+      type: Number,
+      default: 100,
+    },
+    /**
+     * 弹幕速度（像素/秒）
+     */
+    speeds: {
+      type: Number,
+      default: 200,
+    },
+    /**
+     * 弹幕垂直间距
+     */
+    top: {
+      type: Number,
+      default: 4,
+    },
+    /**
+     * 弹幕水平间距
+     */
+    right: {
+      type: Number,
+      default: 0,
+    },
+    /**
      * 弹幕默认层级
      */
     zIndex: {
@@ -123,8 +123,8 @@ export default defineComponent({
       default: 10,
     },
   },
-  emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'update:danmus'],
-  setup(props, { emit, slots }) {
+  emits: ['update:danmus', 'list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
+  setup(props, { emit, slots, expose }) {
     // 容器
     let container = ref<HTMLDivElement>(document.createElement('div'))
     let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
@@ -201,7 +201,9 @@ export default defineComponent({
       containerWidth.value = container.value.offsetWidth
       containerHeight.value = container.value.offsetHeight
       if (containerWidth.value === 0 || containerHeight.value === 0) {
-        throw new Error('获取不到容器宽高')
+        const errorMsg = '获取不到容器宽高'
+        emit('error', { message: errorMsg, code: 'CONTAINER_SIZE_ERROR' })
+        console.error(`[vue-danmaku] ${errorMsg}`)
       }
     }
 
@@ -246,7 +248,7 @@ export default defineComponent({
     function insert(dm?: Danmu) {
       const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
       const _danmu = dm || danmuList.value[_index]
-      const el = getSlotComponent(_danmu, _index).$el
+      const el = getDmComponent(_danmu, _index).$el
       el.classList.add('dm')
       dmContainer.value.appendChild(el)
       el.style.opacity = '0'
@@ -273,7 +275,7 @@ export default defineComponent({
      * 获取弹幕组件实例
      * @returns 组件挂载结果
      */
-    function getSlotComponent(
+    function getDmComponent(
       _danmu: Danmu,
       _index: number
     ): {
@@ -298,6 +300,73 @@ export default defineComponent({
       ele.$el.__vueApp = DmComponent
 
       return ele
+    }
+
+    /**
+     * 处理弹幕元素的样式、事件等
+     */
+    function processElement(el: HTMLDivElement, _index: number): void {
+      let channelIndex = getChannelIndex(el)
+      if (channelIndex >= 0) {
+        const width = el.offsetWidth
+        const height = danmu.height
+        el.dataset.index = `${_index}`
+        el.dataset.channel = channelIndex.toString()
+        el.style.opacity = '1'
+        el.style.top = channelIndex * (height + danmu.top) + 'px'
+        el.style.width = width + danmu.right + 'px'
+        // 设置默认层级
+        el.style.zIndex = props.zIndex.toString()
+
+        // 添加点击事件监听器
+        const clickHandler = (event: MouseEvent) => {
+          emit('dm-click', { el, index: _index, danmu: danmuList.value[_index], event })
+        }
+        el.addEventListener('click', clickHandler)
+        el._clickHandler = clickHandler
+
+        if (props.performanceMode) {
+          // 使用新的动画模块启动动画
+          rafAnimation.startAnimation(
+            el,
+            width,
+            containerWidth.value,
+            danmu.speeds,
+            () => paused.value,
+            handleAnimationEnd
+          )
+        } else {
+          // 使用CSS动画
+          el.classList.add('move')
+          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
+          el.style.left = `${containerWidth.value}px`
+          el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+
+          const onAnimationEnd = () => {
+            if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
+              emit('play-end', el.dataset.index)
+            }
+
+            // 清理元素前，移除所有事件监听器
+            cleanupElement(el)
+
+            if (dmContainer.value && el.parentNode === dmContainer.value) {
+              dmContainer.value.removeChild(el)
+            }
+          }
+
+          el._animationEndHandler = onAnimationEnd
+          el.addEventListener('animationend', onAnimationEnd)
+        }
+
+        index.value++
+      } else {
+        // 清理不能放入轨道的元素
+        cleanupElement(el)
+        if (dmContainer.value && el.parentNode === dmContainer.value) {
+          dmContainer.value.removeChild(el)
+        }
+      }
     }
 
     function getChannelIndex(el: HTMLDivElement): number {
@@ -380,7 +449,6 @@ export default defineComponent({
         dmContainer.value.innerHTML = ''
       }
 
-      // 性能模式下取消所有动画帧
       if (props.performanceMode) {
         rafAnimation.cancelAllAnimations()
       }
@@ -397,7 +465,6 @@ export default defineComponent({
     function pause(): void {
       paused.value = true
 
-      // 在性能模式下，暂停所有动画
       if (props.performanceMode) {
         rafAnimation.pauseAllAnimations()
       }
@@ -435,10 +502,14 @@ export default defineComponent({
         emit('play-end', el.dataset.index)
       }
 
+      // 触发弹幕移除事件
+      const index = Number(el.dataset.index)
+      emit('dm-remove', { el, index, danmu: index >= 0 ? danmuList.value[index] : null })
+
       // 清理元素
       cleanupElement(el)
 
-      if (dmContainer.value) {
+      if (dmContainer.value && el.parentNode === dmContainer.value) {
         dmContainer.value.removeChild(el)
       }
     }
@@ -468,22 +539,6 @@ export default defineComponent({
     }
 
     /**
-     * 添加弹幕（插入到当前播放的弹幕位置）
-     * @deprecated 请使用 addDanmu(danmu, 'current') 代替
-     */
-    function add(danmu: Danmu): number {
-      return addDanmu(danmu, 'current')
-    }
-
-    /**
-     * 添加弹幕（插入到弹幕末尾）
-     * @deprecated 请使用 addDanmu(danmu, 'end') 代替
-     */
-    function push(danmu: Danmu): number {
-      return addDanmu(danmu, 'end')
-    }
-
-    /**
      * 获取播放状态
      */
     function getPlayState(): boolean {
@@ -505,15 +560,54 @@ export default defineComponent({
     }
 
     function resize() {
+      const oldContainerWidth = containerWidth.value // 保存旧容器宽度用于计算进度比例
       initCore()
       const items = dmContainer.value.getElementsByClassName('dm')
 
       for (let i = 0; i < items.length; i++) {
         const el = items[i] as HTMLDivElement
+        const width = el.offsetWidth
 
-        el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + el.offsetWidth}px`)
-        el.style.left = `${containerWidth.value}px`
-        el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+        if (props.performanceMode) {
+          // 获取当前位置信息
+          const currentPosition = el.getBoundingClientRect().left
+          const containerLeft = container.value.getBoundingClientRect().left
+
+          // 计算已移动距离和总距离
+          const totalDistance = oldContainerWidth + width
+          const movedDistance = oldContainerWidth - (currentPosition - containerLeft)
+
+          // 计算进度比例
+          let progressRatio = movedDistance / totalDistance
+          progressRatio = Math.max(0, Math.min(1, progressRatio))
+
+          rafAnimation.cancelAnimation(el)
+
+          if (progressRatio >= 1) {
+            // 如果已经播放完成，直接触发结束事件
+            handleAnimationEnd(el)
+          } else {
+            const newStartX = containerWidth.value - (containerWidth.value + width) * progressRatio
+
+            el.style.left = `${containerWidth.value}px`
+            el.style.transform = `translateX(${newStartX - containerWidth.value}px)`
+
+            // 使用resumeAnimation函数继续动画
+            rafAnimation.resumeAnimation(
+              el,
+              width,
+              containerWidth.value,
+              danmu.speeds,
+              () => paused.value,
+              handleAnimationEnd
+            )
+          }
+        } else {
+          // CSS动画模式下的处理
+          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
+          el.style.left = `${containerWidth.value}px`
+          el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
+        }
       }
     }
 
@@ -536,10 +630,8 @@ export default defineComponent({
       target.style.zIndex = (props.zIndex + 1).toString()
 
       if (props.performanceMode) {
-        // 性能模式下，暂停单个弹幕的动画
         rafAnimation.cancelAnimation(target)
       } else {
-        // CSS动画模式下，添加暂停类
         target.classList.add('pause')
       }
 
@@ -557,14 +649,22 @@ export default defineComponent({
 
       emit('dm-out', { el: target })
 
+      // 恢复单个目标元素
+      resumeSuspendedDanmu(target)
+
+      // 恢复所有暂停的弹幕
+      suspendDanmus.forEach(resumeSuspendedDanmu)
+      suspendDanmus = []
+    }
+
+    function resumeSuspendedDanmu(element: HTMLElement) {
       // 恢复弹幕的默认层级
-      target.style.zIndex = props.zIndex.toString()
+      element.style.zIndex = props.zIndex.toString()
 
       if (props.performanceMode) {
-        // 性能模式下，恢复单个弹幕的动画
-        const width = target.offsetWidth
+        const width = element.offsetWidth
         rafAnimation.resumeAnimation(
-          target as HTMLDivElement,
+          element as HTMLDivElement,
           width,
           containerWidth.value,
           danmu.speeds,
@@ -572,44 +672,26 @@ export default defineComponent({
           handleAnimationEnd
         )
       } else {
-        // CSS动画模式下，移除暂停类
-        target.classList.remove('pause')
+        element.classList.remove('pause')
       }
-
-      // 容错处理
-      suspendDanmus.forEach((item) => {
-        // 恢复所有弹幕的默认层级
-        item.style.zIndex = props.zIndex.toString()
-
-        if (props.performanceMode) {
-          const width = item.offsetWidth
-          rafAnimation.resumeAnimation(
-            item as HTMLDivElement,
-            width,
-            containerWidth.value,
-            danmu.speeds,
-            () => paused.value,
-            handleAnimationEnd
-          )
-        } else {
-          item.classList.remove('pause')
-        }
-      })
-      suspendDanmus = []
     }
 
     // 清理元素的所有事件监听器和引用
     function cleanupElement(el: HTMLDivElement) {
       // 处理requestAnimationFrame动画
       if (props.performanceMode) {
-        // 取消该元素的动画帧
         rafAnimation.cancelAnimation(el)
       } else {
-        // 移除animationend事件监听器
         if (el._animationEndHandler) {
           el.removeEventListener('animationend', el._animationEndHandler)
           delete el._animationEndHandler
         }
+      }
+
+      // 移除点击事件监听器
+      if (el._clickHandler) {
+        el.removeEventListener('click', el._clickHandler)
+        delete el._clickHandler
       }
 
       // 从轨道管理中移除对该元素的引用
@@ -622,74 +704,17 @@ export default defineComponent({
       }
 
       // 卸载Vue组件实例
-      if (el._vueInstance && el._vueInstance.instance) {
-        // 尝试使用unmount方法卸载组件实例
+      if (el.__vueApp) {
         try {
-          el._vueInstance.instance.ctx.unmount && el._vueInstance.instance.ctx.unmount()
-        } catch (e: unknown) {
-          console.warn('Failed to unmount component instance', e)
+          el.__vueApp.unmount()
+        } catch (e) {
+          console.warn('卸载组件实例失败', e)
         }
-        delete el._vueInstance
+        delete el.__vueApp
       }
-    }
-
-    /**
-     * 处理弹幕元素的样式、事件等
-     */
-    function processElement(el: HTMLDivElement, _index: number): void {
-      let channelIndex = getChannelIndex(el)
-      if (channelIndex >= 0) {
-        const width = el.offsetWidth
-        const height = danmu.height
-        el.dataset.index = `${_index}`
-        el.dataset.channel = channelIndex.toString()
-        el.style.opacity = '1'
-        el.style.top = channelIndex * (height + danmu.top) + 'px'
-        el.style.width = width + danmu.right + 'px'
-        // 设置默认层级
-        el.style.zIndex = props.zIndex.toString()
-
-        if (props.performanceMode) {
-          // 使用新的动画模块启动动画
-          rafAnimation.startAnimation(
-            el,
-            width,
-            containerWidth.value,
-            danmu.speeds,
-            () => paused.value,
-            handleAnimationEnd
-          )
-        } else {
-          // 使用CSS动画
-          el.classList.add('move')
-          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
-          el.style.left = `${containerWidth.value}px`
-          el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
-
-          const onAnimationEnd = () => {
-            if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
-              emit('play-end', el.dataset.index)
-            }
-
-            // 清理元素前，移除所有事件监听器
-            cleanupElement(el)
-
-            if (dmContainer.value) {
-              dmContainer.value.removeChild(el)
-            }
-          }
-
-          el._animationEndHandler = onAnimationEnd
-          el.addEventListener('animationend', onAnimationEnd)
-        }
-
-        index.value++
-      } else {
-        // 清理不能放入轨道的元素
-        cleanupElement(el)
-        if (dmContainer.value) {
-          dmContainer.value.removeChild(el)
-        }
+      // 删除_vueInstance引用，简化清理流程
+      if (el._vueInstance) {
+        delete el._vueInstance
       }
     }
 
@@ -712,8 +737,6 @@ export default defineComponent({
       show,
       hide,
       reset,
-      add,
-      push,
       addDanmu,
       insert,
     }

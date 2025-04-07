@@ -1,7 +1,7 @@
 import vue from 'rollup-plugin-vue'
 import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
-import { terser } from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser'
 import path from 'path'
 
 let tsconfigOverride = {
@@ -11,7 +11,7 @@ let tsconfigOverride = {
     rootDir: 'src',
     declarationDir: 'dist/typings',
   },
-  include: ['src/lib/**/*'],
+  include: ['src/lib/**/*', 'src/**/*.vue', 'src/vue-shim.d.ts'],
 }
 
 export default [
@@ -26,7 +26,7 @@ export default [
       postcss({
         plugins: [],
       }),
-      terser()
+      terser(),
     ],
   },
   {
@@ -37,6 +37,7 @@ export default [
       globals: {
         vue: 'Vue',
       },
+      exports: 'named',
     },
     plugins: [
       typescript({ tsconfigOverride, useTsconfigDeclarationDir: true }),
@@ -47,11 +48,11 @@ export default [
         inject: false,
         plugins: [],
       }),
-      terser()
+      terser(),
     ],
   },
 ].map((v) => ({
   ...v,
-  input: 'src/lib/Danmaku.vue',
+  input: 'src/lib/index.ts',
   external: ['vue'],
 }))
