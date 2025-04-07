@@ -19,7 +19,7 @@ import {
   watch,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
-import * as rafAnimation from './animation/rafAnimation'
+import * as rafAnimation from './utils/rafAnimation'
 
 /**
  * 自定义弹幕
@@ -607,6 +607,7 @@ export default defineComponent({
         el.removeEventListener('click', el._clickHandler)
         delete el._clickHandler
       }
+
       // 从轨道管理中移除对该元素的引用
       const channelIndex = el.dataset.channel ? parseInt(el.dataset.channel) : -1
       if (channelIndex >= 0 && danChannel.value[channelIndex]) {
