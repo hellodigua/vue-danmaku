@@ -350,7 +350,7 @@ export default defineComponent({
             // 清理元素前，移除所有事件监听器
             cleanupElement(el)
 
-            if (dmContainer.value) {
+            if (dmContainer.value && el.parentNode === dmContainer.value) {
               dmContainer.value.removeChild(el)
             }
           }
@@ -363,7 +363,7 @@ export default defineComponent({
       } else {
         // 清理不能放入轨道的元素
         cleanupElement(el)
-        if (dmContainer.value) {
+        if (dmContainer.value && el.parentNode === dmContainer.value) {
           dmContainer.value.removeChild(el)
         }
       }
@@ -509,7 +509,7 @@ export default defineComponent({
       // 清理元素
       cleanupElement(el)
 
-      if (dmContainer.value) {
+      if (dmContainer.value && el.parentNode === dmContainer.value) {
         dmContainer.value.removeChild(el)
       }
     }
