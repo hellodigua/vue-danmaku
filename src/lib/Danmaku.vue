@@ -123,8 +123,8 @@ export default defineComponent({
       default: 10,
     },
   },
-  emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'update:danmus'],
-  setup(props, { emit, slots }) {
+  emits: ['update:danmus', 'list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
+  setup(props, { emit, slots, expose }) {
     // 容器
     let container = ref<HTMLDivElement>(document.createElement('div'))
     let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
@@ -201,7 +201,9 @@ export default defineComponent({
       containerWidth.value = container.value.offsetWidth
       containerHeight.value = container.value.offsetHeight
       if (containerWidth.value === 0 || containerHeight.value === 0) {
-        throw new Error('获取不到容器宽高')
+        const errorMsg = '获取不到容器宽高'
+        emit('error', { message: errorMsg, code: 'CONTAINER_SIZE_ERROR' })
+        console.error(`[vue-danmaku] ${errorMsg}`)
       }
     }
 
@@ -435,6 +437,10 @@ export default defineComponent({
         emit('play-end', el.dataset.index)
       }
 
+      // 触发弹幕移除事件
+      const index = Number(el.dataset.index)
+      emit('dm-remove', { el, index, danmu: index >= 0 ? danmuList.value[index] : null })
+
       // 清理元素
       cleanupElement(el)
 
@@ -465,22 +471,6 @@ export default defineComponent({
         danmuList.value.push(danmu)
         return danmuList.value.length - 1
       }
-    }
-
-    /**
-     * 添加弹幕（插入到当前播放的弹幕位置）
-     * @deprecated 请使用 addDanmu(danmu, 'current') 代替
-     */
-    function add(danmu: Danmu): number {
-      return addDanmu(danmu, 'current')
-    }
-
-    /**
-     * 添加弹幕（插入到弹幕末尾）
-     * @deprecated 请使用 addDanmu(danmu, 'end') 代替
-     */
-    function push(danmu: Danmu): number {
-      return addDanmu(danmu, 'end')
     }
 
     /**
@@ -612,6 +602,11 @@ export default defineComponent({
         }
       }
 
+      // 移除点击事件监听器
+      if (el._clickHandler) {
+        el.removeEventListener('click', el._clickHandler)
+        delete el._clickHandler
+      }
       // 从轨道管理中移除对该元素的引用
       const channelIndex = el.dataset.channel ? parseInt(el.dataset.channel) : -1
       if (channelIndex >= 0 && danChannel.value[channelIndex]) {
@@ -649,6 +644,12 @@ export default defineComponent({
         // 设置默认层级
         el.style.zIndex = props.zIndex.toString()
 
+        // 添加点击事件监听器
+        const clickHandler = (event: MouseEvent) => {
+          emit('dm-click', { el, index: _index, danmu: danmuList.value[_index], event })
+        }
+        el.addEventListener('click', clickHandler)
+        el._clickHandler = clickHandler
         if (props.performanceMode) {
           // 使用新的动画模块启动动画
           rafAnimation.startAnimation(
@@ -712,8 +713,6 @@ export default defineComponent({
       show,
       hide,
       reset,
-      add,
-      push,
       addDanmu,
       insert,
     }
