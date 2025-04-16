@@ -20,5 +20,5 @@ yarn-error.log*
 !.vscode/settings.json
 
 # Project
-docs/
 dist/
+docs/.vitepress/cache/

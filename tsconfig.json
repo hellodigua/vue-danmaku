@@ -1,13 +1,19 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     // this enables stricter inference for data properties on `this`
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
     "allowJs": true,
-    "declaration": true
+    "declaration": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"]
 }
