@@ -1,7 +1,7 @@
 <script lang="ts">
 export default {
   name: 'Demo1',
-  title: '1基本1',
+  title: '基本示例',
 }
 </script>
 <script setup lang="ts">
@@ -10,7 +10,8 @@ import VueDanmaku from 'vue-danmaku'
 
 <template>
   <div>
-    <div>demo1</div>
-    <div>demo1</div>
+    <vue-danmaku :danmus="['弹幕', '弹幕', '弹幕']" style="height: 300px" loop :channels="3" autoplay>
+      <template #dm="{ danmu, index }"> {{ danmu }} {{ index }} </template>
+    </vue-danmaku>
   </div>
 </template>

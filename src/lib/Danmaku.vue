@@ -747,6 +747,8 @@ export default defineComponent({
 .vue-danmaku {
   position: relative;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
   .danmus {
     position: absolute;
     left: 0;

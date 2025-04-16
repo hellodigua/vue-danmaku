@@ -5,7 +5,7 @@ import { mdPlugin } from './plugins/demo'
 export default defineConfig({
   title: 'vue-danmaku',
   description: '基于Vue3的弹幕交互组件',
-  base: '/',
+  base: '/vue-danmaku-docs/',
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: 'favicon.ico' }],
     ['link', { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }],

@@ -26,3 +26,45 @@ features:
   - title: 😋 TypeScript支持
     details: 完整的类型定义，提供类型安全和更好的开发体验
 ---
+
+<script setup lang="ts">
+import { ref, onMounted, h, createApp } from 'vue'
+import VueDanmaku from 'vue-danmaku'
+
+const danmus = ref(['这是一条自定义样式的弹幕', '可以设置不同的颜色和样式', '弹幕速度也可以调整'])
+let danmakuInstance = null
+
+onMounted(() => {
+  // 创建弹幕应用实例
+  const app = document.createElement('div')
+  app.style.cssText = 'width: 500px; height: 500px; position: fixed; z-index: 0; left: 20%; top: 20%; pointer-events: none;'
+  document.querySelector('.VPHome')?.appendChild(app)
+
+  // 使用createApp挂载弹幕组件
+  danmakuInstance = createApp({
+    setup() {
+      return () => h(VueDanmaku, {
+        danmus: danmus.value,
+        loop: true,
+        speeds: 150,
+        channels: 0,  // 自动填满容器
+        randomChannel: true,
+      }, {
+        // 使用插槽定义弹幕内容
+        dm: ({danmu, index}) => h('div', {
+          style: {
+            padding: '4px 8px',
+            backgroundColor: index % 2 === 0 ? 'rgba(54, 54, 54, 0.7)' : 'rgba(65, 105, 225, 0.7)',
+            color: 'white',
+            borderRadius: '4px',
+            fontSize: '14px'
+          }
+        }, danmu)
+      })
+    }
+  })
+
+  // danmakuInstance.mount(app)
+})
+
+</script>
