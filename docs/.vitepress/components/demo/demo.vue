@@ -60,10 +60,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import exampleVue from './example.vue'
 import sourceCodeVue from './source-code.vue'
-import { useClipboard } from '@vueuse/core'
 import { modules } from '..'
 export interface DemoProps {
   path: string
@@ -73,9 +72,8 @@ export interface DemoProps {
 const props = defineProps<DemoProps>()
 
 const sourceVisible = ref(false)
-const { copy, isSupported } = useClipboard({
-  source: decodeURIComponent(props.source),
-})
+// 使用原生方法判断剪贴板 API 是否可用
+const isClipboardSupported = ref(!!navigator.clipboard && !!navigator.clipboard.writeText)
 
 const examples = computed(() => {
   let examples: any[] = []
@@ -108,13 +106,13 @@ const showMessage = (type: string, content: string) => {
 }
 
 async function copyCode() {
-  if (!isSupported) {
-    showMessage('error', '复制失败')
+  if (!isClipboardSupported.value) {
+    showMessage('error', '复制失败：浏览器不支持剪贴板 API')
     return
   }
 
   try {
-    await copy()
+    await navigator.clipboard.writeText(decodeURIComponent(props.source))
     showMessage('success', '复制成功')
   } catch (e: any) {
     showMessage('error', e.message)

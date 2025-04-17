@@ -17,7 +17,6 @@ async function devDocs() {
   const url = `http://localhost:3080/`
 
   logger.info(`Server is listening at ${url}`)
-  logger.info(`Server is ready. Copy docs...`)
   docsChangeWatcher()
 
   // 监听服务器关闭事件

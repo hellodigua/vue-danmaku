@@ -8,11 +8,10 @@
 
 简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/main/README_en.md)
 
-Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
+文档： [https://hellodigua.github.io/vue-danmaku-docs/](https://hellodigua.github.io/vue-danmaku-docs/)
 
-[Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/master)
-
-**Tips: 2.0.0 版本开始，vue-danmaku 不再支持 Vue2 项目使用，仅支持 Vue3**
+> [!WARNING]
+> 2.0.0 版本开始，vue-danmaku 不再支持 Vue2 项目使用，仅支持 Vue3，如需使用 Vue2 版本，请移步至 [Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/vue2)
 
 ## Preview
 
