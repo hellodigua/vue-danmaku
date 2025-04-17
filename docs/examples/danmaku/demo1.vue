@@ -10,7 +10,7 @@ import VueDanmaku from 'vue-danmaku'
 
 <template>
   <div>
-    <vue-danmaku :danmus="['弹幕', '弹幕', '弹幕']" style="height: 300px" loop :channels="3" autoplay>
+    <vue-danmaku :danmus="['弹幕', '弹幕', '弹幕']" loop style="height: 300px">
       <template #dm="{ danmu, index }"> {{ danmu }} {{ index }} </template>
     </vue-danmaku>
   </div>

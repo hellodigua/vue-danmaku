@@ -67,6 +67,13 @@ export default defineComponent({
       default: false,
     },
     /**
+     * 循环模式下是否避免重复弹幕
+     */
+    loopOnly: {
+      type: Boolean,
+      default: false,
+    },
+    /**
      * 是否开启随机轨道注入弹幕
      */
     randomChannel: {
@@ -139,6 +146,8 @@ export default defineComponent({
     const paused = ref(false)
     const danChannel = ref<DanChannel>({})
     const danmuList = ref<Danmu[]>([...props.danmus])
+    // 存储当前屏幕上的弹幕索引值
+    const activeIndexes = ref<Set<number>>(new Set())
 
     watch(
       () => props.danmus,
@@ -158,8 +167,6 @@ export default defineComponent({
 
     const danmaku: DanmakuItem = reactive({
       channels: computed(() => props.channels || calcChannels.value),
-      autoplay: computed(() => props.autoplay),
-      loop: computed(() => props.loop),
       debounce: computed(() => props.debounce),
       randomChannel: computed(() => props.randomChannel),
     })
@@ -192,7 +199,7 @@ export default defineComponent({
     function init() {
       initCore()
       props.isSuspend && initSuspendEvents()
-      if (danmaku.autoplay) {
+      if (props.autoplay) {
         play()
       }
     }
@@ -227,11 +234,15 @@ export default defineComponent({
         if (index.value > danmuList.value.length - 1) {
           const screenDanmus = dmContainer.value.children.length
 
-          if (danmaku.loop) {
+          if (props.loop) {
             if (screenDanmus < index.value) {
               // 一轮弹幕插入完毕
               emit('list-end')
               index.value = 0
+              // 清空活跃索引记录
+              if (props.loopOnly) {
+                activeIndexes.value.clear()
+              }
             }
             insert()
           }
@@ -242,11 +253,30 @@ export default defineComponent({
     }
 
     /**
+     * 检查弹幕是否可以插入（用于loop-only模式）
+     * @param _index 弹幕索引
+     * @returns 是否可以插入弹幕
+     */
+    function canInsertDanmu(_index: number): boolean {
+      // 在loop-only模式下，检查索引是否已经在屏幕上
+      if (props.loop && props.loopOnly) {
+        return !activeIndexes.value.has(_index)
+      }
+      return true
+    }
+
+    /**
      * 插入弹幕（也暴露到外部，允许外部直接执行绘制弹幕方法）
      * @param {Danmu} dm 外部定义的弹幕
      */
     function insert(dm?: Danmu) {
-      const _index = danmaku.loop ? index.value % danmuList.value.length : index.value
+      const _index = props.loop ? index.value % danmuList.value.length : index.value
+
+      // 检查在loop-only模式下是否可以插入当前弹幕
+      if (!canInsertDanmu(_index)) {
+        return
+      }
+
       const _danmu = dm || danmuList.value[_index]
       const el = getDmComponent(_danmu, _index).$el
       el.classList.add('dm')
@@ -325,6 +355,11 @@ export default defineComponent({
         el.addEventListener('click', clickHandler)
         el._clickHandler = clickHandler
 
+        // 在loop-only模式下，记录该弹幕索引为活跃状态
+        if (props.loop && props.loopOnly) {
+          activeIndexes.value.add(_index)
+        }
+
         if (props.performanceMode) {
           // 使用新的动画模块启动动画
           rafAnimation.startAnimation(
@@ -343,9 +378,17 @@ export default defineComponent({
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
 
           const onAnimationEnd = () => {
-            if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
+            if (Number(el.dataset.index) === danmuList.value.length - 1 && !props.loop) {
               emit('play-end', el.dataset.index)
             }
+
+            const dmIndex = Number(el.dataset.index)
+            if (props.loop && props.loopOnly && dmIndex >= 0) {
+              activeIndexes.value.delete(dmIndex)
+            }
+
+            // 触发弹幕移除事件
+            emit('dm-remove', { el, index: dmIndex, danmu: dmIndex >= 0 ? danmuList.value[dmIndex] : null })
 
             // 清理元素前，移除所有事件监听器
             cleanupElement(el)
@@ -425,6 +468,7 @@ export default defineComponent({
     function clear() {
       clearTimer()
       index.value = 0
+      activeIndexes.value.clear()
     }
 
     /**
@@ -432,6 +476,7 @@ export default defineComponent({
      */
     function reset() {
       danmuHeight.value = 0
+      activeIndexes.value.clear()
       init()
     }
 
@@ -456,6 +501,7 @@ export default defineComponent({
       danChannel.value = {}
       paused.value = true
       hidden.value = false
+      activeIndexes.value.clear()
       clear()
     }
 
@@ -498,8 +544,12 @@ export default defineComponent({
      * 处理动画结束事件
      */
     function handleAnimationEnd(el: HTMLDivElement) {
-      if (Number(el.dataset.index) === danmuList.value.length - 1 && !danmaku.loop) {
+      if (Number(el.dataset.index) === danmuList.value.length - 1 && !props.loop) {
         emit('play-end', el.dataset.index)
+      }
+
+      if (props.loop && props.loopOnly && index >= 0) {
+        activeIndexes.value.delete(index)
       }
 
       // 触发弹幕移除事件
