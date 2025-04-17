@@ -1,0 +1,17 @@
+:root {
+  --vp-c-brand-1: #3da968;
+  --vp-c-brand-2: #34965d;
+  --vp-c-brand-3: #2d8451;
+  --vp-c-sponsor: #20568b;
+  --vp-vue: #26a069;
+  --vitest-c-sponsor-hover: #1d4b7b;
+}
+
+.dark {
+  --vp-c-brand-1: #5fc393;
+  --vp-c-brand-2: #57b988;
+  --vp-c-brand-3: #50ae7e;
+  --vp-c-sponsor: #4b85b5;
+  --vitest-c-sponsor-hover: #4078a4;
+  --vp-button-brand-bg: var(--vp-vue);
+}

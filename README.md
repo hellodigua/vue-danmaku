@@ -11,7 +11,7 @@
 文档： [https://hellodigua.github.io/vue-danmaku-docs/](https://hellodigua.github.io/vue-danmaku-docs/)
 
 > [!WARNING]
-> 2.0.0 版本开始，vue-danmaku 不再支持 Vue2 项目使用，仅支持 Vue3，如需使用 Vue2 版本，请移步至 [Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/vue2)
+> 2.0.0 版本开始，vue-danmaku 仅支持 Vue3，如需使用 Vue2 版本，请移步至 [Vue2 版本文档](https://github.com/hellodigua/vue-danmaku/tree/vue2)
 
 ## Preview
 

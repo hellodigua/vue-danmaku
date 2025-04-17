@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: 开始使用
-      link: /zh-CN/components/quick-start.html
+      link: /guide/quick-start.html
     - theme: alt
       text: 查看GitHub
       link: https://github.com/hellodigua/vue-danmaku

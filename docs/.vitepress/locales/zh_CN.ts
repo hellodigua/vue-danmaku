@@ -1,29 +1,28 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  lang: 'zh-CN',
   description: '基于 Vue 的弹幕交互组件',
-
   themeConfig: {
     nav: [
-      { text: '配置项', link: '/zh-CN/components/config' },
-      { text: 'Demo', link: '/zh-CN/components/demo' },
+      { text: '指南', link: '/guide/quick-start' },
+      { text: '示例Demo', link: '/guide/demo-base' },
+      { text: 'Vue2版本', link: 'https://github.com/hellodigua/vue-danmaku/tree/vue2' },
     ],
     sidebar: {
-      '/zh-CN/components/': [
+      '/guide/': [
         {
           text: '使用',
           items: [
-            { text: '快速开始', link: '/zh-CN/components/quick-start' },
-            { text: '配置项', link: '/zh-CN/components/config' },
-            { text: '更新日志', link: '/zh-CN/components/changelog' },
+            { text: '快速开始', link: '/guide/quick-start' },
+            { text: '配置项', link: '/guide/config' },
+            { text: '更新日志', link: '/guide/changelog' },
           ],
         },
         {
           text: '示例',
           items: [
-            { text: 'Danmaku', link: '/zh-CN/components/danmaku' },
-            { text: '性能监控', link: '/zh-CN/components/performance' },
+            { text: 'Danmaku', link: '/guide/danmaku' },
+            { text: '性能监控', link: '/guide/performance' },
           ],
         },
       ],
