@@ -1,0 +1,3 @@
+---
+sidebarDepth: 2
+---

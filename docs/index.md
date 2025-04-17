@@ -54,7 +54,7 @@ onMounted(() => {
         dm: ({danmu, index}) => h('div', {
           style: {
             padding: '4px 8px',
-            backgroundColor: index % 2 === 0 ? 'rgba(54, 54, 54, 0.7)' : 'rgba(65, 105, 225, 0.7)',
+            backgroundColor: 'rgba(54, 54, 54, 0.7)',
             color: 'white',
             borderRadius: '4px',
             fontSize: '14px'

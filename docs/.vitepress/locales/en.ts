@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import pkg from '../../../package.json'
 
 export default defineConfig({
   description: 'A danmaku component for Vue',
@@ -6,25 +7,28 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/en/guide/quick-start' },
-      { text: 'Demo', link: '/en/guide/demo-base' },
-      { text: 'For Vue2', link: 'https://github.com/hellodigua/vue-danmaku/tree/vue2' },
+      { text: 'Demo', link: '/en/demo/base' },
+      {
+        text: pkg.version,
+        items: [
+          { text: 'Changelog', link: 'https://github.com/hellodigua/vue-danmaku/blob/main/CHANGELOG_en.md' },
+          { text: 'For Vue2', link: 'https://github.com/hellodigua/vue-danmaku/tree/vue2' },
+        ],
+      },
     ],
     sidebar: {
-      '/en/guide/': [
+      '/en/': [
         {
-          text: 'How to use',
+          text: 'Guide',
           items: [
             { text: 'QuickStart', link: '/en/guide/quick-start' },
             { text: 'Config', link: '/en/guide/config' },
-            { text: 'Changelog', link: '/en/guide/changelog' },
+            { text: 'Performance', link: '/en/guide/performance' },
           ],
         },
         {
           text: 'Demo',
-          items: [
-            { text: 'Danmaku', link: '/en/guide/danmaku' },
-            { text: 'Performance', link: '/en/guide/performance' },
-          ],
+          items: [{ text: 'Base', link: '/en/demo/base' }],
         },
       ],
     },
