@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: 'Demo3',
-  title: '使用插槽自定义弹幕内容',
-}
-</script>
 <script setup lang="ts">
 import { ref } from 'vue'
 import VueDanmaku from 'vue-danmaku'
@@ -16,7 +10,7 @@ const danmus = ref([
 </script>
 
 <template>
-  <div>
+  <div style="height: 300px">
     <VueDanmaku :danmus="danmus" :fontSize="20" :channels="4" :autoplay="true" :useSlot="true">
       <template #dm="{ danmu }">
         <div class="custom-danmaku">
