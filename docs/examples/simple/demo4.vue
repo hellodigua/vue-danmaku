@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: 'Demo4',
-  title: '互动示例 - 添加弹幕',
-}
-</script>
 <script setup lang="ts">
 import { ref } from 'vue'
 import VueDanmaku from 'vue-danmaku'

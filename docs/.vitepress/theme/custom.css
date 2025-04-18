@@ -15,3 +15,10 @@
   --vitest-c-sponsor-hover: #4078a4;
   --vp-button-brand-bg: var(--vp-vue);
 }
+
+.demo-btn {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+}
