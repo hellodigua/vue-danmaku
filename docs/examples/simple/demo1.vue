@@ -5,7 +5,7 @@ import VueDanmaku from 'vue-danmaku'
 <template>
   <div style="height: 300px">
     <vue-danmaku :danmus="['弹幕', '弹幕', '弹幕']" loop>
-      <template #dm="{ danmu, index }"> {{ danmu }} </template>
+      <template #dm="{ danmu }"> {{ danmu }} </template>
     </vue-danmaku>
   </div>
 </template>

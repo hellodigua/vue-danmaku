@@ -24,6 +24,14 @@ simple/demo3
 simple/demo4
 :::
 
+## 响应式
+
+内置响应式支持，自动适配容器宽度
+
+:::demo
+simple/responsive
+:::
+
 ## 手动控制播放
 
 <!-- TODO -->

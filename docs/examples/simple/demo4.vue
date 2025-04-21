@@ -7,18 +7,25 @@ interface DanmakuInstance {
   add: (danmu: string) => void
 }
 
-const danmus = ref(['欢迎尝试添加弹幕功能', '在下方输入框输入内容并点击发送', '或者按回车键发送'])
+const _danmus = ['欢迎尝试添加弹幕功能', '在下方输入框输入内容并点击发送', '或者按回车键发送']
 const newDanmu = ref('')
 const danmakuRef = ref<DanmakuInstance | null>(null)
+
+// 每秒随机发送一条弹幕
+setInterval(() => {
+  if (danmakuRef.value) {
+    danmakuRef.value.insert(_danmus[Math.floor(Math.random() * _danmus.length)])
+  }
+}, 1000)
 
 const sendDanmu = () => {
   if (newDanmu.value.trim()) {
     // 添加新弹幕到数组
-    danmus.value.push(newDanmu.value)
+    danmakuRef.value.insert(newDanmu.value)
 
     // 如果引用到了组件实例，可以调用组件方法添加单条弹幕
     if (danmakuRef.value) {
-      danmakuRef.value.add(newDanmu.value)
+      danmakuRef.value.addDanmu(newDanmu.value)
     }
 
     // 清空输入框
@@ -35,10 +42,15 @@ const handleKeyDown = (event: KeyboardEvent) => {
 
 <template>
   <div class="demo-container">
-    <div class="danmaku-container">
-      <VueDanmaku ref="danmakuRef" :danmus="danmus" :fontSize="20" :channels="6" :autoplay="true" :debounce="50" />
+    <div class="h-200 danmaku-container">
+      <VueDanmaku ref="danmakuRef" autoplay random-channel>
+        <template #dm="{ danmu }">
+          <div class="danmu-item">
+            <span class="content">{{ danmu }}</span>
+          </div>
+        </template>
+      </VueDanmaku>
     </div>
-
     <div class="input-container">
       <input v-model="newDanmu" type="text" placeholder="输入弹幕内容..." @keydown="handleKeyDown" />
       <button @click="sendDanmu">发送弹幕</button>
@@ -55,7 +67,6 @@ const handleKeyDown = (event: KeyboardEvent) => {
 
 .danmaku-container {
   height: 200px;
-  background-color: #f0f0f0;
   border-radius: 8px;
   overflow: hidden;
   position: relative;

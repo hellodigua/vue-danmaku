@@ -16,7 +16,7 @@ function pause() {
 <template>
   <div style="height: 300px">
     <vue-danmaku ref="danmaku" :danmus="['弹幕', '弹幕', '弹幕']" loop>
-      <template #dm="{ danmu, index }"> {{ danmu }} </template>
+      <template #dm="{ danmu }"> {{ danmu }} </template>
     </vue-danmaku>
 
     <button class="demo-btn" @click="play">播放</button>
