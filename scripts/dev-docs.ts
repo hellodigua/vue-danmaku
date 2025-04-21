@@ -48,7 +48,7 @@ function docsChangeWatcher() {
     const componentName = path.basename(path.dirname(filePath))
 
     const copyFile = (lang: string) => {
-      const descFile = path.resolve(process.cwd(), `docs/${lang}/components`, path.basename(componentName) + '.md')
+      const descFile = path.resolve(process.cwd(), `docs/${lang}/guide`, path.basename(componentName) + '.md')
       fs.mkdirSync(path.dirname(descFile), {
         recursive: true,
       })
@@ -56,7 +56,7 @@ function docsChangeWatcher() {
     }
 
     if (path.basename(filePath) === 'README.md') {
-      copyFile('en-US')
+      copyFile('en')
     } else if (path.basename(filePath) === 'README.zh-CN.md') {
       copyFile('zh-CN')
     }

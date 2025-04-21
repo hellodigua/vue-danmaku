@@ -1,8 +1,3 @@
----
-class: 'danmaku-doc'
-sidebarDepth: 2
----
-
 ## 基础示例
 
 :::demo

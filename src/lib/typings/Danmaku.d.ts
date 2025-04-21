@@ -20,8 +20,6 @@ export interface DanmuItem {
  */
 export interface DanmakuItem {
   channels: number
-  autoplay: boolean
-  loop: boolean
   debounce: number
   randomChannel: boolean
 }
