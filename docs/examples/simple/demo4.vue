@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import VueDanmaku from 'vue-danmaku'
-
-// 定义组件实例类型
-interface DanmakuInstance {
-  add: (danmu: string) => void
-}
+import VueDanmaku, { DanmakuInstance } from 'vue-danmaku'
 
 const _danmus = ['欢迎尝试添加弹幕功能', '在下方输入框输入内容并点击发送', '或者按回车键发送']
 const newDanmu = ref('')
@@ -21,7 +16,7 @@ setInterval(() => {
 const sendDanmu = () => {
   if (newDanmu.value.trim()) {
     // 添加新弹幕到数组
-    danmakuRef.value.insert(newDanmu.value)
+    danmakuRef.value?.insert(newDanmu.value)
 
     // 如果引用到了组件实例，可以调用组件方法添加单条弹幕
     if (danmakuRef.value) {

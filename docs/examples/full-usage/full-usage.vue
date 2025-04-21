@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, watch, onMounted, onBeforeUnmount } from 'vue'
 import VueDanmaku from 'vue-danmaku'
 
 // 弹幕数据
@@ -53,11 +53,7 @@ const maxLogs = 5
 // 记录事件
 const logEvent = (event, data = {}) => {
   const time = new Date().toLocaleTimeString()
-  eventLogs.value.unshift({
-    time,
-    event,
-    data: JSON.stringify(data),
-  })
+  eventLogs.value.unshift({ time, event, data: JSON.stringify(data) })
 
   // 限制日志数量
   if (eventLogs.value.length > maxLogs) {
@@ -103,9 +99,9 @@ const hide = () => {
   logEvent('hide')
 }
 
-const clear = () => {
-  danmakuRef.value.clear()
-  logEvent('clear')
+const stop = () => {
+  danmakuRef.value.stop()
+  logEvent('stop')
 }
 
 const addDanmu = () => {
@@ -125,7 +121,6 @@ const addDanmu = () => {
 
 const resetDanmu = () => {
   danmakuRef.value.reset()
-  danmakuRef.value.add(danmuList.value)
   logEvent('reset')
 }
 
@@ -230,8 +225,8 @@ onBeforeUnmount(() => {
           <button @click="pause">暂停</button>
           <button @click="show">显示</button>
           <button @click="hide">隐藏</button>
-          <button @click="clear">清空</button>
-          <button @click="resetDanmu">重置</button>
+          <button @click="stop">停止播放</button>
+          <button @click="resetDanmu">重置设置</button>
         </div>
       </div>
 

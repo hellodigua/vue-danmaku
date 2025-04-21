@@ -29,7 +29,6 @@ export default defineConfig({
           text: '示例Demo',
           items: [
             { text: '一般用法', link: '/demo/simple' },
-            { text: '响应式', link: '/demo/responsive' },
             { text: '悬浮暂停', link: '/demo/suspend' },
             { text: '完整用法', link: '/demo/full-usage' },
           ],

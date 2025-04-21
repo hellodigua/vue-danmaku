@@ -1,4 +1,16 @@
 /**
+ * 自定义弹幕
+ */
+export type CustomDanmu<T = any> = {
+  [key: string]: T
+}
+
+/**
+ * 弹幕类型
+ */
+export type Danmu = string | CustomDanmu
+
+/**
  * 弹幕轨道
  */
 export interface DanChannel {
@@ -20,8 +32,8 @@ export interface DanmuItem {
  */
 export interface DanmakuItem {
   channels: number
-  debounce: number
-  randomChannel: boolean
+  debounce?: number
+  randomChannel?: boolean
 }
 
 /**
@@ -75,4 +87,88 @@ declare global {
      */
     __vueParentComponent?: VueComponentInstance
   }
+}
+
+/**
+ * 弹幕组件类型
+ */
+type DanmakuComponent = typeof import('./Danmaku.vue').default
+
+/**
+ * 弹幕组件实例类型
+ */
+export type DanmakuInstance = InstanceType<DanmakuComponent> & {
+  /**
+   * 是否隐藏弹幕
+   */
+  hidden: boolean
+
+  /**
+   * 是否暂停弹幕
+   */
+  paused: boolean
+
+  /**
+   * 获取播放状态
+   */
+  getPlayState(): boolean
+
+  /**
+   * 调整容器大小
+   */
+  resize(): void
+
+  /**
+   * 开始播放弹幕
+   */
+  play(): void
+
+  /**
+   * 暂停弹幕
+   */
+  pause(): void
+
+  /**
+   * 停止弹幕
+   */
+  stop(): void
+
+  /**
+   * 显示弹幕
+   */
+  show(): void
+
+  /**
+   * 隐藏弹幕
+   */
+  hide(): void
+
+  /**
+   * 清空弹幕
+   */
+  clear(): void
+
+  /**
+   * 重置弹幕
+   */
+  reset(): void
+
+  /**
+   * 添加弹幕
+   * @param danmu 弹幕内容
+   * @param position 插入位置，'current'表示当前播放位置，'end'表示末尾，默认为'current'
+   * @returns 插入的索引位置
+   */
+  addDanmu(danmu: Danmu, position?: 'current' | 'end'): number
+
+  /**
+   * 插入弹幕
+   * @param dm 外部定义的弹幕
+   */
+  insert(dm?: Danmu): void
+
+  /**
+   * 获取最大可容纳的弹幕轨道数
+   */
+  getMaxChannels(): number
 }

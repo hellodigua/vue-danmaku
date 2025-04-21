@@ -7,7 +7,7 @@
   "main": "dist/vue-danmaku.umd.js",
   "module": "dist/vue-danmaku.esm.js",
   "style": "dist/vue-danmaku.css",
-  "types": "dist/typings/lib/danmaku.vue.d.ts",
+  "types": "dist/typings/lib/index.d.ts",
   "type": "module",
   "files": [
     "dist",

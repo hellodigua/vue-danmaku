@@ -93,6 +93,7 @@ setup() {
 | addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 当前插入的位置 'current','end'，默认为'current' |
 | insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                                            |
 | getPlayState()            | 获得当前播放状态                             |                                                                                           |
+| getMaxChannels()          | 获得当前最大轨道数                           |                                                                                           |
 
 - 注 1：push 和 add 方法已废弃，请使用 addDanmu 代替
 - 注 2：insert 跟 addDanmu 的区别在于，insert 不存储于内部变量，而是直接插入 DOM，适用于直播等场景

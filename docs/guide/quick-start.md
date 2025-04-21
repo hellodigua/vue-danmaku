@@ -20,6 +20,9 @@ npm install vue-danmaku --save
 <script setup>
 import vueDanmaku from 'vue-danmaku'
 
-const danmus = ref([{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...])
+const danmus = ref([
+  { name: 'a', text: 'aaa' },
+  { name: 'b', text: 'bbb' },
+])
 </script>
 ```
