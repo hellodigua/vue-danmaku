@@ -16,10 +16,18 @@ import {
   reactive,
   computed,
   h,
-  watch,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem } from './typings/Danmaku'
 import * as rafAnimation from './utils/rafAnimation'
+
+function useModelWrapper<T>(props: any, emit: Function, name = 'modelValue', translater?: Function) {
+  return computed<T>({
+    get: () => props[name],
+    set: (value) => {
+      emit(`update:${name}`, translater ? translater(value) : value)
+    },
+  })
+}
 
 /**
  * 自定义弹幕
@@ -130,7 +138,7 @@ export default defineComponent({
       default: 10,
     },
   },
-  emits: ['update:danmus', 'list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
+  emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
   setup(props, { emit, slots, expose }) {
     // 容器
     let container = ref<HTMLDivElement>(document.createElement('div'))
@@ -149,21 +157,7 @@ export default defineComponent({
     // 存储当前屏幕上的弹幕索引值
     const activeIndexes = ref<Set<number>>(new Set())
 
-    watch(
-      () => props.danmus,
-      (newValue) => {
-        danmuList.value = [...newValue]
-      },
-      { deep: true }
-    )
-
-    watch(
-      danmuList,
-      (newValue) => {
-        emit('update:danmus', newValue)
-      },
-      { deep: true }
-    )
+    useModelWrapper<Danmu[]>(props, emit, 'danmus')
 
     const danmaku: DanmakuItem = reactive({
       channels: computed(() => props.channels || calcChannels.value),
@@ -548,13 +542,12 @@ export default defineComponent({
         emit('play-end', el.dataset.index)
       }
 
-      if (props.loop && props.loopOnly && index >= 0) {
-        activeIndexes.value.delete(index)
-      }
-
       // 触发弹幕移除事件
-      const index = Number(el.dataset.index)
-      emit('dm-remove', { el, index, danmu: index >= 0 ? danmuList.value[index] : null })
+      const _index = Number(el.dataset.index)
+      if (props.loop && props.loopOnly && _index >= 0) {
+        activeIndexes.value.delete(_index)
+      }
+      emit('dm-remove', { el, index, danmu: _index >= 0 ? danmuList.value[_index] : null })
 
       // 清理元素
       cleanupElement(el)

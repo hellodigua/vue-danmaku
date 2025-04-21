@@ -8,7 +8,7 @@
 
 简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/main/README_en.md)
 
-文档： [https://hellodigua.github.io/vue-danmaku-docs/](https://hellodigua.github.io/vue-danmaku-docs/)
+<!-- 文档： [https://hellodigua.github.io/vue-danmaku-docs/](https://hellodigua.github.io/vue-danmaku-docs/) -->
 
 > [!WARNING]
 > 2.0.0 版本开始，vue-danmaku 仅支持 Vue3，如需使用 Vue2 版本，请移步至 [Vue2 版本文档](https://github.com/hellodigua/vue-danmaku/tree/vue2)
@@ -27,23 +27,20 @@ $ npm install vue-danmaku --save
 
 ```vue
 <template>
-  <vue-danmaku v-model:danmus="danmus" style="height: 100px;">
+  <vue-danmaku v-model:danmus="danmus" loop style="height: 100px;">
     <template v-slot:dm="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
   </vue-danmaku>
 </template>
 
-<script>
+<script setup>
 import vueDanmaku from 'vue-danmaku'
 
-export default {
-  setup(props) {
-    const danmus = ref([{ avatar: 'http://a.com/a.jpg', name: 'a', text: 'aaa' }, { avatar: 'http://a.com/b.jpg', name: 'b', text: 'bbb' }, ...])
-
-    return { danmus }
-  },
-}
+const danmus = ref([
+  { name: 'a', text: 'aaa' },
+  { name: 'b', text: 'bbb' },
+])
 </script>
 ```
 
@@ -112,99 +109,10 @@ setup() {
 | dm-remove | 弹幕被移除时触发                               | {el, index, danmu}          |
 | error     | 发生错误时触发                                 | {message, code}             |
 
-## 性能监控模块
-
-vue-danmaku 提供了独立的性能监控模块，完全独立于主组件，用户可以根据需要自行导入使用：
-
-```js
-import {
-  createFpsMonitor,
-  createDanmakuPerformanceMonitor,
-  createDanmakuMonitor,
-  PERFORMANCE_CONSTANTS,
-} from 'vue-danmaku'
-
-// 创建FPS监控
-const fpsMonitor = createFpsMonitor(30, (data) => {
-  console.log(`FPS下降到${data.fps}，低于阈值${data.threshold}`)
-})
-fpsMonitor.start() // 开始监控
-fpsMonitor.stop() // 停止监控
-
-// 创建弹幕性能监控
-const performanceMonitor = createDanmakuPerformanceMonitor(100, (data) => {
-  console.log(data.message) // 弹幕数量超过阈值警告
-})
-performanceMonitor.checkPerformance(110) // 检查弹幕数量
-
-// 同时创建FPS和弹幕性能监控
-const monitor = createDanmakuMonitor({
-  fpsThreshold: 25,
-  warningThreshold: 150,
-  onFpsDrop: (data) => console.log(`FPS下降: ${data.fps}`),
-  onPerformanceWarning: (data) => console.log(`性能警告: ${data.message}`),
-})
-monitor.startAll() // 启动所有监控
-monitor.checkDanmakuCount(160) // 检查弹幕数量
-monitor.stopAll() // 停止所有监控
-```
-
-### 在组件中使用性能监控
-
-您可以在组件中结合使用 vue-danmaku 组件和性能监控模块：
-
-```vue
-<template>
-  <vue-danmaku ref="danmakuRef" v-model:danmus="danmus"></vue-danmaku>
-</template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import vueDanmaku, { createDanmakuMonitor } from 'vue-danmaku'
-
-const danmakuRef = ref(null)
-const danmus = ref(['弹幕1', '弹幕2', '弹幕3'])
-
-// 创建性能监控实例
-const monitor = createDanmakuMonitor({
-  fpsThreshold: 30,
-  warningThreshold: 100,
-  onFpsDrop: (data) => {
-    console.log(`FPS下降到${data.fps}`)
-  },
-  onPerformanceWarning: (data) => {
-    console.log(`性能警告: ${data.message}`)
-  },
-})
-
-onMounted(() => {
-  // 启动性能监控
-  monitor.startAll()
-
-  // 在添加大量弹幕后检查性能
-  const addManyDanmus = () => {
-    for (let i = 0; i < 150; i++) {
-      danmus.value.push(`大量弹幕${i}`)
-    }
-    // 手动检查弹幕数量
-    monitor.checkDanmakuCount(danmus.value.length)
-  }
-
-  // 例如，5秒后添加大量弹幕
-  setTimeout(addManyDanmus, 5000)
-})
-
-// 在组件销毁时停止监控
-onUnmounted(() => {
-  monitor.stopAll()
-})
-</script>
-```
-
 ## 讨论交流和 BUG 反馈
 
 这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/main/QA.md) 收集了一些常见问题，可以做阅读参考
 
 也可以给本项目 [提交 issue](https://github.com/hellodigua/vue-danmaku/issues)
 
-如果 vue-danmaku 帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/)，你的 star 是我改 BUG 的动力 ヾ(_ゝ ω・_)ノ
+如果 vue-danmaku 帮助到了你，欢迎 [star](https://github.com/hellodigua/vue-danmaku/) ヾ(_ゝ ω・_)ノ
