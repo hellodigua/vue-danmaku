@@ -215,6 +215,7 @@ body {
       display: flex;
       align-items: center;
       z-index: 10;
+      color: #fff;
       .img {
         height: 25px;
         width: 25px;

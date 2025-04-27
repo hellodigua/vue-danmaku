@@ -87,7 +87,6 @@ interface DanmakuProps {
   zIndex: number
 }
 
-
 export default defineComponent({
   name: 'vue-danmaku',
   components: {},
@@ -240,6 +239,11 @@ export default defineComponent({
     function init() {
       initCore()
       props.isSuspend && initSuspendEvents()
+
+      if (!slots.dm) {
+        console.error('[vue-danmaku] 警告：没有提供弹幕插槽内容(slot="dm")，无法展示弹幕')
+      }
+
       if (props.autoplay) {
         play()
       }
