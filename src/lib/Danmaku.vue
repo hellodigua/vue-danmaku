@@ -177,7 +177,6 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       stop()
-      clear()
       if (dmContainer.value) {
         dmContainer.value.removeEventListener('mouseover', onMouseOver)
         dmContainer.value.removeEventListener('mouseout', onMouseOut)
@@ -196,7 +195,7 @@ export default defineComponent({
     })
 
     function init() {
-      initCore()
+      updateContainerSize()
       props.isSuspend && initSuspendEvents()
 
       if (!slots.danmu) {
@@ -209,7 +208,7 @@ export default defineComponent({
       }
     }
 
-    function initCore() {
+    function updateContainerSize() {
       containerWidth.value = container.value.offsetWidth
       containerHeight.value = container.value.offsetHeight
       if (containerWidth.value === 0 || containerHeight.value === 0) {
@@ -225,7 +224,6 @@ export default defineComponent({
         timer = window.setInterval(() => draw(), danmaku.debounce)
       }
 
-      // 在性能模式下，恢复所有暂停的动画
       if (props.performanceMode) {
         resumeAllAnimations()
       }
@@ -258,27 +256,14 @@ export default defineComponent({
     }
 
     /**
-     * 检查弹幕是否可以插入（用于loop-only模式）
-     * @param _index 弹幕索引
-     * @returns 是否可以插入弹幕
-     */
-    function canInsertDanmu(_index: number): boolean {
-      // 在loop-only模式下，检查索引是否已经在屏幕上
-      if (props.loop && props.loopOnly) {
-        return !activeIndexes.value.has(_index)
-      }
-      return true
-    }
-
-    /**
      * 插入弹幕（也暴露到外部，允许外部直接执行绘制弹幕方法）
      * @param {Danmu} dm 外部定义的弹幕
      */
     function insert(dm?: Danmu) {
       const _index = props.loop ? index.value % danmuList.value.length : index.value
 
-      // 检查在loop-only模式下是否可以插入当前弹幕
-      if (!canInsertDanmu(_index)) {
+      // loop-only模式下是否可以插入当前弹幕
+      if (props.loopOnly && activeIndexes.value.has(_index)) {
         return
       }
 
@@ -457,38 +442,27 @@ export default defineComponent({
       return dmContainer.value.getBoundingClientRect().right - eleRight
     }
 
-    function clearTimer() {
-      clearInterval(timer)
-      timer = 0
-    }
-
     function initSuspendEvents() {
       dmContainer.value.addEventListener('mouseover', onMouseOver)
       dmContainer.value.addEventListener('mouseout', onMouseOut)
     }
 
     /**
-     * 清空弹幕
+     * 清除内部计时器和状态变量
      */
     function clear() {
-      clearTimer()
+      clearInterval(timer)
+      timer = 0
       index.value = 0
       activeIndexes.value.clear()
     }
 
     /**
-     * 重置弹幕
-     */
-    function reset() {
-      danmuHeight.value = 0
-      activeIndexes.value.clear()
-      init()
-    }
-
-    /**
-     * 停止弹幕
+     * 停止弹幕播放（停止播放，清理DOM元素，暂停弹幕系统）
      */
     function stop() {
+      clear()
+
       // 清理所有弹幕元素
       if (dmContainer.value) {
         const danmuElements = Array.from(dmContainer.value.querySelectorAll('.dm'))
@@ -505,9 +479,18 @@ export default defineComponent({
 
       danChannel.value = {}
       paused.value = true
+    }
+
+    /**
+     * 重置弹幕系统
+     */
+    function reset() {
+      stop()
+
+      danmuHeight.value = 0
       hidden.value = false
-      activeIndexes.value.clear()
-      clear()
+
+      updateContainerSize()
     }
 
     /**
@@ -615,7 +598,7 @@ export default defineComponent({
 
     function resize() {
       const oldContainerWidth = containerWidth.value // 保存旧容器宽度用于计算进度比例
-      initCore()
+      updateContainerSize()
       const items = dmContainer.value.getElementsByClassName('dm')
 
       for (let i = 0; i < items.length; i++) {
