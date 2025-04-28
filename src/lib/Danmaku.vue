@@ -485,8 +485,6 @@ export default defineComponent({
      * 重置弹幕系统
      */
     function reset() {
-      stop()
-
       danmuHeight.value = 0
       hidden.value = false
 
@@ -835,6 +833,7 @@ export default defineComponent({
       font-size: 20px;
       color: #666;
       white-space: pre;
+      cursor: default;
       transform: translateX(0);
       transform-style: preserve-3d;
       &.move {
