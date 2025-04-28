@@ -17,7 +17,7 @@ const danmus = ref([
 <template>
   <div style="height: 300px; width: 100%">
     <vue-danmaku :danmus="danmus" :channels="0" loop autoplay>
-      <template #dm="{ danmu }">{{ danmu }}</template>
+      <template #danmu="{ danmu }">{{ danmu }}</template>
     </vue-danmaku>
   </div>
 </template>

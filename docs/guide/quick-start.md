@@ -11,7 +11,7 @@ npm install vue-danmaku --save
 ```vue
 <template>
   <vue-danmaku v-model:danmus="danmus" style="height: 100px;">
-    <template #dm="{ index, danmu }">
+    <template #danmu="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
   </vue-danmaku>

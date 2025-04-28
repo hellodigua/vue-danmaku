@@ -12,7 +12,7 @@ const danmus = ref([
 <template>
   <div style="height: 300px">
     <VueDanmaku :danmus="danmus" loop loop-only random-channel>
-      <template #dm="{ danmu }">
+      <template #danmu="{ danmu }">
         <div class="custom-danmaku">
           <span class="avatar">{{ danmu.avatar }}</span>
           <span class="username">{{ danmu.username }}:</span>

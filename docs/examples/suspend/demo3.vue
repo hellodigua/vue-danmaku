@@ -34,7 +34,7 @@ const like = (danmu) => {
 <template>
   <div style="height: 300px">
     <vue-danmaku :danmus="danmus" :channels="6" isSuspend loop autoplay>
-      <template #dm="{ danmu }">
+      <template #danmu="{ danmu }">
         <div class="danmu-container" @mouseover="handleMouseover(danmu.id)" @mouseout="handleMouseout">
           <span class="danmu-text">{{ danmu.text }}</span>
 

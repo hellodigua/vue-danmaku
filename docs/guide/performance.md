@@ -125,7 +125,7 @@ monitor.stopAll()
 <template>
   <div>
     <vue-danmaku ref="danmakuRef" v-model:danmus="danmus" style="height: 300px;">
-      <template #dm="{ danmu, index }">
+      <template #danmu="{ danmu, index }">
         <div class="danmu-item">
           {{ danmu }}
         </div>

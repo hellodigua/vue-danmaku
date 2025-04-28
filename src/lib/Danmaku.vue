@@ -240,8 +240,8 @@ export default defineComponent({
       initCore()
       props.isSuspend && initSuspendEvents()
 
-      if (!slots.dm) {
-        console.error('[vue-danmaku] 警告：没有提供弹幕插槽内容(slot="dm")，无法展示弹幕')
+      if (!slots.danmu) {
+        console.error('[vue-danmaku] 警告：没有提供弹幕插槽内容(slot="danmu")，无法展示弹幕')
       }
 
       if (props.autoplay) {
@@ -360,8 +360,8 @@ export default defineComponent({
       const DmComponent = createApp({
         render() {
           return h('div', {}, [
-            slots.dm &&
-              slots.dm({
+            slots.danmu &&
+              slots.danmu({
                 danmu: _danmu,
                 index: _index,
               }),

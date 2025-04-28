@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
 
       <!-- 弹幕层 -->
       <vue-danmaku ref="danmakuRef" :danmus="[]" :channels="8" :speeds="150" class="slides-danmaku-layer">
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div class="slide-danmu" :style="danmu.style || {}">
             {{ danmu.text }}
           </div>

@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
 
       <!-- 弹幕层 -->
       <vue-danmaku ref="danmakuRef" :danmus="danmus" :channels="8" :speeds="150" :debounce="50" class="danmaku-layer">
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div class="live-danmu">
             <span class="user-avatar">{{ danmu.user.avatar }}</span>
             <span class="user-name">{{ danmu.user.name }}:</span>

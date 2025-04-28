@@ -39,7 +39,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
   <div class="demo-container">
     <div class="h-200 danmaku-container">
       <VueDanmaku ref="danmakuRef" autoplay random-channel>
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div class="danmu-item">
             <span class="content">{{ danmu }}</span>
           </div>

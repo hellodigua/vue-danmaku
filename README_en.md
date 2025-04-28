@@ -196,7 +196,7 @@ If you have the need to customize the structure and style of the popup, you can 
 ```vue
 <template>
   <vue-danmaku ref="danmaku" v-model:danmus="danmus" loop :channels="5">
-    <template v-slot:dm="{ index, danmu }">
+    <template v-slot:danmu="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
   </vue-danmaku>

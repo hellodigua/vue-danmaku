@@ -54,7 +54,7 @@ vue-danmaku 提供了丰富的功能配置，让你可以根据需求自定义�
 <template>
   <div>
     <vue-danmaku ref="danmakuRef" v-model:danmus="danmus" style="height: 200px;">
-      <template #dm="{ danmu, index }">
+      <template #danmu="{ danmu, index }">
         <div class="danmu-item">
           {{ danmu }}
         </div>

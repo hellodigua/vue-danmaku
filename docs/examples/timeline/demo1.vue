@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
 
       <!-- 弹幕层 -->
       <vue-danmaku ref="danmakuRef" :danmus="[]" :channels="8" :speeds="150" class="danmaku-layer">
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div class="timeline-danmu">
             <span class="danmu-user">{{ danmu.user }}:</span>
             <span class="danmu-text" :style="{ color: danmu.color }">

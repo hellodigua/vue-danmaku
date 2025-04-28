@@ -291,7 +291,7 @@ onBeforeUnmount(() => {
 
       <!-- 弹幕层 -->
       <vue-danmaku ref="danmakuRef" :danmus="[]" :channels="8" :speeds="150" class="notes-danmaku-layer">
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div class="note-danmu" :class="{ 'user-note': danmu.isUser }">
             <div class="note-badge" :style="{ backgroundColor: danmu.color }">
               {{ danmu.type }}

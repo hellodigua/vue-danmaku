@@ -201,7 +201,7 @@ onBeforeUnmount(() => {
         @dm-click="handleDmClick"
         @list-end="handleListEnd"
       >
-        <template #dm="{ danmu }">
+        <template #danmu="{ danmu }">
           <div
             class="custom-danmu"
             :style="{
