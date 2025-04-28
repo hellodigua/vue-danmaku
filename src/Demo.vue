@@ -138,7 +138,6 @@ export default defineComponent({
           return
         }
         config.speeds += val
-        danmaku.value.reset()
       }
 
       if (type === 'channels') {
@@ -166,9 +165,6 @@ export default defineComponent({
      */
     function togglePerformanceMode() {
       config.performanceMode = !config.performanceMode
-      // 切换性能模式后重置弹幕以应用新设置
-      danmaku.value.stop()
-      danmaku.value.reset()
     }
 
     return {

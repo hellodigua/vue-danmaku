@@ -96,17 +96,27 @@ export function resumeAnimation(
   const currentPosition = danmuPositions.get(el)
 
   if (currentPosition === undefined) {
+    // 如果没有位置信息，直接启动新动画
+    startAnimation(el, width, containerWidth, speed, isPaused, onAnimationEnd)
     return
   }
 
-  // 初始化动画参数，根据当前位置计算
-  const startTime = performance.now()
-  const startPosition = currentPosition
+  // 计算当前已经完成的进度比例
+  const startPosition = containerWidth
   const endPosition = -width
+  const totalDistance = startPosition - endPosition
+  const distanceTraveled = startPosition - currentPosition
+  const completedProgress = distanceTraveled / totalDistance
 
-  // 重新计算剩余动画时间，基于剩余要移动的距离
-  const remainingDistance = Math.abs(endPosition - startPosition)
-  const duration = (remainingDistance / speed) * 1000 // 转换为毫秒
+  // 获取原始动画总时长，与startAnimation保持一致
+  const totalDuration = (containerWidth / speed) * 1000
+
+  // 计算已经过的时间和剩余时间
+  const elapsedTime = totalDuration * completedProgress
+  const remainingTime = totalDuration - elapsedTime
+
+  // 初始化新的动画参数
+  const startTime = performance.now() - elapsedTime // 调整开始时间，保持速度连贯
 
   // 动画帧函数
   function animate(timestamp: number) {
@@ -117,18 +127,18 @@ export function resumeAnimation(
 
     const elapsed = timestamp - startTime
 
-    if (elapsed >= duration) {
+    if (elapsed >= totalDuration) {
       // 动画结束
       onAnimationEnd(el)
       return
     }
 
-    // 计算当前位置 (使用线性插值)
-    const progress = elapsed / duration
+    // 使用与startAnimation完全相同的计算逻辑
+    const progress = elapsed / totalDuration
     const position = startPosition + (endPosition - startPosition) * progress
 
-    // 更新元素位置
-    el.style.transform = `translateX(${position - containerWidth}px)`
+    // 更新元素位置，使用与startAnimation相同的计算方式
+    el.style.transform = `translateX(${position - startPosition}px)`
 
     // 存储当前位置
     danmuPositions.set(el, position)
@@ -189,23 +199,6 @@ export function cancelAllAnimations(): void {
 }
 
 /**
- * 开始主循环（适用于需要持续运行的动画系统）
- * @param callback 主循环回调函数
- */
-export function startMainLoop(callback: (timestamp: number) => void): void {
-  // 先取消之前的主循环
-  cancelMainLoop()
-
-  // 启动新的主循环
-  function loop(timestamp: number) {
-    callback(timestamp)
-    mainLoopFrameId = requestAnimationFrame(loop)
-  }
-
-  mainLoopFrameId = requestAnimationFrame(loop)
-}
-
-/**
  * 取消主循环
  */
 export function cancelMainLoop(): void {
@@ -213,19 +206,4 @@ export function cancelMainLoop(): void {
     cancelAnimationFrame(mainLoopFrameId)
     mainLoopFrameId = null
   }
-}
-
-/**
- * 获取元素的当前位置
- * @param el 弹幕DOM元素
- */
-export function getElementPosition(el: HTMLElement): number | undefined {
-  return danmuPositions.get(el)
-}
-
-/**
- * 获取所有有位置记录的弹幕元素
- */
-export function getAllAnimatedElements(): HTMLElement[] {
-  return Array.from(danmuPositions.keys())
 }

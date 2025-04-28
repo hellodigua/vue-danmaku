@@ -146,7 +146,7 @@ export default defineComponent({
     const danmuHeight = ref(0)
     const index = ref<number>(0)
     const hidden = ref(false)
-    const paused = ref(false)
+    const paused = ref(true)
     const danChannel = ref<DanChannel>({})
     const danmuList = ref<Danmu[]>([...props.danmus])
     // 存储当前屏幕上的弹幕索引值
@@ -219,6 +219,9 @@ export default defineComponent({
     }
 
     function play() {
+      // 如果已经处于播放状态，直接返回，避免重复恢复动画
+      if (!paused.value) return
+
       paused.value = false
       if (!timer) {
         timer = window.setInterval(() => draw(), danmaku.debounce)
@@ -485,6 +488,8 @@ export default defineComponent({
      * 重置弹幕系统
      */
     function reset() {
+      stop()
+
       danmuHeight.value = 0
       hidden.value = false
 
@@ -627,7 +632,6 @@ export default defineComponent({
             el.style.left = `${containerWidth.value}px`
             el.style.transform = `translateX(${newStartX - containerWidth.value}px)`
 
-            // 使用resumeAnimation函数继续动画
             rafAnimation.resumeAnimation(
               el,
               width,
