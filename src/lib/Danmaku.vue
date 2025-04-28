@@ -241,6 +241,7 @@ export default defineComponent({
       props.isSuspend && initSuspendEvents()
 
       if (!slots.danmu) {
+        emit('error', { message: '没有提供弹幕插槽内容(slot="danmu")，无法展示弹幕', code: 'NO_DANMU_SLOT' })
         console.error('[vue-danmaku] 警告：没有提供弹幕插槽内容(slot="danmu")，无法展示弹幕')
       }
 
