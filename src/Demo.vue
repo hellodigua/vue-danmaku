@@ -3,7 +3,7 @@
     <!-- 容器slot -->
     <div></div>
     <!-- 弹幕slot -->
-    <template v-slot:dm="{ danmu, index }">
+    <template v-slot:danmu="{ danmu, index }">
       <div class="danmu-item">
         <img class="img" :src="danmu.avatar" />
         <span>{{ index }}{{ danmu.name }}：</span>
@@ -215,6 +215,7 @@ body {
       display: flex;
       align-items: center;
       z-index: 10;
+      color: #fff;
       .img {
         height: 25px;
         width: 25px;

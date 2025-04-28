@@ -27,7 +27,20 @@ export default defineConfig({
         },
         {
           text: '示例Demo',
-          items: [{ text: 'Danmaku', link: '/demo/base' }],
+          items: [
+            { text: '一般用法', link: '/demo/simple' },
+            { text: '悬浮暂停', link: '/demo/suspend' },
+            { text: '完整用法', link: '/demo/full-usage' },
+          ],
+        },
+        {
+          text: '通用场景',
+          items: [
+            { text: '直播模式', link: '/demo/live-mode' },
+            { text: '时间轴模式', link: '/demo/timeline' },
+            { text: '大屏模式', link: '/demo/screen' },
+            { text: '性能监控', link: '/demo/performance-monitor' },
+          ],
         },
       ],
     },

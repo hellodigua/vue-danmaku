@@ -11,7 +11,7 @@
 <!-- 文档： [https://hellodigua.github.io/vue-danmaku-docs/](https://hellodigua.github.io/vue-danmaku-docs/) -->
 
 > [!WARNING]
-> 2.0.0 版本开始，vue-danmaku 仅支持 Vue3，如需使用 Vue2 版本，请移步至 [Vue2 版本文档](https://github.com/hellodigua/vue-danmaku/tree/vue2)
+> 2.0.0 版本开始，vue-danmaku 仅支持 Vue3，[Vue2 版本文档请移步至此](https://github.com/hellodigua/vue-danmaku/tree/vue2)
 
 ## Preview
 
@@ -28,7 +28,7 @@ $ npm install vue-danmaku --save
 ```vue
 <template>
   <vue-danmaku v-model:danmus="danmus" loop style="height: 100px;">
-    <template v-slot:dm="{ index, danmu }">
+    <template v-slot:danmu="{ index, danmu }">
       <span>{{ index }}{{ danmu.name }}：{{ danmu.text }}</span>
     </template>
   </vue-danmaku>
@@ -61,7 +61,6 @@ const danmus = ref([
 | performanceMode | 是否开启性能模式（默认使用 requestAnimationFrame 代替 CSS 动画） | Boolean |              | true   |
 | zIndex          | 弹幕层级                                                         | Number  |              | 10     |
 
-- 注 0：1.0.0 版本起，danmus 参数写法变为双向绑定 v-model:danmus
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放
 - 注 3：弹幕刷新频率为每隔多长时间插入一条弹幕
@@ -72,7 +71,9 @@ const danmus = ref([
 通过以下方式调用：
 
 ```js
-<vue-danmaku ref="danmakuRef"></vue-danmaku>
+<vue-danmaku ref="danmakuRef">
+  <template #danmu="{ danmu }">{{ danmu }}</template>
+</vue-danmaku>
 
 setup() {
   const danmakuRef = ref(null)
@@ -93,6 +94,7 @@ setup() {
 | addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 当前插入的位置 'current','end'，默认为'current' |
 | insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                                            |
 | getPlayState()            | 获得当前播放状态                             |                                                                                           |
+| getMaxChannels()          | 获得当前最大轨道数                           |                                                                                           |
 
 - 注 1：push 和 add 方法已废弃，请使用 addDanmu 代替
 - 注 2：insert 跟 addDanmu 的区别在于，insert 不存储于内部变量，而是直接插入 DOM，适用于直播等场景

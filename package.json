@@ -1,13 +1,13 @@
 {
   "name": "vue-danmaku",
   "description": "基于 Vue 的弹幕交互组件 | A danmaku component for Vue",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.11",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue-danmaku.umd.js",
   "module": "dist/vue-danmaku.esm.js",
   "style": "dist/vue-danmaku.css",
-  "types": "dist/typings/lib/danmaku.vue.d.ts",
+  "types": "dist/typings/lib/index.d.ts",
   "type": "module",
   "files": [
     "dist",
