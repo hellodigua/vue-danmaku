@@ -172,3 +172,65 @@ export type DanmakuInstance = InstanceType<DanmakuComponent> & {
    */
   getMaxChannels(): number
 }
+
+/**
+ * 弹幕组件属性类型
+ */
+export interface DanmakuProps {
+  /**
+   * 弹幕列表数据
+   */
+  danmus: Danmu[]
+  /**
+   * 轨道数量，0为最大轨道数量（撑满容器）
+   */
+  channels: number
+  /**
+   * 是否自动播放
+   */
+  autoplay: boolean
+  /**
+   * 是否循环播放
+   */
+  loop: boolean
+  /**
+   * 循环模式下是否避免重复弹幕
+   */
+  loopOnly: boolean
+  /**
+   * 是否开启随机轨道注入弹幕
+   */
+  randomChannel: boolean
+  /**
+   * 是否开启悬浮暂停
+   */
+  isSuspend: boolean
+  /**
+   * 性能模式，启用时使用requestAnimationFrame代替CSS动画
+   */
+  performanceMode: boolean
+  /**
+   * 弹幕刷新频率(ms)
+   */
+  debounce: number
+  /**
+   * 弹幕速度（像素/秒）
+   */
+  speeds: number
+  /**
+   * 弹幕垂直间距
+   */
+  top: number
+  /**
+   * 弹幕水平间距
+   */
+  right: number
+  /**
+   * 弹幕默认层级
+   */
+  zIndex: number
+  /**
+   * 是否自动监听容器大小变化
+   */
+  autoResize: boolean
+}

@@ -29,64 +29,6 @@ function useModelWrapper<T>(props: any, emit: Function, name = 'modelValue', tra
   })
 }
 
-/**
- * 组件 Props 类型
- */
-interface DanmakuProps {
-  /**
-   * 弹幕列表数据
-   */
-  danmus: Danmu[]
-  /**
-   * 轨道数量，0为最大轨道数量（撑满容器）
-   */
-  channels: number
-  /**
-   * 是否自动播放
-   */
-  autoplay: boolean
-  /**
-   * 是否循环播放
-   */
-  loop: boolean
-  /**
-   * 循环模式下是否避免重复弹幕
-   */
-  loopOnly: boolean
-  /**
-   * 是否开启随机轨道注入弹幕
-   */
-  randomChannel: boolean
-  /**
-   * 是否开启悬浮暂停
-   */
-  isSuspend: boolean
-  /**
-   * 性能模式，启用时使用requestAnimationFrame代替CSS动画
-   */
-  performanceMode: boolean
-  /**
-   * 弹幕刷新频率(ms)
-   */
-  debounce: number
-  /**
-   * 弹幕速度（像素/秒）
-   */
-  speeds: number
-  /**
-   * 弹幕垂直间距
-   */
-  top: number
-  /**
-   * 弹幕水平间距
-   */
-  right: number
-  /**
-   * 弹幕默认层级
-   */
-  zIndex: number
-}
-
 export default defineComponent({
   name: 'vue-danmaku',
   components: {},
@@ -181,7 +123,14 @@ export default defineComponent({
      */
     zIndex: {
       type: Number,
-      default: 10,
+      default: 1,
+    },
+    /**
+     * 是否自动监听容器大小变化
+     */
+    autoResize: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
@@ -202,6 +151,7 @@ export default defineComponent({
     const danmuList = ref<Danmu[]>([...props.danmus])
     // 存储当前屏幕上的弹幕索引值
     const activeIndexes = ref<Set<number>>(new Set())
+    let resizeObserver: ResizeObserver | null = null
 
     useModelWrapper<Danmu[]>(props, emit, 'danmus')
 
@@ -220,6 +170,9 @@ export default defineComponent({
 
     onMounted(() => {
       init()
+      if (props.autoResize) {
+        initResizeObserver()
+      }
     })
 
     onBeforeUnmount(() => {
@@ -228,6 +181,12 @@ export default defineComponent({
       if (dmContainer.value) {
         dmContainer.value.removeEventListener('mouseover', onMouseOver)
         dmContainer.value.removeEventListener('mouseout', onMouseOut)
+      }
+
+      // 清理resize observer
+      if (resizeObserver) {
+        resizeObserver.disconnect()
+        resizeObserver = null
       }
 
       // 清理所有requestAnimationFrame
@@ -818,6 +777,24 @@ export default defineComponent({
         return 0
       }
       return Math.floor(containerHeight.value / (danmu.height + danmu.top))
+    }
+
+    function initResizeObserver() {
+      if (typeof ResizeObserver !== 'undefined') {
+        resizeObserver = new ResizeObserver(() => {
+          resize()
+        })
+        resizeObserver.observe(container.value)
+      } else {
+        // 降级方案：使用window.resize
+        const resizeHandler = () => resize()
+        window.addEventListener('resize', resizeHandler)
+
+        // 在组件销毁时确保移除事件监听
+        onBeforeUnmount(() => {
+          window.removeEventListener('resize', resizeHandler)
+        })
+      }
     }
 
     return {

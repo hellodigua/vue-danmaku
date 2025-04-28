@@ -82,7 +82,7 @@
   </a>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { getDanmuData } from './assets/danmu.js'
 import VueDanmaku from './lib/Danmaku.vue'
 
@@ -105,14 +105,7 @@ export default defineComponent({
       debounce: 10, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       randomChannel: true, // 随机弹幕轨道
       performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
-    })
-
-    onMounted(() => {
-      window.onresize = () => danmaku.value.resize()
-    })
-
-    onUnmounted(() => {
-      window.onresize = null
+      autoResize: true, // 启用内部resize监听
     })
 
     function handleInvoke(type: string) {
