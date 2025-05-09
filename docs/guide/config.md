@@ -18,6 +18,7 @@ vue-danmaku 提供了丰富的功能配置，让你可以根据需求自定义�
 | right           | 弹幕水平间距(px)                                                 | Number  |              | 0      |
 | performanceMode | 是否开启性能模式（默认使用 requestAnimationFrame 代替 CSS 动画） | Boolean |              | true   |
 | zIndex          | 弹幕层级                                                         | Number  |              | 10     |
+| autoResize      | 是否自动监听容器大小变化                                         | Boolean |              | true   |
 
 ## 方法
 
@@ -33,6 +34,7 @@ vue-danmaku 提供了丰富的功能配置，让你可以根据需求自定义�
 | addDanmu(danmu, position) | 发送弹幕（统一方法，可指定插入位置）         | danmu 数据，可以是字符串或对象；position: 当前插入的位置 'current','end'，默认为'current' |
 | insert(danmu)             | 绘制弹幕（实时插入，不进行数据绑定）         | danmu 数据，可以是字符串或对象                                                            |
 | getPlayState()            | 获得当前播放状态                             | -                                                                                         |
+| getMaxChannels()          | 获得当前最大轨道数                           |                                                                                           |
 
 ## 事件
 
