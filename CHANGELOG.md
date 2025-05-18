@@ -9,7 +9,6 @@
 - 新增 autoResize 参数，默认开启自动监听容器大小变化
 - 新增 zIndex 参数，默认 1
 - 新增多个事件：dm-click, dm-remove, error
-- 新增性能监控模块，可单独导入使用
 
 优化：
 
