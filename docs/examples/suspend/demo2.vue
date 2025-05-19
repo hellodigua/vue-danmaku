@@ -28,7 +28,7 @@ const handleMouseout = () => {
 
 <template>
   <div style="height: 300px">
-    <vue-danmaku :danmus="danmus" :channels="6" isSuspend loop autoplay>
+    <vue-danmaku :danmus="danmus" :channels="3" isSuspend loop loop-only autoplay>
       <template #danmu="{ danmu, index }">
         <span
           class="danmu-item"
