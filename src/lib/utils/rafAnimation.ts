@@ -25,17 +25,19 @@ export function startAnimation(
   containerWidth: number,
   speed: number,
   isPaused: () => boolean,
-  onAnimationEnd: (el: HTMLDivElement) => void
+  onAnimationEnd: (el: HTMLDivElement) => void,
+  moveDirection?: number
 ): void {
   // 设置初始位置
+  const moveDirectionN = (moveDirection || -1) * -1;
   el.style.transform = `translateX(0px)`
-  el.style.left = `${containerWidth}px`
+  el.style[moveDirectionN < 0 ? 'right' : 'left'] = `${containerWidth}px`
 
   // 初始化动画参数
   const startTime = performance.now()
   const duration = (containerWidth / speed) * 1000 // 转换为毫秒
-  const startPosition = containerWidth
-  const endPosition = -width
+  const startPosition = containerWidth * moveDirectionN
+  const endPosition = -width * moveDirectionN
 
   // 存储初始位置
   danmuPositions.set(el, startPosition)

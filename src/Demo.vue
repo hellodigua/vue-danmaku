@@ -51,6 +51,11 @@
         <button class="btn" @click="togglePerformanceMode">{{ config.performanceMode ? '关闭' : '开启' }}</button>
         <span>{{ config.performanceMode ? ' requestAnimationFrame' : 'CSS Animation' }}</span>
       </p>
+      <p>
+        <span class="title">镜像：</span>
+        <button class="btn" @click="toggleMirror">{{ config.mirror ? '关闭' : '开启' }}</button>
+        <span>{{ config.mirror ? '已开启' : '已关闭' }}</span>
+      </p>
     </div>
   </div>
   <a
@@ -106,6 +111,7 @@ export default defineComponent({
       randomChannel: true, // 随机弹幕轨道
       performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
       autoResize: true, // 启用内部resize监听
+      mirror: false,
     })
 
     function handleInvoke(type: string) {
@@ -166,6 +172,12 @@ export default defineComponent({
     function togglePerformanceMode() {
       config.performanceMode = !config.performanceMode
     }
+    /**
+     * 切换镜像
+    */
+   function toggleMirror() {
+    config.mirror = !config.mirror;
+   }
 
     return {
       danmaku,
@@ -177,6 +189,7 @@ export default defineComponent({
       handleChange,
       addDanmu,
       togglePerformanceMode,
+      toggleMirror,
     }
   },
 })
