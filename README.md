@@ -7,11 +7,10 @@
 
 > 基于 Vue3 的弹幕交互组件
 
-简体中文 | [English](https://github.com/hellodigua/vue-danmaku/blob/vue3/README_en.md)
-
-Demo： [https://hellodigua.github.io/vue-danmaku/](https://hellodigua.github.io/vue-danmaku/)
-
 [Vue2 版本链接](https://github.com/hellodigua/vue-danmaku/tree/master)
+
+> [!WARNING]
+> vue3-danmaku 不再维护，请安装 [vue-danmaku](https://www.npmjs.com/package/vue-danmaku) 以替代vue3-danmaku
 
 ## Preview
 

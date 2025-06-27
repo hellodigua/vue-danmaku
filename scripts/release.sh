@@ -7,4 +7,5 @@ set -e
 npm run package
 
 # publish
+echo "发布包到 npm..."
 npm publish

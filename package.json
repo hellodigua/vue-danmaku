@@ -1,7 +1,7 @@
 {
   "name": "vue3-danmaku",
   "description": "基于 Vue3 的弹幕交互组件",
-  "version": "1.6.1",
+  "version": "1.6.6",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue3-danmaku.umd.js",
@@ -11,7 +11,9 @@
   "type": "module",
   "files": [
     "dist",
-    "src"
+    "src",
+    "postinstall.js",
+    "postinstall.cjs"
   ],
   "scripts": {
     "dev": "vite",
@@ -19,7 +21,11 @@
     "build:docs": "vite build",
     "release:docs": "sh scripts/deploy.sh",
     "release:package": "sh scripts/release.sh",
-    "package": "rollup -c build/rollup.config.js"
+    "package": "rollup -c build/rollup.config.js",
+    "postinstall": "node --no-warnings postinstall.cjs || node postinstall.js"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
