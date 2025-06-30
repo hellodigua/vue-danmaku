@@ -542,7 +542,8 @@ export default defineComponent({
             containerWidth.value,
             danmu.speeds,
             () => paused.value,
-            handleAnimationEnd
+            handleAnimationEnd,
+            moveDirection.value
           )
         })
       }
@@ -655,7 +656,8 @@ export default defineComponent({
               containerWidth.value,
               danmu.speeds,
               () => paused.value,
-              handleAnimationEnd
+              handleAnimationEnd,
+              moveDirection.value
             )
           }
         } else {
@@ -726,7 +728,8 @@ export default defineComponent({
           containerWidth.value,
           danmu.speeds,
           () => paused.value,
-          handleAnimationEnd
+          handleAnimationEnd,
+          moveDirection.value
         )
       } else {
         element.classList.remove('pause')

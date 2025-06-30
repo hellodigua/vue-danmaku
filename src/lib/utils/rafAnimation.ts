@@ -92,7 +92,8 @@ export function resumeAnimation(
   containerWidth: number,
   speed: number,
   isPaused: () => boolean,
-  onAnimationEnd: (el: HTMLDivElement) => void
+  onAnimationEnd: (el: HTMLDivElement) => void,
+  moveDirection?: number
 ): void {
   // 获取存储的位置
   const currentPosition = danmuPositions.get(el)
@@ -102,10 +103,11 @@ export function resumeAnimation(
     startAnimation(el, width, containerWidth, speed, isPaused, onAnimationEnd)
     return
   }
+  const moveDirectionN = (moveDirection || -1) * -1;
 
   // 计算当前已经完成的进度比例
-  const startPosition = containerWidth
-  const endPosition = -width
+  const startPosition = containerWidth * moveDirectionN
+  const endPosition = -width * moveDirectionN
   const totalDistance = startPosition - endPosition
   const distanceTraveled = startPosition - currentPosition
   const completedProgress = distanceTraveled / totalDistance
