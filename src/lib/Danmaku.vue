@@ -132,6 +132,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    mirror: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
   setup(props, { emit, slots, expose }) {
@@ -140,6 +144,7 @@ export default defineComponent({
     let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
     const containerWidth = ref(0)
     const containerHeight = ref(0)
+    const moveDirection = computed(() => props.mirror ? 1 : -1); // 1/-1
     // 变量
     let timer: number = 0
     const calcChannels = ref(0)
@@ -361,13 +366,14 @@ export default defineComponent({
             containerWidth.value,
             danmu.speeds,
             () => paused.value,
-            handleAnimationEnd
+            handleAnimationEnd,
+            moveDirection.value
           )
         } else {
           // 使用CSS动画
           el.classList.add('move')
-          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
-          el.style.left = `${containerWidth.value}px`
+          el.style.setProperty('--dm-scroll-width', `${(containerWidth.value + width) * moveDirection.value}px`)
+          el.style[props.mirror ? 'right' : 'left'] = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
 
           const onAnimationEnd = () => {
@@ -416,7 +422,7 @@ export default defineComponent({
 
         if (items && items.length) {
           for (let j = 0; j < items.length; j++) {
-            const danRight = getDanRight(items[j]) - 10
+            const danRight = getDanDistance(items[j]) - 10
             // 安全距离判断
             if (danRight <= (el.offsetWidth - items[j].offsetWidth) * 0.88 || danRight <= 0) {
               break
@@ -443,6 +449,17 @@ export default defineComponent({
       const eleWidth = el.offsetWidth || parseInt(el.style.width)
       const eleRight = el.getBoundingClientRect().right || dmContainer.value.getBoundingClientRect().right + eleWidth
       return dmContainer.value.getBoundingClientRect().right - eleRight
+    }
+    /**
+     * 获取弹幕左侧到屏幕左侧的距离
+     */
+    function getDanLeft(el: HTMLDivElement) {
+      const eleWidth = el.offsetWidth || parseInt(el.style.width)
+      const eleLeft = el.getBoundingClientRect().left || dmContainer.value.getBoundingClientRect().left + eleWidth
+      return dmContainer.value.getBoundingClientRect().left + eleLeft
+    }
+    function getDanDistance(el: HTMLDivElement) {
+      return props.mirror ? getDanLeft(el) : getDanRight(el)
     }
 
     function initSuspendEvents() {
@@ -525,7 +542,8 @@ export default defineComponent({
             containerWidth.value,
             danmu.speeds,
             () => paused.value,
-            handleAnimationEnd
+            handleAnimationEnd,
+            moveDirection.value
           )
         })
       }
@@ -638,13 +656,15 @@ export default defineComponent({
               containerWidth.value,
               danmu.speeds,
               () => paused.value,
-              handleAnimationEnd
+              handleAnimationEnd,
+              moveDirection.value
             )
           }
         } else {
           // CSS动画模式下的处理
-          el.style.setProperty('--dm-scroll-width', `-${containerWidth.value + width}px`)
-          el.style.left = `${containerWidth.value}px`
+          el.style.setProperty('--dm-scroll-width', `${(containerWidth.value + width) * moveDirection.value}px`)
+          console.log('### mirror', props.mirror);
+          el.style[props.mirror ? 'right' : 'left'] = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
         }
       }
@@ -708,7 +728,8 @@ export default defineComponent({
           containerWidth.value,
           danmu.speeds,
           () => paused.value,
-          handleAnimationEnd
+          handleAnimationEnd,
+          moveDirection.value
         )
       } else {
         element.classList.remove('pause')
