@@ -134,8 +134,8 @@ export default defineComponent({
     },
     mirror: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
   setup(props, { emit, slots, expose }) {
@@ -144,7 +144,9 @@ export default defineComponent({
     let dmContainer = ref<HTMLDivElement>(document.createElement('div'))
     const containerWidth = ref(0)
     const containerHeight = ref(0)
-    const moveDirection = computed(() => props.mirror ? 1 : -1); // 1/-1
+    const moveDirection = computed(() => (props.mirror ? 1 : -1)) // 1/-1
+    // 添加计算属性，优化方向相关的逻辑
+    const startPosition = computed(() => (props.mirror ? 'right' : 'left'))
     // 变量
     let timer: number = 0
     const calcChannels = ref(0)
@@ -373,7 +375,7 @@ export default defineComponent({
           // 使用CSS动画
           el.classList.add('move')
           el.style.setProperty('--dm-scroll-width', `${(containerWidth.value + width) * moveDirection.value}px`)
-          el.style[props.mirror ? 'right' : 'left'] = `${containerWidth.value}px`
+          el.style[startPosition.value] = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
 
           const onAnimationEnd = () => {
@@ -647,7 +649,7 @@ export default defineComponent({
           } else {
             const newStartX = containerWidth.value - (containerWidth.value + width) * progressRatio
 
-            el.style.left = `${containerWidth.value}px`
+            el.style[startPosition.value] = `${containerWidth.value}px`
             el.style.transform = `translateX(${newStartX - containerWidth.value}px)`
 
             rafAnimation.resumeAnimation(
@@ -663,8 +665,7 @@ export default defineComponent({
         } else {
           // CSS动画模式下的处理
           el.style.setProperty('--dm-scroll-width', `${(containerWidth.value + width) * moveDirection.value}px`)
-          console.log('### mirror', props.mirror);
-          el.style[props.mirror ? 'right' : 'left'] = `${containerWidth.value}px`
+          el.style[startPosition.value] = `${containerWidth.value}px`
           el.style.animationDuration = `${containerWidth.value / danmu.speeds}s`
         }
       }

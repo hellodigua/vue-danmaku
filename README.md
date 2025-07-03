@@ -62,6 +62,7 @@ const danmus = ref([
 | performanceMode | 是否开启性能模式（默认使用 requestAnimationFrame 代替 CSS 动画） | Boolean |              | true   |
 | zIndex          | 弹幕层级                                                         | Number  |              | 10     |
 | autoResize      | 是否自动监听容器大小变化以重新计算弹幕位置                       | Boolean |              | true   |
+| mirror          | 是否开启镜像模式（弹幕从左向右移动）                             | Boolean |              | false  |
 
 - 注 1：channels 为 0，则轨道数为容器可容纳最高轨道数
 - 注 2：danmus 初始化后如果为空，则 autoplay 失效。因此对于异步加载的弹幕数据，需要手动调用 `refName.value.play()` 进行播放

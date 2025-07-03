@@ -233,4 +233,8 @@ export interface DanmakuProps {
    * 是否自动监听容器大小变化
    */
   autoResize: boolean
+  /**
+   * 是否开启镜像模式（弹幕从左向右移动）
+   */
+  mirror: boolean
 }
