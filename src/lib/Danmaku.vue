@@ -676,11 +676,11 @@ export default defineComponent({
     function onMouseOver(e: MouseEvent) {
       let target = e.target as EventTarget & HTMLElement
 
-      if (!target.className.includes('dm')) {
+      if (!target.classList.contains('dm')) {
         target = target.closest('.dm') || target
       }
 
-      if (!target.className.includes('dm')) return
+      if (!target.classList.contains('dm')) return
 
       if (suspendDanmus.includes(target)) return
 
@@ -701,11 +701,11 @@ export default defineComponent({
     function onMouseOut(e: MouseEvent) {
       let target = e.target as EventTarget & HTMLElement
 
-      if (!target.className.includes('dm')) {
+      if (!target.classList.contains('dm')) {
         target = target.closest('.dm') || target
       }
 
-      if (!target.className.includes('dm')) return
+      if (!target.classList.contains('dm')) return
 
       emit('dm-out', { el: target })
 
