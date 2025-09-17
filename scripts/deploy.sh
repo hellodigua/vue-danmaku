@@ -4,10 +4,10 @@
 set -e
 
 # build
-npm run build
+npm run demo:build
 
 # navigate into the build output directory
-cd docs
+cd dist
 
 # if you are deploying to a custom domain
 # echo 'www.example.com' > CNAME
@@ -20,6 +20,6 @@ git commit -m 'docs: deploy'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:hellodigua/vue-danmaku.git master:gh-pages
+git push -f git@github.com:hellodigua/vue-danmaku.git main:gh-pages
 
 cd -

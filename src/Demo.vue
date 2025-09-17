@@ -32,19 +32,22 @@
         <span class="title">速度：</span>
         <button class="btn" @click="handleChange('speeds', -10)">减速</button>
         <button class="btn" @click="handleChange('speeds', 10)">增速</button>
-        <span>当前速度：{{ config.speeds }}像素/s</span>
+        <span>速度：{{ config.speeds }}像素/s</span>
       </p>
       <p>
         <span class="title">轨道：</span>
         <button class="btn" @click="handleChange('channels', -1)">-1</button>
         <button class="btn" @click="handleChange('channels', 1)">+1</button>
         <button class="btn" @click="handleChange('channels', -config.channels)">填满</button>
-        <span>当前轨道：{{ config.channels }}</span>
+        <span>轨道：{{ config.channels }}</span>
       </p>
       <p>
-        <span class="title">发送：</span>
-        <input class="ipt" type="text" v-model="danmuMsg" />
-        <button class="btn" @click="addDanmu">发送</button>
+        <span class="title">刷新频率：</span>
+        <button class="btn" @click="handleChange('debounce', -currentDebounceStep)">
+          -{{ currentDebounceStep }}ms
+        </button>
+        <button class="btn" @click="handleChange('debounce', currentDebounceStep)">+{{ currentDebounceStep }}ms</button>
+        <span>频率：{{ config.debounce }}ms</span>
       </p>
       <p>
         <span class="title">性能模式：</span>
@@ -55,6 +58,16 @@
         <span class="title">镜像：</span>
         <button class="btn" @click="toggleMirror">{{ config.mirror ? '关闭' : '开启' }}</button>
         <span>{{ config.mirror ? '已开启' : '已关闭' }}</span>
+      </p>
+      <p>
+        <span class="title">随机轨道：</span>
+        <button class="btn" @click="toggleRandomChannel">{{ config.randomChannel ? '关闭' : '开启' }}</button>
+        <span>{{ config.randomChannel ? '已开启' : '已关闭' }}</span>
+      </p>
+      <p>
+        <span class="title">发送：</span>
+        <input class="ipt" type="text" v-model="danmuMsg" />
+        <button class="btn" @click="addDanmu">发送</button>
       </p>
     </div>
   </div>
@@ -87,7 +100,7 @@
   </a>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, computed } from 'vue'
 import { getDanmuData } from './assets/danmu.js'
 import VueDanmaku from './lib/Danmaku.vue'
 
@@ -102,12 +115,12 @@ export default defineComponent({
     const danmuMsg = ref<string>('')
     let timer: number = 0
     const config = reactive({
-      channels: 5, // 轨道数量，为0则弹幕轨道数会撑满容器
+      channels: 8, // 轨道数量，为0则弹幕轨道数会撑满容器
       loop: true, // 是否开启弹幕循环
       speeds: 200, // 弹幕速度，实际为弹幕滚动完一整屏的秒数，值越小速度越快
       top: 10, // 弹幕轨道间的垂直间距
       right: 0, // 同一轨道弹幕的水平间距
-      debounce: 10, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+      debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
       randomChannel: true, // 随机弹幕轨道
       performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
       autoResize: true, // 启用内部resize监听
@@ -152,7 +165,36 @@ export default defineComponent({
         }
         config.channels += val
       }
+
+      if (type === 'debounce') {
+        const step = getDebounceStep(config.debounce)
+        const newValue = config.debounce + val
+
+        if (newValue < 10) {
+          return
+        }
+
+        config.debounce = newValue
+
+        // 自动重启弹幕以使新频率生效
+        if (danmaku.value) {
+          danmaku.value.reset()
+          danmaku.value.play()
+        }
+      }
     }
+
+    function getDebounceStep(currentValue: number): number {
+      if (currentValue <= 100) {
+        return 10 // 10-100ms范围用10ms步长
+      } else if (currentValue <= 500) {
+        return 50 // 100-500ms范围用50ms步长
+      } else {
+        return 100 // 500ms+范围用100ms步长
+      }
+    }
+
+    const currentDebounceStep = computed(() => getDebounceStep(config.debounce))
 
     function addDanmu() {
       if (!danmuMsg.value) return
@@ -162,7 +204,7 @@ export default defineComponent({
         text: danmuMsg.value,
       }
 
-      danmaku.value.add(_danmuMsg)
+      danmaku.value.addDanmu(_danmuMsg)
       danmuMsg.value = ''
     }
 
@@ -174,22 +216,31 @@ export default defineComponent({
     }
     /**
      * 切换镜像
-    */
-   function toggleMirror() {
-    config.mirror = !config.mirror;
-   }
+     */
+    function toggleMirror() {
+      config.mirror = !config.mirror
+    }
+
+    /**
+     * 切换随机轨道
+     */
+    function toggleRandomChannel() {
+      config.randomChannel = !config.randomChannel
+    }
 
     return {
       danmaku,
       danmus,
       config,
       danmuMsg,
+      currentDebounceStep,
 
       handleInvoke,
       handleChange,
       addDanmu,
       togglePerformanceMode,
       toggleMirror,
+      toggleRandomChannel,
     }
   },
 })
@@ -301,6 +352,12 @@ body {
   }
 
   @media (max-width: 500px) {
+    .main {
+      transform: scale(0.8);
+      transform-origin: center;
+      transition: transform 0.3s ease;
+    }
+
     .github-corner:hover .octo-arm {
       animation: none;
     }
