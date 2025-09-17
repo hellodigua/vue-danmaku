@@ -353,7 +353,7 @@ body {
 
   @media (max-width: 500px) {
     .main {
-      transform: scale(0.8);
+      transform: scale(0.9);
       transform-origin: center;
       transition: transform 0.3s ease;
     }
