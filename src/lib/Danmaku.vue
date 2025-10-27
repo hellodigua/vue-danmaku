@@ -16,6 +16,7 @@ import {
   reactive,
   computed,
   h,
+  watch,
 } from 'vue'
 import { DanChannel, DanmuItem, DanmakuItem, DanmakuInstance, Danmu } from './typings/Danmaku'
 import * as rafAnimation from './utils/rafAnimation'
@@ -156,6 +157,10 @@ export default defineComponent({
     const paused = ref(true)
     const danChannel = ref<DanChannel>({})
     const danmuList = ref<Danmu[]>([...props.danmus])
+    // 监听 props.danmus 变化并同步
+    watch(() => props.danmus, (newDanmus) => {
+      danmuList.value = [...newDanmus]
+    })
     // 存储当前屏幕上的弹幕索引值
     const activeIndexes = ref<Set<number>>(new Set())
     let resizeObserver: ResizeObserver | null = null
