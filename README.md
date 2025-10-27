@@ -114,6 +114,10 @@ setup() {
 | dm-remove | 弹幕被移除时触发                               | {el, index, danmu}          |
 | error     | 发生错误时触发                                 | {message, code}             |
 
+## 更新日志
+
+见 [CHANGELOG.md](https://github.com/hellodigua/vue-danmaku/blob/main/CHANGELOG.md)
+
 ## 讨论交流和 BUG 反馈
 
 这个 [QA 文档](https://github.com/hellodigua/vue-danmaku/blob/main/QA.md) 收集了一些常见问题，可以做阅读参考

@@ -1,7 +1,7 @@
 {
   "name": "vue-danmaku",
   "description": "基于 Vue 的弹幕交互组件 | A danmaku component for Vue",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "author": "hellodigua",
   "private": false,
   "main": "dist/vue-danmaku.esm.js",
