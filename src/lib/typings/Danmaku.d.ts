@@ -237,4 +237,9 @@ export interface DanmakuProps {
    * 是否开启镜像模式（弹幕从左向右移动）
    */
   mirror: boolean
+  /**
+   * 初始时间偏移（秒）
+   * 模拟已播放 n 秒后的弹幕状态，组件加载时屏幕上已有弹幕
+   */
+  startOffset: number
 }

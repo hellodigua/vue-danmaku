@@ -137,6 +137,14 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * 初始时间偏移（秒）
+     * 模拟已播放 n 秒后的弹幕状态，组件加载时屏幕上已有弹幕
+     */
+    startOffset: {
+      type: Number,
+      default: 0,
+    },
   },
   emits: ['list-end', 'play-end', 'dm-over', 'dm-out', 'dm-click', 'dm-remove', 'error'],
   setup(props, { emit, slots, expose }) {
@@ -215,9 +223,300 @@ export default defineComponent({
         console.error('[vue-danmaku] 警告：没有提供弹幕插槽内容(slot="danmu")，无法展示弹幕')
       }
 
+      // 如果设置了初始时间偏移，先渲染初始状态的弹幕
+      if (props.startOffset > 0 && danmuList.value.length > 0) {
+        initWithOffset()
+      }
+
       if (props.autoplay) {
         play()
       }
+    }
+
+    /**
+     * 初始化带时间偏移的弹幕状态
+     * 模拟已播放 startOffset 秒后的弹幕分布
+     */
+    function initWithOffset() {
+      const offsetMs = props.startOffset * 1000 // 转换为毫秒
+      const debounceMs = danmaku.debounce
+
+      // 计算在 startOffset 时间内应该插入的弹幕数量
+      const totalInsertCount = Math.floor(offsetMs / debounceMs)
+      // 实际可插入的弹幕数量（不能超过弹幕列表长度，除非是循环模式）
+      const maxIndex = props.loop ? totalInsertCount : Math.min(totalInsertCount, danmuList.value.length)
+
+      // 用于存储需要预渲染的弹幕信息
+      const danmusToRender: Array<{
+        danmu: Danmu
+        index: number
+        elapsedTime: number // 该弹幕已经移动的时间（毫秒）
+      }> = []
+
+      // 遍历计算每条弹幕的状态
+      for (let i = 0; i < maxIndex; i++) {
+        const actualIndex = props.loop ? i % danmuList.value.length : i
+        const insertTime = i * debounceMs // 该弹幕的插入时刻（毫秒）
+        const elapsedTime = offsetMs - insertTime // 该弹幕已移动的时间（毫秒）
+
+        // 只处理已经开始移动的弹幕
+        if (elapsedTime > 0) {
+          danmusToRender.push({
+            danmu: danmuList.value[actualIndex],
+            index: actualIndex,
+            elapsedTime,
+          })
+        }
+      }
+
+      // 更新 index 到正确的位置
+      index.value = maxIndex
+
+      // 批量渲染弹幕
+      danmusToRender.forEach((item) => {
+        insertWithOffset(item.danmu, item.index, item.elapsedTime)
+      })
+    }
+
+    /**
+     * 在指定偏移位置插入弹幕
+     * @param dm 弹幕数据
+     * @param _index 弹幕索引
+     * @param elapsedTime 已经过的时间（毫秒）
+     */
+    function insertWithOffset(dm: Danmu, _index: number, elapsedTime: number) {
+      const el = getDmComponent(dm, _index).$el
+      el.classList.add('dm')
+      dmContainer.value.appendChild(el)
+      el.style.opacity = '0'
+
+      // 保存组件实例的引用
+      el._vueInstance = {
+        instance: el.__vueParentComponent || { ctx: {} },
+        el: el,
+      }
+
+      nextTick(() => {
+        if (!danmu.height) {
+          danmuHeight.value = el.offsetHeight
+        }
+        if (!danmaku.channels) {
+          calcChannels.value = Math.floor(containerHeight.value / (danmu.height + danmu.top))
+        }
+        processElementWithOffset(el, _index, elapsedTime)
+      })
+    }
+
+    // 存储初始化阶段弹幕的计算位置（用于碰撞检测）
+    const offsetDanmuPositions = ref<Map<HTMLDivElement, number>>(new Map())
+
+    /**
+     * 处理带偏移的弹幕元素
+     */
+    function processElementWithOffset(el: HTMLDivElement, _index: number, elapsedTime: number): void {
+      const width = el.offsetWidth
+      const height = danmu.height
+
+      // 计算弹幕已移动的距离
+      const movedDistance = (elapsedTime / 1000) * danmu.speeds
+      // 计算弹幕当前位置（从容器右边缘开始算，即弹幕左边缘的 x 坐标）
+      const currentPosition = containerWidth.value - movedDistance
+
+      // 检查弹幕是否已经完全离开屏幕
+      if (currentPosition < -width) {
+        // 弹幕已离开屏幕，清理并跳过
+        cleanupElement(el)
+        if (dmContainer.value && el.parentNode === dmContainer.value) {
+          dmContainer.value.removeChild(el)
+        }
+        return
+      }
+
+      // 检查弹幕是否还未进入屏幕（理论上不应该发生）
+      if (currentPosition > containerWidth.value) {
+        cleanupElement(el)
+        if (dmContainer.value && el.parentNode === dmContainer.value) {
+          dmContainer.value.removeChild(el)
+        }
+        return
+      }
+
+      // 获取轨道，传入当前弹幕的计算位置和宽度
+      let channelIndex = getChannelIndexForOffset(el, currentPosition, width)
+
+      if (channelIndex >= 0) {
+        // 存储弹幕的计算位置，供后续弹幕的碰撞检测使用
+        offsetDanmuPositions.value.set(el, currentPosition)
+
+        el.dataset.index = `${_index}`
+        el.dataset.channel = channelIndex.toString()
+        el.style.opacity = '1'
+        el.style.top = channelIndex * (height + danmu.top) + 'px'
+        el.style.width = width + danmu.right + 'px'
+        el.style.zIndex = props.zIndex.toString()
+
+        // 添加点击事件监听器
+        const clickHandler = (event: MouseEvent) => {
+          emit('dm-click', { el, index: _index, danmu: danmuList.value[_index], event })
+        }
+        el.addEventListener('click', clickHandler)
+        el._clickHandler = clickHandler
+
+        // 在loop-only模式下，记录该弹幕索引为活跃状态
+        if (props.loop && props.loopOnly) {
+          activeIndexes.value.add(_index)
+        }
+
+        if (props.performanceMode) {
+          // 使用 requestAnimationFrame 动画，从当前位置继续
+          startAnimationWithOffset(el, width, currentPosition, elapsedTime)
+        } else {
+          // CSS 动画模式：设置初始位置并启动动画
+          el.classList.add('move')
+          el.style.setProperty('--dm-scroll-width', `${(containerWidth.value + width) * moveDirection.value}px`)
+          el.style[startPosition.value] = `${containerWidth.value}px`
+
+          // 计算剩余动画时间
+          const totalDuration = (containerWidth.value + width) / danmu.speeds
+          const remainingDuration = totalDuration - elapsedTime / 1000
+
+          if (remainingDuration > 0) {
+            el.style.animationDuration = `${totalDuration}s`
+            // 设置动画延迟为负值，跳过已经过的部分
+            el.style.animationDelay = `-${elapsedTime / 1000}s`
+
+            const onAnimationEnd = () => {
+              if (Number(el.dataset.index) === danmuList.value.length - 1 && !props.loop) {
+                emit('play-end', el.dataset.index)
+              }
+
+              const dmIndex = Number(el.dataset.index)
+              if (props.loop && props.loopOnly && dmIndex >= 0) {
+                activeIndexes.value.delete(dmIndex)
+              }
+
+              emit('dm-remove', { el, index: dmIndex, danmu: dmIndex >= 0 ? danmuList.value[dmIndex] : null })
+              cleanupElement(el)
+
+              if (dmContainer.value && el.parentNode === dmContainer.value) {
+                dmContainer.value.removeChild(el)
+              }
+            }
+
+            el._animationEndHandler = onAnimationEnd
+            el.addEventListener('animationend', onAnimationEnd)
+          } else {
+            // 动画应该已经结束，直接清理
+            cleanupElement(el)
+            if (dmContainer.value && el.parentNode === dmContainer.value) {
+              dmContainer.value.removeChild(el)
+            }
+          }
+        }
+      } else {
+        // 无法找到不重叠的轨道，清理元素不渲染
+        cleanupElement(el)
+        if (dmContainer.value && el.parentNode === dmContainer.value) {
+          dmContainer.value.removeChild(el)
+        }
+      }
+    }
+
+    /**
+     * 获取偏移模式下的轨道索引
+     * @param el 弹幕元素
+     * @param currentPosition 弹幕当前的计算位置（左边缘 x 坐标）
+     * @param width 弹幕宽度
+     * @returns 可用的轨道索引，-1 表示无可用轨道
+     */
+    function getChannelIndexForOffset(el: HTMLDivElement, currentPosition: number, width: number): number {
+      // 初始化阶段不使用随机轨道，按顺序分配以确保弹幕不重叠
+      let _channels = [...Array(danmaku.channels).keys()]
+
+      // 新弹幕的右边缘位置
+      const newDanmuRight = currentPosition + width
+      // 安全间距，确保弹幕之间有足够的水平距离
+      const safetyMargin = Math.max(danmu.right, 20)
+
+      for (let i of _channels) {
+        const items = danChannel.value[i]
+
+        if (items && items.length) {
+          let canInsert = true
+
+          // 检查该轨道上的所有弹幕是否会与新弹幕重叠
+          for (const existingEl of items) {
+            const existingPosition = offsetDanmuPositions.value.get(existingEl)
+            if (existingPosition === undefined) continue
+
+            const existingWidth = existingEl.offsetWidth
+            const existingRight = existingPosition + existingWidth
+
+            // 检查是否重叠：
+            // 新弹幕左边缘 < 已有弹幕右边缘 + 安全间距 且 新弹幕右边缘 + 安全间距 > 已有弹幕左边缘
+            if (currentPosition < existingRight + safetyMargin && newDanmuRight + safetyMargin > existingPosition) {
+              canInsert = false
+              break
+            }
+          }
+
+          if (canInsert) {
+            danChannel.value[i].push(el)
+            return i % danmaku.channels
+          }
+        } else {
+          danChannel.value[i] = [el]
+          return i % danmaku.channels
+        }
+      }
+
+      // 所有轨道都有重叠，返回 -1 表示无法放置
+      return -1
+    }
+
+    /**
+     * 从指定位置开始动画（性能模式）
+     */
+    function startAnimationWithOffset(
+      el: HTMLDivElement,
+      width: number,
+      currentPosition: number,
+      elapsedTime: number
+    ): void {
+      const moveDirectionN = moveDirection.value * -1
+      const startPos = containerWidth.value * moveDirectionN
+      const endPos = -width * moveDirectionN
+
+      // 计算当前的 transform 值
+      const currentTranslateX = currentPosition - containerWidth.value
+
+      el.style[startPosition.value] = `${containerWidth.value}px`
+      el.style.transform = `translateX(${currentTranslateX}px)`
+
+      // 存储当前位置到 rafAnimation
+      const currentPosForRaf = startPos + (currentPosition - containerWidth.value) * moveDirectionN
+      rafAnimation.setPosition(el, currentPosition * moveDirectionN)
+
+      // 计算剩余动画时间
+      const totalDuration = (containerWidth.value / danmu.speeds) * 1000
+      const remainingTime = totalDuration - elapsedTime
+
+      if (remainingTime <= 0) {
+        // 动画应该已经结束
+        handleAnimationEnd(el)
+        return
+      }
+
+      // 启动动画，从当前位置继续
+      rafAnimation.resumeAnimation(
+        el,
+        width,
+        containerWidth.value,
+        danmu.speeds,
+        () => paused.value,
+        handleAnimationEnd,
+        moveDirection.value
+      )
     }
 
     function updateContainerSize() {

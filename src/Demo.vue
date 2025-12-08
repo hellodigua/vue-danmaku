@@ -65,6 +65,13 @@
         <span>{{ config.randomChannel ? '已开启' : '已关闭' }}</span>
       </p>
       <p>
+        <span class="title">初始偏移：</span>
+        <button class="btn" @click="handleChange('startOffset', -1)">-1s</button>
+        <button class="btn" @click="handleChange('startOffset', 1)">+1s</button>
+        <button class="btn" @click="applyStartOffset">应用</button>
+        <span>{{ config.startOffset }}秒</span>
+      </p>
+      <p>
         <span class="title">发送：</span>
         <input class="ipt" type="text" v-model="danmuMsg" />
         <button class="btn" @click="addDanmu">发送</button>
@@ -125,6 +132,7 @@ export default defineComponent({
       performanceMode: true, // 性能模式，使用requestAnimationFrame代替CSS动画
       autoResize: true, // 启用内部resize监听
       mirror: false,
+      startOffset: 10, // 初始时间偏移（秒），模拟已播放3秒的状态
     })
 
     function handleInvoke(type: string) {
@@ -181,6 +189,24 @@ export default defineComponent({
           danmaku.value.reset()
           danmaku.value.play()
         }
+      }
+
+      if (type === 'startOffset') {
+        const newValue = config.startOffset + val
+        if (newValue < 0) {
+          return
+        }
+        config.startOffset = newValue
+      }
+    }
+
+    /**
+     * 应用初始偏移（需要重置弹幕）
+     */
+    function applyStartOffset() {
+      if (danmaku.value) {
+        danmaku.value.reset()
+        danmaku.value.play()
       }
     }
 
@@ -241,6 +267,7 @@ export default defineComponent({
       togglePerformanceMode,
       toggleMirror,
       toggleRandomChannel,
+      applyStartOffset,
     }
   },
 })

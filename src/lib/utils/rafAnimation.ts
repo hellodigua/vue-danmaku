@@ -186,6 +186,16 @@ export function cancelAnimation(el: HTMLElement): void {
 }
 
 /**
+ * 设置弹幕元素的当前位置
+ * 用于初始化带偏移的弹幕
+ * @param el 弹幕DOM元素
+ * @param position 当前位置
+ */
+export function setPosition(el: HTMLElement, position: number): void {
+  danmuPositions.set(el, position)
+}
+
+/**
  * 取消所有动画，并清除位置信息
  */
 export function cancelAllAnimations(): void {

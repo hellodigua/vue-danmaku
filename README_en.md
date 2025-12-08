@@ -53,6 +53,7 @@ export default {
 | isSuspend     | Whether or not to enable debounce hover pause (experimental function)          | Boolean |                  | false   |
 | top           | Vertical Pitch(px)                                                             | Number  |                  | 4       |
 | right         | horizontal spacing(px)                                                         | Number  |                  | 0       |
+| startOffset   | Initial time offset (seconds), simulates danmaku state after n seconds played  | Number  |                  | 0       |
 
 - Since version 1.0.0, the danmus parameter supports v-model:danmus writing to become a two-way binding
 - If channels is 0, the number of tracks is the maximum number of tracks the container can hold.
