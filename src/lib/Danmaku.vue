@@ -165,6 +165,9 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      console.error('%c [vue3-danmaku] ⚠️ DEPRECATION WARNING',
+          'background: #ffcc00; color: #000; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
+          '\n该包已停止维护，请迁移至新版官方库: "vue-danmaku"。\nThis package is deprecated. Please migrate to "vue-danmaku".')
       init()
     })
 
